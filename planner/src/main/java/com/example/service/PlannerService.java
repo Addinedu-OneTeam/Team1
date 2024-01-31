@@ -14,6 +14,7 @@ public class PlannerService {
 	public PlannerRepository plannerRepository;
 	
 	public Plan insert(Plan plan) {
+		System.out.println("저장완료");
 		return plannerRepository.save(plan);
 	}
 
