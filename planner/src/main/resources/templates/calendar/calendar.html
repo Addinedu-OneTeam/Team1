@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 
 <head>
   <meta charset="UTF-8">
@@ -104,7 +104,7 @@
       <label for="alarm">알람</label>
       <input type="checkbox" id="alarm" name="alarm" checked>
       <br>
-      <!--<input type="hidden" id="userEmail" name="userEmail">-->
+      <input type="hidden" id="userEmail" name="userEmail">
       <!-- 이벤트 추가 버튼 -->
       <button onclick="insertPlan();">추가</button>
     </form>
@@ -156,7 +156,6 @@
         // 날짜를 클릭하면 미니 달력 선택 날짜 갱신
         miniCalendar.setDate(info.date); // 이걸 안해주면 메인 캘린더 날짜를 클릭해도 미니 달력에 반영이 안된다
         // 단 미니 달력에서 날짜 클릭하면 메인 달력에 반영이 된다
-        console.log(info);
         showForm(info);
       }
     });
@@ -179,24 +178,6 @@
       }
     });
 
-    // datetimepicker 초기화
-    /*$('#startTime, #endTime').datetimepicker({
-        format: 'H:i',
-        step: 15, // 시간 간격 설정 (예: 15분 간격)
-        allowTimes: [ // 선택 가능한 시간 목록
-        '00:00', '00:15', '00:30', '00:45',
-        '01:00', '01:15', '01:30', '01:45',
-        // ... 중간 생략 ...
-        '22:00', '22:15', '22:30', '22:45',
-        '23:00', '23:15', '23:30', '23:45'
-      ]
-    });
-
-    // datetimepicker를 더블클릭하여 날짜 및 시간 선택
-$('#startTime, #endTime').on('dblclick', function () {
-  $(this).datetimepicker('show');
-});*/
-
     // 폼 제출 처리
     $('#addEventForm').submit(function (e) {
       e.preventDefault();
@@ -206,40 +187,18 @@ $('#startTime, #endTime').on('dblclick', function () {
       var endDate = $('#endDate').val();
       var startTime = $('#startTime').val();
       var endTime = $('#endTime').val();
-
-      if (title && startDate && endDate && startTime && endTime) {
+  
         // FullCalendar에 이벤트 추가
         mainCalendar.addEvent({
           title: title,
           start: startDate,
           end: endDate
         });
-
-        // 폼 숨기기
-        hideEventForm();
-      }
     });
-
-    // 외부 클릭으로 폼 닫기
-    $(document).mouseup(function (e) {
-      var container = $("#eventForm");
-      if (!container.is(e.target) && container.has(e.target).length === 0) {
-        hideEventForm();
-      }
-    });
-
+    
+    // 날짜 및 시간 input
     function showForm(date) {
-      // 클릭한 날짜에 이벤트 폼 표시
-      var eventForm = $('#eventForm');
-
-      // 새로운 방법으로 클릭한 날짜의 요소 가져오기 (예시)
-      var dayElement = date.dayEl || date.el;
-
-      eventForm.css({
-        left: $(window).width() / 2 - eventForm.width() / 2,
-        top: dayElement.offsetTop,
-        display: 'block'
-      });
+     
       $('#startDate').val(date.dateStr);
       $('#endDate').val(date.dateStr);
 
@@ -254,20 +213,18 @@ $('#startTime, #endTime').on('dblclick', function () {
       $('#startTime').val(hours + ':' + minutes);
       $('#endTime').val(hours + ':' + minutes);
     }
-
-    function hideEventForm() {
-      // 이벤트 폼 숨기기
-      $('#eventForm').hide();
-      $('#addEventForm')[0].reset();
-    }
   });
+</script>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var planList = /*[[${planList}]]*/ [];
+    /*]]>*/
 </script>
 
 <!-- ajax -->
 <script>
   function insertPlan() {
-    // 폼에서 데이터 가져오기
-
     var plan = {
       title : $('#title').val(),
       startDate : $('#startDate').val(),
@@ -275,11 +232,13 @@ $('#startTime, #endTime').on('dblclick', function () {
       endDate : $('#endDate').val(),
       endTime : $('#endTime').val(),
       content : $('#content').val(),
-      place : $('#place').val()
+      place : $('#place').val(),
+      userEmail : $('#userEmail').val()
     };
+    
     $.ajax({
       type: "post",
-      url: "/insert",
+      url: "/api/planner/insert",
       contentType: 'application/json',
       data: JSON.stringify(plan),
       success: function (response) {
