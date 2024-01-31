@@ -17,23 +17,30 @@ import com.example.service.PlannerService;
 import jakarta.servlet.http.HttpSession;
 
 @RestController
-@RequestMapping("/api/planner")
+@RequestMapping("/api/plan")
 public class PlannerApiController {
+	
 	@Autowired
 	private PlannerService plannerService;
+	
+	@Autowired
+    HttpSession session;
 	
 	// 일정 추가
 	@PostMapping("/insert")
 	@ResponseBody
-	public Plan insert(@RequestBody Plan plan, HttpSession session) {
+	public Plan insert(@RequestBody Plan plan) {
 		plan.setUserEmail((String)session.getAttribute("loginUser"));
 		return plannerService.insert(plan);
 	}
 	
 	// 일정 조회
 	@GetMapping("/select")
-	public @ResponseBody List<Map<String, Object>> select(Plan plan){
-		String userEmail = plan.getUserEmail();
-		return plannerService.select(userEmail);
+	@ResponseBody
+	public List<Map<String, Object>> select(){
+		String userEmail = (String) session.getAttribute("loginUser");
+	    return plannerService.select(userEmail);
 	}
+	
+	
 }

@@ -112,6 +112,37 @@
 </div>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
+	fetchPlans();
+	  
+	// 일정 조회 함수
+    function fetchPlans() {
+      $.ajax({
+        url: '/api/plan/select',
+        success: function (planList) {
+			console.log(planList);
+			console.log("----------");
+          planList.forEach(function(plan) {
+			  console.log(plan);
+			  console.log("----------");
+            addEventToCalendar(plan);
+          });
+        },
+        error: function (error) {
+          console.error('일정 불러오기 중 오류 발생:', error);
+        }
+      });
+    }
+    
+    // addEventToCalendar 함수 추가
+    function addEventToCalendar(plan) {
+      mainCalendar.addEvent({
+        title: plan.title,
+        start: plan.start, // 서버에서 받은 시작 날짜
+        end: plan.end // 서버에서 받은 종료 날짜
+        // 필요한 경우 여기에 추가 필드 추가
+      });
+    }
+
     // 미니 달력 설정
     var miniCalendar = flatpickr("#mini-calendar", {
       inline: true,
@@ -162,22 +193,7 @@
 
     // 메인 달력 렌더링. 이 메서드를 호출해야 캘린더가 표시됨
     mainCalendar.render();
-
-    // 메인 달력 갱신 함수
-    function updateMainCalendar(date) {
-      mainCalendar.gotoDate(date);
-      mainCalendar.changeView('timeGridDay');
-    }
-
-    // datepicker 초기화 날짜
-    $('#startDate, #endDate').datepicker({
-      dateFormat: 'yy-mm-dd',
-      onSelect: function (dateText) {
-        $('#startDate').val(dateText);
-        $('#endDate').val(dateText);
-      }
-    });
-
+    
     // 폼 제출 처리
     $('#addEventForm').submit(function (e) {
       e.preventDefault();
@@ -195,7 +211,22 @@
           end: endDate
         });
     });
-    
+
+    // 메인 달력 갱신 함수
+    function updateMainCalendar(date) {
+      mainCalendar.gotoDate(date);
+      mainCalendar.changeView('timeGridDay');
+    }
+
+    // datepicker 초기화 날짜
+    $('#startDate, #endDate').datepicker({
+      dateFormat: 'yy-mm-dd',
+      onSelect: function (dateText) {
+        $('#startDate').val(dateText);
+        $('#endDate').val(dateText);
+      }
+    });
+
     // 날짜 및 시간 input
     function showForm(date) {
      
@@ -214,12 +245,7 @@
       $('#endTime').val(hours + ':' + minutes);
     }
   });
-</script>
-
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    var planList = /*[[${planList}]]*/ [];
-    /*]]>*/
+  
 </script>
 
 <!-- ajax -->
@@ -238,7 +264,7 @@
     
     $.ajax({
       type: "post",
-      url: "/api/planner/insert",
+      url: "/api/plan/insert",
       contentType: 'application/json',
       data: JSON.stringify(plan),
       success: function (response) {
