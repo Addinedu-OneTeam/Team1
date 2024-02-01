@@ -3,63 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <title>회원가입</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/signup.css}" />
 </head>
 <body>
-<h1 align="center">회원가입</h1>
-<br>
-<div class="signup-area" align="center">
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <!-- For CSS -->
+    <link rel="stylesheet" th:href="@{/css/swiper.css}"/>
+    <link rel="stylesheet" th:href="@{/css/login.css}"/>
+</head>
+<body>
+
+<div class="entire" id="loginForm">
     <form method="post" th:action="@{/api/user}" th:object="${user}">
-<!--    <form action="/api/create" method="post" th:action="@{/api/create}">-->
-        <table>
-            <tr>
-                <td>이름</td>
-                <td><input type="text" th:field="*{username}" required></td>
-            </tr>
-            <tr>
-                <td>e-mail</td>
-                <td><input type="email" th:field="*{email}" required></td>
-                <td rowspan="1"><button style="height: 25px;">인증</button></td>
-            </tr>
-            <tr>
-                <td>비밀번호</td>
-                <td><input type="password" th:field="*{passwordHash}" required></td>
-            </tr>
-            <tr>
-                <td>생년월일</td>
-                <td><input type="text" th:field="*{birthday}" placeholder="ex. 1990-10-24"></td>
-            </tr>
-            <tr>
-                <td>성별</td>
-                <td>
-                    남<input type="radio" th:field="*{gender}" value="Male">
-                    여<input type="radio" th:field="*{gender}" value="Female">
-                </td>
-            </tr>
-            <tr>
-                <td>사용목적</td>
-                <td>
-                    <select th:field="*{purpose}">
-                        <option value="Personal">개인용</option>
-                        <option value="Academic">학업용</option>
-                        <option value="Business">기업용</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2"><button type="submit">가입하기</button></td>
-            </tr>
-        </table>
+        <img src="../img/logo.png" alt="logo" id="logo" width="50%"></a>
+        <h1>회원가입</h1>
+        <div class="sign-up">
+            <div class="sign-box">
+                <label for="username">이름</label>
+                <input type="text" th:field="*{username}" id="username">
+                <label for="email">email</label>
+                <input type="text" th:field="*{email}" id="email">
+                <button type="button" id="verifyEmailButton">인증</button>
+                <!-- 인증번호 입력 섹션 (초기에 숨겨져 있음) -->
+
+                <div id="verificationSection" style="display: none">
+                    <input type="text" id="verificationCode">
+                    <button type="button" id="verifyCodeButton">확인</button>
+                </div>
+
+                <label for="password">비밀번호</label>
+                <input type="password" th:field="*{passwordHash}" id="password" placeholder="영문,숫자,특수기호 8~12자리">
+
+                <label for="birthday">생년월일</label>
+                <input type="text" th:field="*{birthday}" id="birthday" placeholder="ex. 1990-10-24">
+                <label for="gender">성별</label>
+                남<input type="radio" th:field="*{gender}" id="gedner" value="Male">
+                여<input type="radio" th:field="*{gender}" id="gender" value="Female">
+                <label for="purpose">사용목적</label>
+                <select th:field="*{purpose}" id="purpose">
+                    <option value="Personal">개인용</option>
+                    <option value="Academic">학업용</option>
+                    <option value="Business">기업용</option>
+                </select>
+                <button type="submit" id="submitBtn" disabled>가입하기</button>
+            </div>
+        </div>
     </form>
-
+</div>
     <script>
-        // 회원가입 요청
-        axios.post('/signup', userData)
-            .then(response => {
-                if (response.data.success) {
-                    window.location.href = '/login'; // 로그인 페이지로 리다이렉트
-                }
-            });
+        // 인증 이메일 보내기
+        document.getElementById('verifyEmailButton').addEventListener('click', function() {
+            var email = document.getElementById('email').value;
+            axios.post('/verify-email', { email: email })
+                .then(function (response) {
+                    document.getElementById('verificationSection').style.display = 'block';
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        });
 
+        // 인증 코드 확인
+        document.getElementById('verifyCodeButton').addEventListener('click', function() {
+            var email = document.getElementById('email').value;
+            var code = document.getElementById('verificationCode').value;
+            axios.post('/verification-email-sent', { email: email, verificationCode: code })
+                .then(function (response) {
+                    if (response.data.valid) {
+                        document.getElementById('verificationSection').style.display = 'none';
+                        document.getElementById('submitBtn').disabled = false;
+                    } else {
+                        alert('인증번호가 올바르지 않습니다.');
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        });
     </script>
 </div>
 </body>
