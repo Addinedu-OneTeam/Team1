@@ -10,59 +10,32 @@
     <link rel="stylesheet" th:href="@{/css/style.css}" />
 </head>
 <body>
-<!--    <div id="loginForm">-->
-<!--        <li>-->
-<!--            <label for="email">Email</label>-->
-<!--            <input type="text" name="email" id="email">    -->
-<!--        </li>-->
-<!--        <li>-->
-<!--            <label for="password">Password</label>-->
-<!--            <input type="password" name="password" id="password">-->
-<!--        </li>-->
-<!--        <li>-->
-<!--            <button type="submit">로그인</button>-->
-<!--        </li>-->
-<!--        아직도 회원이 아니세요? <a href="/web/signup">지금 바로 시작하세요!</a>-->
-<!--    </div>-->
 
-<div class="entire" >
-    <div id="loginForm">
-
-        <h1 align="left">환영합니다</h1>
-        <form>
-            <table>
-                <tr>
-                    <th scope="row">
-                        <label for="email">Email</label>
-                    </th>
-                    <td>
-                        <input type="text" name="email" id="email">
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">
-                        <label for="password">Password</label>
-                    </th>
-                    <td>
-                        <input type="password" name="password" id="password">
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                         <button type="submit">로그인</button>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <td colspan="3" align="center">
-                     아직도 회원이 아니세요? <a href="/web/signup">지금 바로 시작하세요!</a>
-                    </td>
-                </tr>
-            </table>
-        </form>
-    </div>
-
+<div class="entire" id="loginForm">
+    <form>
+        <h1>One-Planner</h1>
+        <div class="sign-in">
+            <div class="sign-box">
+                <label for="email">Email</label>
+                <input type="text" name="email" id="email" placeholder="Email@domain.com">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" placeholder="Password">
+                <button>Login</button>
+                <div class="sign-up-text">
+                    <span>아직도 회원이 아니세요?</span>
+                    <a href="/web/signup">지금 바로 시작!</a>
+                </div>
+            </div>
+        </div>
+        <div class="line">
+            <p>or</p>
+        </div>
+        <div class="social-login">
+            <a href="#"><i><img src="img/google.png" alt="google login" id="google"></i></a>
+            <a href="#"><i><img src="img/naver.png" alt="naver login" id="naver"></i></a>
+            <a href="#"><i><img src="img/kakao.png" alt="kakao login" id="kakao"></i></a>
+        </div>
+    </form>
     <!-- Slider main container -->
     <div class="swiper">
         <!-- Additional required wrapper -->
@@ -83,40 +56,40 @@
         </div>
     </div>
 </div>
- <script>
-        $(document).ready(function() {
-            $('#loginForm').on('submit', function(e) {
-                e.preventDefault(); // 폼 기본 제출 방지
+<script>
+    $(document).ready(function() {
+        $('#loginForm').on('submit', function(e) {
+            e.preventDefault(); // 폼 기본 제출 방지
 
-                var loginData = {
-                    email: $('#email').val(),
-                    password: $('#password').val()
-                };
+            var loginData = {
+                email: $('#email').val(),
+                password: $('#password').val()
+            };
 
-                $.ajax({
-                    url: '/api/user/login',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(loginData),
-                    success: function(response) {
-                        console.log(loginData);
-                        window.location.href = '/web/main';
-                        // if (response.success) {
-                        //     window.location.href = '/main'; // 메인 페이지로 리다이렉트
-                        // } else {
-                        //     // 로그인 실패 처리
-                        //     alert('로그인 실패');
-                        // }
-                    },
-                    error: function(error) {
-                        // 오류 처리
-                        alert('로그인 중 오류 발생');
-                    }
-                });
+            $.ajax({
+                url: '/api/user/login',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(loginData),
+                success: function(response) {
+                    console.log(loginData);
+                    window.location.href = '/web/main';
+                    // if (response.success) {
+                    //     window.location.href = '/main'; // 메인 페이지로 리다이렉트
+                    // } else {
+                    //     // 로그인 실패 처리
+                    //     alert('로그인 실패');
+                    // }
+                },
+                error: function(error) {
+                    // 오류 처리
+                    alert('로그인 중 오류 발생');
+                }
             });
         });
-    </script>
-    <!-- For JavaScript 자바스크립트 div 마치고 적용됨-->
-    <script th:src="@{/js/main.js}"></script>
+    });
+</script>
+<!-- For JavaScript 자바스크립트 div 마치고 적용됨-->
+<script th:src="@{/js/main.js}"></script>
 </body>
 </html>
