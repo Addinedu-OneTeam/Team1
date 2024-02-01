@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/main.css">
+  
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/main.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/moment@2.24.0/moment.min.js"></script>
   <script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
@@ -25,11 +25,8 @@
   <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
   
   <!-- jQuery UI JS -->
-	<script src="/webjars/jquery-ui/1.13.1/jquery-ui.js"></script>
-	<!-- Datetimepicker CSS -->
-	<link rel="stylesheet" href="/webjars/datetimepicker/2.5.20-1/jquery.datetimepicker.css">
-	<!-- Datetimepicker JS -->
-	<script src="/webjars/datetimepicker/2.5.20-1/jquery.datetimepicker.js"></script>
+  <script src="/webjars/jquery-ui/1.13.1/jquery-ui.js"></script>
+
 
   <title>Insert title here</title>
 
@@ -72,7 +69,7 @@
 	}
 
 	#flatpickr-container-start {
-	    width: 21%; /* 또는 다른 원하는 크기로 조절 */
+	    width: 1%; /* 또는 다른 원하는 크기로 조절 */
 	    position: relative;
 	    z-index: 1;
 	}
@@ -87,17 +84,63 @@
 	}
 	
 	/* 선택되기 전의 배경색을 하얀색으로 지정 */
-    #startTime, #endTime {
-        background-color: white;
+    #startTime, #endTime, #repeat {
+        background-color: white !important;
+        color: black !important;
     }
 
+
+	/* 선택 중일 때의 배경색 */
+    #startTime.selected-option,
+    #endTime.selected-option {
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+    }
+	
     /* 선택된 후의 배경색을 검정색으로 지정 */
-    #startTime option, #endTime option {
-        background-color: black;
+    #startTime option, #endTime option, #repeat option {
+        background-color: rgba(0,0,0,0.8);
         color: white; /* 선택된 옵션의 텍스트 색상도 변경 */
     }
-
-
+    
+    /* 시간설정부분 css */
+    #startTime, #endTime, #repeat {
+	  display: inline-block;
+	  overflow-y: scroll;
+	  border: 1px solid black;
+	  box-sizing: border-box;
+	  color: white;
+	  background-color: rgba(0, 0, 0, 0.8);
+	}
+	
+	/* 스크롤바 설정 */
+	#startTime::-webkit-scrollbar,
+	#endTime::-webkit-scrollbar,
+	#repeat::-webkit-scrollbar {
+	  width: 20px;
+	}
+	
+	/* 스크롤바 막대 설정 */
+	#startTime::-webkit-scrollbar-thumb,
+	#endTime::-webkit-scrollbar-thumb,
+	#repeat::-webkit-scrollbar-thumb {
+	  background-color: rgba(255, 255, 255, 1);
+	  /* 스크롤바 둥글게 설정 */
+	  border-radius: 10px;
+	  border: 7px solid rgba(0, 0, 0, 0.8);
+	}
+	
+	/* 스크롤바 뒷 배경 설정 */
+	#startTime::-webkit-scrollbar-track,
+	#endTime::-webkit-scrollbar-track,
+	#repeat::-webkit-scrollbar-track {
+	  background-color: rgba(0, 0, 0, 0);
+	}
+	
+	#repeat {
+	  border-radius: 5px;
+	}
+	
   </style>
 
 </head>
@@ -195,6 +238,12 @@
   
 
   <script>
+	  // 날짜를 받아와서 해당 요일의 문자열을 반환하는 함수
+	  function getDayOfWeek(date) {
+		    const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
+		    const dayIndex = date.getDay();
+		    return `(${daysOfWeek[dayIndex]})`;
+		}
 	  
 	 // 풀캘린더 api
     document.addEventListener('DOMContentLoaded', function () {
@@ -228,6 +277,7 @@
 	      },
 		locale: 'ja',
         selectable: true,
+        
 
 
         dateClick: function (info) {
@@ -236,7 +286,8 @@
           
           // FullCalendar에서 날짜를 클릭했을 때 flatpickr 시작일 종료일에 날짜만 넘어가게 하기(이렇게 안하면 2024-02-03T09:00:00+09:00 이렇게 넘어감 )
 	      var clickedDate = info.date;
-	      var formattedDate = moment(clickedDate).format('YYYY-MM-DD');
+	      
+	      var formattedDate = moment(clickedDate).format('YYYY-MM-DD') + getDayOfWeek(clickedDate);
 	      
 	      // 풀캘린더 날짜 클릭시 우측 시작일 종료일에 동기화  
 	      document.getElementById('startDate').value = formattedDate;
@@ -438,14 +489,23 @@
 		function insertPlan() {
 			// 폼에서 데이터 가져오기
 		    var plan = {
-			      title : $('#title').val(),
-			      startDate : $('#startDate').val(),
-			      startTime : $('#startTime').val(),
-			      endDate : $('#endDate').val(),
-			      endTime : $('#endTime').val(),
-			      content : $('#content').val(),
-			      place : $('#place').val()
+		        title: $('#title').val(),
+		        startDate: $('#startDate').val(),
+		        startTime: null,  // 시작 시간 초기화
+		        endDate: $('#endDate').val(),
+		        endTime: null,    // 종료 시간 초기화
+		        content: $('#content').val(),
+		        place: $('#place').val()
 		    };
+		
+		    // 종일(all-day) 체크 여부 확인
+		    var allDayChecked = $('#allDay').is(':checked');
+		    
+		    if (!allDayChecked) {
+		        // 종일이 아니면 시작 시간과 종료 시간을 설정
+		        plan.startTime = $('#startTime').val();
+		        plan.endTime = $('#endTime').val();
+		    }
 		   
 			$.ajax({
 				type:"post",
@@ -457,8 +517,6 @@
 					
 					// 입력 필드 초기화
 	                $('#title').val('');
-	                $('#startDate').val('');
-	                $('#endDate').val('');
 	                $('#startTime').val('');
 	                $('#endTime').val('');
 	                $('#content').val('');
@@ -487,28 +545,61 @@
 	
 	<!-- 시간설정 15분단위(24시간) -->
 	<script>
-	function populateTimeDropdown(selectElement) {
-	    for (let hour = 0; hour < 24; hour++) {
-	        for (let minute = 0; minute < 60; minute += 15) {
-	            const formattedHour = hour.toString().padStart(2, '0');
-	            const formattedMinute = minute.toString().padStart(2, '0');
-	            const optionText = `${formattedHour}:${formattedMinute}`;
-	            
-	            const optionElement = document.createElement('option');
-	            optionElement.value = optionText;
-	            optionElement.textContent = optionText;
-	            
-	            selectElement.appendChild(optionElement);
-	        }
-	    }
-	}
+		function populateTimeDropdown(selectElement) {
+    for (let hour = 0; hour < 24; hour++) {
+      for (let minute = 0; minute < 60; minute += 15) {
+        const formattedHour = hour.toString().padStart(2, '0');
+        const formattedMinute = minute.toString().padStart(2, '0');
+        const optionText = `${formattedHour}:${formattedMinute}`;
+
+        const optionElement = document.createElement('option');
+        optionElement.value = optionText;
+        optionElement.textContent = optionText;
+
+        selectElement.appendChild(optionElement);
+      }
+    }
+  }
+
+  function updateEndTimeOptions(startTime) {
+    const endTimeDropdown = document.getElementById('endTime');
+    endTimeDropdown.innerHTML = ''; // Clear existing options
+
+    populateTimeDropdown(endTimeDropdown);
+
+    // Find the selected index of the start time
+    const startIndex = Array.from(endTimeDropdown.options).findIndex(
+      (option) => option.value === startTime
+    );
+
+    // Remove options before the selected start time
+    for (let i = 0; i < startIndex; i++) {
+      endTimeDropdown.options[i].remove();
+    }
+
+    // Disable options before the selected start time
+    for (let i = 0; i < startIndex; i++) {
+      endTimeDropdown.options[i].disabled = true;
+    }
+
+    // Set the default selected option to the first valid option
+    endTimeDropdown.selectedIndex = 0;
+  }
+
+  // 시작 시간과 종료 시간 드롭다운을 채우기
+  const startTimeDropdown = document.getElementById('startTime');
+  const endTimeDropdown = document.getElementById('endTime');
+
+  populateTimeDropdown(startTimeDropdown);
+  populateTimeDropdown(endTimeDropdown);
+
+  // 시작 시간이 변경될 때 종료 시간 업데이트
+  startTimeDropdown.addEventListener('change', function () {
+    const selectedStartTime = this.value;
+    updateEndTimeOptions(selectedStartTime);
+  });
 	
-	// 시작 시간과 종료 시간 드롭다운을 채우기
-	const startTimeDropdown = document.getElementById('startTime');
-	const endTimeDropdown = document.getElementById('endTime');
 	
-	populateTimeDropdown(startTimeDropdown);
-	populateTimeDropdown(endTimeDropdown);
 	</script>
 	
 	
