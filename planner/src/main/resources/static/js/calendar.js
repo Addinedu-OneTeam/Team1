@@ -1,133 +1,4 @@
-<!DOCTYPE html>
-<html lang='ja'>
 
-<head>
-  <meta charset="UTF-8">
-  
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/main.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/moment@2.24.0/moment.min.js"></script>
-  <script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-  <!-- Bootstrap JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-
-  <!--flatpickr (미니 달력)-->
-  <link rel="stylesheet" href="/webjars/flatpickr/4.6.13/dist/flatpickr.min.css">
-  <script src="/webjars/flatpickr/4.6.13/dist/flatpickr.min.js"></script>
-<!-- 위에는 webjars 이거는 cdn방식  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>-->
-  <script src="/webjars/flatpickr/4.6.13/dist/l10n/ja.js"></script> <!-- 일본어 설정-->
-
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
-  
-  <!-- jQuery UI JS -->
-  <script src="/webjars/jquery-ui/1.13.1/jquery-ui.js"></script>
-
-
-  <!-- Custom CSS -->
-  <link href="/css/calendar.css" rel="stylesheet">
-  
-
-  <title>Insert title here</title>
-
-
-</head>
-
-<body>
-  	<div class="flexContainer">
-		  
-		<!--좌상단 flatpickr-->
-	    <div id="flatpickr-container" class="calendarFlat">
-	        <button id="todayButton" class="btn btn-dark">今日</button>
-	        <input type="text" id="dateInput" placeholder="flatpickr 달력" style="display: none;">
-	    </div>
-  
-
-	<!--fullcalendar-->
-	<div id='calendar'></div>
-  
-  
-  	<!--detail-->
-      <div align="center" id="calendarDetail">
-        <form action="" id="eventForm">
-            <table>
-				<h3 id="eventTag">行事(イベント)</h3>
-                <tr>
-                    <td colspan="2">
-                        <input type="text" id="title" class="form-control" placeholder="제목 및 시간 추가" onfocus="this.placeholder=''" onblur="this.placeholder='제목 및 시간 추가'" size="27px">
-                    </td>
-                </tr>
-<!--                <tr>-->
-<!--                    <td>-->
-<!--                        <button class="btn btn-primary">이벤트</button>&nbsp;-->
-<!--                        <button class="btn btn-primary">할 일</button>-->
-<!--                    </td>-->
-<!--                </tr>-->
-                <tr>
-					<td id="flatpickr-container-start">
-						시작일始作日 : <input type="text" id="startDate" class="form-control">
-						종료일終了日 : <input type="text" id="endDate" class="form-control">
-					</td>
-				</tr>
-				<tr id="timeInputs">
-					<td>
-				        시작시간始作時間 :
-				        <select id="startTime" class="form-control">
-				        </select>
-				        종료시간終了時間 :
-				        <select id="endTime" class="form-control">
-				        </select>
-					</td>
-				</tr>
-				<tr>
-					<td>
-	                    종일終日 : <input type="checkbox" id="allDay" name="allDay">
-					</td>
-                </tr>
-                <tr>
-					<td>
-	                    장소場所 <input id="place" name="place" class="form-control">
-					</td>
-                </tr>
-                <tr>
-                    <td>
-                        <select id="repeat" class="form-select" aria-label="Default select example">
-                            <option value="1">반복안함</option>
-                            <option value="2">매일</option>
-                            <option value="3">매주</option>
-                            <option value="4">평일</option>
-                            <option value="5">주말</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <textarea id="content" class="form-control" placeholder="설명 추가" onfocus="this.placeholder=''" onblur="this.placeholder='설명 추가'" cols="30" rows="10"></textarea>
-                    </td>
-                </tr>
-<!--                <tr>-->
-<!--                    <td>-->
-<!--                        <select name="">-->
-<!--                            <option value="">내 할 일 목록</option>-->
-<!--                        </select>-->
-<!--                    </td>-->
-<!--                </tr>-->
-                <tr>
-					<td colspan="2" align="right">
-						<button onclick="insertPlan()" class="btn btn-primary">저장</button>
-					</td>
-				</tr>
-            </table>
-        </form>
-    </div>
-    </div>
-  
-
-  <script>
 	  // 날짜를 받아와서 해당 요일의 문자열을 반환하는 함수
 	  function getDayOfWeek(date) {
 		    const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
@@ -368,10 +239,10 @@
 	});
       
     });
-  </script>
+
   
-  <!-- ajax -->
-    <script>
+//  <!-- ajax -->
+
 		function insertPlan() {
 			// 폼에서 데이터 가져오기
 		    var plan = {
@@ -413,10 +284,10 @@
 		        }
 			})
 		};
-	</script>
+
 	
-	<!-- 종일체크시 시간 활성/비활성 -->
-	<script>
+//	<!-- 종일체크시 시간 활성/비활성 -->
+
 		// 종일(all-day) 체크박스
 		$('#allDay').change(function () {
 		  if (this.checked) {
@@ -427,10 +298,10 @@
 		    $('#timeInputs').removeClass('blurred');
 		  }
 		});
-	</script>
+
 	
-	<!-- 시간설정 15분단위(24시간) -->
-	<script>
+//	<!-- 시간설정 15분단위(24시간) -->
+
 		function populateTimeDropdown(selectElement) {
 		    for (let hour = 0; hour < 24; hour++) {
 		        for (let minute = 0; minute < 60; minute += 15) {
@@ -480,7 +351,3 @@
 		    endTimeDropdown.selectedIndex = 0;
 		}
 		
-	</script>
-	
-</body>
-</html>
