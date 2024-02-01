@@ -37,13 +37,11 @@ public class Plan {
     @NonNull
     private LocalDate startDate; // 시작일
 
-    @NonNull
     private String startTime; // 시작시간
 
     @NonNull
     private LocalDate endDate; // 종료일
 
-    @NonNull
     private String endTime; // 종료시간
 
     @Column(insertable = false, columnDefinition = "NUMBER DEFAULT 0")
