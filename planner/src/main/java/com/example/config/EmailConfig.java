@@ -66,14 +66,6 @@ public class EmailConfig {
     private Properties getMailProperties(){
 
         Properties properties = new Properties();
-
-//        properties.setProperty("mail.transport.protocol", "smtp");   	   // 프로토콜 설정
-//        properties.setProperty("mail.smtp.auth", "true");				   // smtp 인증
-//        properties.setProperty("mail.smtp.starttls.enable", "false"); 	   // TLS 사용시 true, SSL 사용시 false
-//        properties.setProperty("mail.debug", "true"); 					   // 디버그 사용
-//        properties.setProperty("mail.smtp.ssl.trust", host);   // ssl 인증 서버 (smtp 서버명)
-//        properties.setProperty("mail.smtp.ssl.enable", "true"); 		   // ssl 사용안함
-
         properties.setProperty("mail.transport.protocol", "smtp");
         properties.setProperty("mail.smtp.auth", String.valueOf(auth));
         properties.setProperty("mail.smtp.starttls.enable", String.valueOf(starttlsEnable));

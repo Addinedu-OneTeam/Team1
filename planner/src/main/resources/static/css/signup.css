@@ -62,3 +62,29 @@ form > h1 {
     font-size: 18px;
     color: #fff;
 }
+
+.sign-up button:disabled {
+    background-color: grey;
+    color: white;
+}
+
+.sign-up select {
+    height: 50px; /* 높이 설정 */
+    padding: 0 14px; /* 패딩 설정 */
+    border-radius: 5px; /* 테두리 둥글기 설정 */
+    border: 1px solid #8e8383; /* 테두리 색상 */
+}
+
+/* 성별 선택 부분의 라벨 스타일 조정 */
+.gender-selection label {
+    font-size: 16px; /* 폰트 크기 조정 */
+    color: #333; /* 텍스트 색상 */
+    font-weight: bold; /* 글꼴 두께 */
+    margin-right: 10px; /* 오른쪽 여백 추가 */
+}
+
+/* 라디오 버튼 스타일 조정 */
+.gender-selection input[type="radio"] {
+    margin-right: 5px; /* 오른쪽 여백 추가 */
+    vertical-align: middle; /* 수직 정렬 */
+}
