@@ -3,63 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <title>회원가입</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/signup.css}" />
+
 </head>
 <body>
-<h1 align="center">회원가입</h1>
-<br>
-<div class="signup-area" align="center">
+
+<div class="entire" id="sign-up-form">
     <form method="post" th:action="@{/api/user}" th:object="${user}">
-<!--    <form action="/api/create" method="post" th:action="@{/api/create}">-->
-        <table>
-            <tr>
-                <td>이름</td>
-                <td><input type="text" th:field="*{username}" required></td>
-            </tr>
-            <tr>
-                <td>e-mail</td>
-                <td><input type="email" th:field="*{email}" required></td>
-                <td rowspan="1"><button style="height: 25px;">인증</button></td>
-            </tr>
-            <tr>
-                <td>비밀번호</td>
-                <td><input type="password" th:field="*{passwordHash}" required></td>
-            </tr>
-            <tr>
-                <td>생년월일</td>
-                <td><input type="text" th:field="*{birthday}" placeholder="ex. 1990-10-24"></td>
-            </tr>
-            <tr>
-                <td>성별</td>
-                <td>
-                    남<input type="radio" th:field="*{gender}" value="Male">
-                    여<input type="radio" th:field="*{gender}" value="Female">
-                </td>
-            </tr>
-            <tr>
-                <td>사용목적</td>
-                <td>
-                    <select th:field="*{purpose}">
-                        <option value="Personal">개인용</option>
-                        <option value="Academic">학업용</option>
-                        <option value="Business">기업용</option>
+        <img src="../img/logo.png" alt="logo" id="logo" width="50%"></a>
+        <h1>회원가입</h1>
+        <div class="sign-up">
+            <div class="sign-box">
+                <label for="username">이름</label>
+                <input type="text" th:field="*{username}" id="username">
+                <label for="emailId">email</label>
+                <input type="hidden" th:field="*{email}" id="fullEmail">
+                <div id="address">
+                    <input type="text" id="emailId"> <!-- 이메일 아이디 입력 필드 -->
+                    <span>@</span>
+                    <select name="select" id="emailDomain">
+                        <option value="direct">직접입력</option>
+                        <option value="gmail.com">gmail.com</option>
+                        <option value="naver.com">naver.com</option>
+                        <option value="kakao.com">kakao.com</option>
+                        <option value="apple.com">apple.com</option>
                     </select>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2"><button type="submit">가입하기</button></td>
-            </tr>
-        </table>
+                </div>
+                <button type="button" id="verifyEmailButton">인증</button>
+                <!-- 인증번호 입력 섹션 (초기에 숨겨져 있음) -->
+                <!-- 타이머 표시 위치 -->
+                <div id="timerDisplay" style="display: none;">
+                    <span id="timer"></span>
+                </div>
+
+                <div id="verificationSection" style="display: none">
+                    <input type="text" id="verificationCode">
+                    <button type="button" id="verifyCodeButton">확인</button>
+                </div>
+
+                <label for="password">비밀번호</label>
+                <input type="password" th:field="*{passwordHash}" id="password" placeholder="영문,숫자,특수기호 8~12자리">
+
+                <label for="birthday">생년월일</label>
+                <input type="text" th:field="*{birthday}" id="birthday" placeholder="ex. 1990-10-24">
+                <div class="gender-selection">
+                    <label for="male">남</label>
+                    <input type="radio" th:field="*{gender}" id="male" value="Male">
+                    <label for="female">여</label>
+                    <input type="radio" th:field="*{gender}" id="female" value="Female">
+                </div>
+
+                <label for="purpose">사용목적</label>
+                <select th:field="*{purpose}" id="purpose">
+                    <option value="Personal">개인용</option>
+                    <option value="Academic">학업용</option>
+                    <option value="Business">기업용</option>
+                </select>
+                <button type="submit" id="submitBtn" disabled>가입하기</button>
+            </div>
+        </div>
     </form>
-
+</div>
     <script>
-        // 회원가입 요청
-        axios.post('/signup', userData)
-            .then(response => {
-                if (response.data.success) {
-                    window.location.href = '/login'; // 로그인 페이지로 리다이렉트
-                }
-            });
+        var timer;
+        var isRunning = false;
+        let tmp = 0;
+        // 인증 이메일 보내기
+        document.getElementById('verifyEmailButton').addEventListener('click', function() {
+            this.disabled = true; // 버튼 비활성화
+            combineEmail();
+            // 이메일 인증 버튼 클릭 시 타이머 시작
+            var fiveMinutes = 60 * 1; // 5분
+            var display = document.getElementById('timer');
+            startTimer(fiveMinutes, display);
+            document.getElementById("timerDisplay").style.display = "block";
 
+            var email = document.getElementById('email').value;
+            axios.post('/verify-email', { email: email })
+                .then(function (response) {
+                    document.getElementById('verificationSection').style.display = 'block';
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        });
+
+        function startTimer(duration, display) {
+            var timer = duration, minutes, seconds;
+            if (isRunning) {
+                clearInterval(window.timer);
+            }
+            isRunning = true;
+
+            window.timer = setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = minutes + ":" + seconds;
+
+                if (--timer < 0) {
+                    clearInterval(window.timer);
+                    display.textContent = "시간 초과";
+                    isRunning = false;
+                    // 타이머가 끝났음을 사용자에게 알리고 추가적인 조치를 취할 수 있습니다.
+                    document.getElementById('verifyEmailButton').disabled = false; // 버튼 다시 활성화
+                    // 예: document.getElementById('verificationSection').style.display = 'none';
+                }
+            }, 1000);
+        }
+
+        // 인증 코드 확인 부분
+        document.getElementById('verifyCodeButton').addEventListener('click', function() {
+            // 인증 완료 후 또는 타이머 종료 후 버튼을 다시 활성화
+            document.getElementById('verifyEmailButton').disabled = false;
+            var email = document.getElementById('email').value;
+            var code = document.getElementById('verificationCode').value;
+            axios.post('/verification-email-sent', { email: email, verificationCode: code })
+                .then(function (response) {
+                    if (response.data.valid) {
+                        clearInterval(window.timer); // 타이머 중지
+                        document.getElementById('timer').textContent = ""; // 타이머 UI 초기화
+                        document.getElementById('verificationSection').style.display = 'none';
+                        document.getElementById('submitBtn').disabled = false;
+                    } else {
+                        alert('인증번호가 올바르지 않습니다.');
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        });
+
+        function combineEmail() {
+            var emailId = document.getElementById('emailId').value;
+            var emailDomain = document.getElementById('emailDomain').value;
+            document.getElementById('fullEmail').value = emailId + '@' + emailDomain;
+        }
+
+        // 폼 제출 이벤트 처리 (옵션)
+        document.getElementById('sign-up-form').addEventListener('submit', function(event) {
+            combineEmail(); // 이메일 조합
+            var email = document.getElementById('fullEmail').value;
+
+            // 이메일 유효성 검사 등 추가적인 검증을 할 수 있습니다.
+            // 예: if (!isValidEmail(email)) { event.preventDefault(); /* 오류 처리 */ }
+        });
     </script>
 </div>
 </body>
