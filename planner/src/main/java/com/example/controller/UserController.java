@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +11,8 @@ import com.example.domain.User;
 import com.example.service.PlannerService;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/web")
@@ -18,6 +21,8 @@ public class UserController {
 	@Autowired 
 	public PlannerService plannerService;
 
+    @Autowired
+    public UserService userService;
     @RequestMapping("/")
     public String root() throws Exception {
         return "index";
@@ -38,6 +43,15 @@ public class UserController {
 //		session.invalidate();
         return "calendar/calendar2";
     }
-    
-	
+
+
+
+    @GetMapping("/checkDuplicateEmail")
+    @ResponseBody
+    public boolean checkDuplicateEmail(@RequestParam("fullEmail") String email) {
+        System.out.println("이메일 쐈다 받아!!!" + email);
+        return userService.isEmailUnique(email);
+    }
+
+
 }
