@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>회원가입</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" th:href="@{/css/signup.css}" />
 
 </head>
@@ -15,8 +16,8 @@
         <h1>회원가입</h1>
         <div class="sign-up">
             <div class="sign-box">
-                <label for="username">이름</label>
-                <input type="text" th:field="*{username}" id="username">
+                <!--<label for="username">이름</label>
+                <input type="text" th:field="*{username}" id="username">-->
                 <label for="emailId">email</label>
                 <input type="hidden" th:field="*{email}" id="fullEmail">
                 <div id="address">
@@ -28,9 +29,11 @@
                         <option value="naver.com">naver.com</option>
                         <option value="kakao.com">kakao.com</option>
                         <option value="apple.com">apple.com</option>
+                        <option value="daum.net">daum.net</option>
                     </select>
                 </div>
-                <button type="button" id="verifyEmailButton">인증</button>
+                <button type="button" id="checkDuplicateButton">중복 체크</button>
+                <button type="button" id="verifyEmailButton" disabled>인증</button>
                 <!-- 인증번호 입력 섹션 (초기에 숨겨져 있음) -->
                 <!-- 타이머 표시 위치 -->
                 <div id="timerDisplay" style="display: none;">
@@ -41,7 +44,8 @@
                     <input type="text" id="verificationCode">
                     <button type="button" id="verifyCodeButton">확인</button>
                 </div>
-
+                <label for="username">이름</label>
+                <input type="text" th:field="*{username}" id="username">
                 <label for="password">비밀번호</label>
                 <input type="password" th:field="*{passwordHash}" id="password" placeholder="영문,숫자,특수기호 8~12자리">
 
@@ -74,12 +78,12 @@
             this.disabled = true; // 버튼 비활성화
             combineEmail();
             // 이메일 인증 버튼 클릭 시 타이머 시작
-            var fiveMinutes = 60 * 1; // 5분
+            var fiveMinutes = 60 * 3; // 5분
             var display = document.getElementById('timer');
             startTimer(fiveMinutes, display);
             document.getElementById("timerDisplay").style.display = "block";
 
-            var email = document.getElementById('email').value;
+            var email = document.getElementById('fullEmail').value;
             axios.post('/verify-email', { email: email })
                 .then(function (response) {
                     document.getElementById('verificationSection').style.display = 'block';
@@ -120,7 +124,7 @@
         document.getElementById('verifyCodeButton').addEventListener('click', function() {
             // 인증 완료 후 또는 타이머 종료 후 버튼을 다시 활성화
             document.getElementById('verifyEmailButton').disabled = false;
-            var email = document.getElementById('email').value;
+            var email = document.getElementById('fullEmail').value;
             var code = document.getElementById('verificationCode').value;
             axios.post('/verification-email-sent', { email: email, verificationCode: code })
                 .then(function (response) {
@@ -129,6 +133,7 @@
                         document.getElementById('timer').textContent = ""; // 타이머 UI 초기화
                         document.getElementById('verificationSection').style.display = 'none';
                         document.getElementById('submitBtn').disabled = false;
+                        alert('인증이 완료 되었습니다.');
                     } else {
                         alert('인증번호가 올바르지 않습니다.');
                     }
@@ -141,7 +146,7 @@
         function combineEmail() {
             var emailId = document.getElementById('emailId').value;
             var emailDomain = document.getElementById('emailDomain').value;
-            document.getElementById('fullEmail').value = emailId + '@' + emailDomain;
+            document.getElementById('fullEmail').value = emailId + "@" + emailDomain;
         }
 
         // 폼 제출 이벤트 처리 (옵션)
@@ -152,6 +157,54 @@
             // 이메일 유효성 검사 등 추가적인 검증을 할 수 있습니다.
             // 예: if (!isValidEmail(email)) { event.preventDefault(); /* 오류 처리 */ }
         });
+
+
+        function enableverifyEmailButton() {
+
+            $("#verifyEmailButton").prop("disabled", false);
+        }
+
+        function disableverifyEmailButton() {
+
+            $("#verifyEmailButton").prop("disabled", true);
+        }
+
+
+        document.getElementById('checkDuplicateButton').addEventListener('click', function(event) {
+
+            //빈값 방지
+            var emailId = document.getElementById('emailId').value;
+            if (emailId == ""){
+                alert("빈값은 안된다.. 다시!")
+                return;
+            }
+
+            combineEmail(); // 이메일 조합
+            var fullEmail = $("#fullEmail").val();
+            $.ajax({
+                type: "GET", // GET 메서드로 변경
+                url: "/web/checkDuplicateEmail",
+                data: { fullEmail: fullEmail }, // URL에 데이터를 포함
+                success: function(response) {
+                    if (!response) {
+                        alert("이미 등록된 이메일입니다.");
+                        /*isEmailVerified = false;*/
+                        disableverifyEmailButton();
+                    } else {
+                        alert("사용 가능한 이메일입니다.");
+                        console.log(response);
+                        document.getElementById('verifyEmailButton').disabled = false;
+                        /*isEmailVerified = true;*//*
+                        enableverifyEmailButton();*/
+                    }
+                },
+                error: function(error) {
+                    console.error("Error checking email:", error);
+                }
+            });
+
+
+        })
     </script>
 </div>
 </body>
