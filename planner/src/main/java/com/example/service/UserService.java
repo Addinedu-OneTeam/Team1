@@ -39,4 +39,10 @@ public class UserService {
         }
         return false;
     }
+
+    public boolean isEmailUnique(String email) {
+        Optional<User> existingUser = UserRepository.findByEmail(email);
+        System.out.println("있으니가 가입 불가능 false" + !existingUser.isPresent());
+        return !existingUser.isPresent();
+    }
 }
