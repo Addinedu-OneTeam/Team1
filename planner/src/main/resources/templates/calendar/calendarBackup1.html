@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<html lang="ja">
 
 <head>
   <meta charset="UTF-8">
@@ -24,101 +24,92 @@
   <script src="/webjars/datetimepicker/2.5.20-1/jquery.datetimepicker.js"></script>
 
   <!-- Custom CSS -->
-<!--  <link rel="stylesheet" th:href="@{/css/calendarMini.css}" />-->
-  <link href="css/calendarMini.css" rel="stylesheet">
+  <link href="/css/calendarMini.css" rel="stylesheet">
 
   <style>
     /* 스타일 추가 */
     body {
       font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
+      width: 1900px;
     }
 
-    #mini-calendar {
+    .calendar {
       display: flex;
-      padding-right: 0;
-      padding-left: 0;
+      width: 100%;
+      padding-top: 40px;
+      justify-content: space-evenly;
     }
 
     #main-calendar {
-      width: 20%;
-      height: 800px;
+      width: 70%;
     }
 
-    #eventForm {
-      display: none;
-      position: absolute;
-      background-color: #fff;
-      padding: 10px;
-      border: 1px solid #ccc;
-      z-index: 1000;
-    }
   </style>
 </head>
 
 <body>
 
-<!-- 미니 달력 컨테이너 -->
-<div id="mini-calendar"></div>
+<div class='calendar'>
+  <!-- 미니 달력 컨테이너 -->
+  <div id="mini-calendar"></div>
 
-<!-- 메인 달력 컨테이너 -->
-<div id="main-calendar"></div>
+  <!-- 메인 달력 컨테이너 -->
+  <div id="main-calendar"></div>
 
-<div id="eventForm">
-  <h3>일정 추가</h3>
-  <form id="addEventForm">
-    <!-- 이벤트 제목 입력 -->
-    <label for="title">제목</label>
-    <input type="text" id="title" name="title" required>
-    <br>
-    <!-- 이벤트 하루종일 선택 여부 -->
-    <label for="allDay">하루종일</label>
-    <input type="checkbox" id="allDay" name="allDay" checked>
-    <br>
-    <!-- 시작 이벤트 날짜 선택 -->
-    <label for="startDate">시작일</label>
-    <input type="text" id="startDate" name="startDate" readonly>
-    <br>
-    <!-- 시작 이벤트 시간 선택 -->
-    <label for="startTime">시작시간</label>
-    <input type="text" id="startTime" name="startTime" readonly>
-    <br>
-    <!-- 종료 이벤트 날짜 선택 -->
-    <label for="endDate">종료일</label>
-    <input type="text" id="endDate" name="endDate" readonly>
-    <br>
-    <!-- 종료 이벤트 시간 선택 -->
-    <label for="endTime">종료시간</label>
-    <input type="text" id="endTime" name="endTime" readonly>
-    <br>
-    <!-- 이벤트 반복 선택 -->
-    <label for="repeat">반복</label>
-    <select name="repeat">
-      <option value="1">매일</option>
-      <option value="2">해당 요일마다</option>
-      <option value="3">평일</option>
-      <option value="4">주말 및 공휴일</option>
-    </select>
-    <br>
-    <!-- 이벤트 내용 선택 -->
-    <label for="content">내용</label>
-    <textarea id="content" name="content"></textarea>
-    <br>
-    <!-- 이벤트 장소 선택 -->
-    <label for="place">장소</label>
-    <input id="place" name="place">
-    <br>
-    <!-- 일정 알람 선택 여부 -->
-    <label for="alarm">알람</label>
-    <input type="checkbox" id="alarm" name="alarm" checked>
-    <br>
-    <!--<input type="hidden" id="userEmail" name="userEmail">-->
-    <!-- 이벤트 추가 버튼 -->
-    <button onclick="insertPlan();">추가</button>
-  </form>
+  <div id="eventForm">
+    <h3>일정 추가</h3>
+    <form id="addEventForm">
+      <!-- 이벤트 제목 입력 -->
+      <label for="title">제목</label>
+      <input type="text" id="title" name="title" required>
+      <br>
+      <!-- 이벤트 하루종일 선택 여부 -->
+      <label for="allDay">하루종일</label>
+      <input type="checkbox" id="allDay" name="allDay" checked>
+      <br>
+      <!-- 시작 이벤트 날짜 선택 -->
+      <label for="startDate">시작일</label>
+      <input type="text" id="startDate" name="startDate" readonly>
+      <br>
+      <!-- 시작 이벤트 시간 선택 -->
+      <label for="startTime">시작시간</label>
+      <input type="text" id="startTime" name="startTime" readonly>
+      <br>
+      <!-- 종료 이벤트 날짜 선택 -->
+      <label for="endDate">종료일</label>
+      <input type="text" id="endDate" name="endDate" readonly>
+      <br>
+      <!-- 종료 이벤트 시간 선택 -->
+      <label for="endTime">종료시간</label>
+      <input type="text" id="endTime" name="endTime" readonly>
+      <br>
+      <!-- 이벤트 반복 선택 -->
+      <label for="repeat">반복</label>
+      <select name="repeat">
+        <option value="1">매일</option>
+        <option value="2">해당 요일마다</option>
+        <option value="3">평일</option>
+        <option value="4">주말 및 공휴일</option>
+      </select>
+      <br>
+      <!-- 이벤트 내용 선택 -->
+      <label for="content">내용</label>
+      <textarea id="content" name="content"></textarea>
+      <br>
+      <!-- 이벤트 장소 선택 -->
+      <label for="place">장소</label>
+      <input id="place" name="place">
+      <br>
+      <!-- 일정 알람 선택 여부 -->
+      <label for="alarm">알람</label>
+      <input type="checkbox" id="alarm" name="alarm" checked>
+      <br>
+      <!--<input type="hidden" id="userEmail" name="userEmail">-->
+      <!-- 이벤트 추가 버튼 -->
+      <button onclick="insertPlan();">추가</button>
+    </form>
+  </div>
 </div>
-
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     // 미니 달력 설정
@@ -159,6 +150,7 @@
       dayMaxEventRows: true, // 셀 높이에 따라 이벤트 표시
       fixedWeekCount: false, // 다음 달에 해당되는 날짜 미리 보여짐 여부
       locale: 'ja', // 원하는 지역(언어)로 설정
+
 
       dateClick: function (info) {
         // 날짜를 클릭하면 미니 달력 선택 날짜 갱신
@@ -288,7 +280,7 @@ $('#startTime, #endTime').on('dblclick', function () {
     $.ajax({
       type: "post",
       url: "/insert",
-      contentType: "application/json",
+      contentType: 'application/json',
       data: JSON.stringify(plan),
       success: function (response) {
         console.log(response);
