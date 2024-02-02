@@ -12,7 +12,7 @@ import com.example.service.PlannerService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
-public class PlannerController {
+public class PlannerApiController {
 	
 	@Autowired 
 	public PlannerService plannerService;
