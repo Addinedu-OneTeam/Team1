@@ -33,42 +33,43 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-
-
-	// jsp를 위한 의존성 주입
-	implementation 'jakarta.servlet:jakarta.servlet-api'
-	implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api'
-	implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl'
-	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
-
 	// log4jdbc
 	implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
 
-	// 부트스트랩 사용
-	implementation 'org.webjars:bootstrap:5.3.2'
-
-	// jQuery 사용
+	// 새로고침으로 html 갱신
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	
+	// fullcalendar
+	implementation 'org.webjars.npm:fullcalendar:6.1.10'
+	
+	// flatpickr
+	implementation 'org.webjars.npm:flatpickr:4.6.13'
+	
+	// jQuery
 	implementation 'org.webjars:jquery:3.7.1'
 
 	// jQuery UI
 	implementation 'org.webjars:jquery-ui:1.13.1'
+	
+	// bootstrap
+	implementation 'org.webjars:bootstrap:5.3.2'
 
-	// fullcalendar
-	implementation 'org.webjars:fullcalendar:6.1.9'
-	// flatpickr
-	implementation 'org.webjars.npm:flatpickr:4.6.13'
-	// Datetimepicker
-	implementation 'org.webjars:datetimepicker:2.5.20-1'
+	// popper
+	implementation 'org.webjars:popper.js:2.11.7'
+	
+	// moment
+	implementation 'org.webjars.npm:moment:2.30.1'
+	
+	// sweetalert2
+	implementation 'org.webjars.npm:sweetalert2:11.10.4'
 
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-
-//	// Spring Security
+	// 비밀번호 암호화
+	implementation 'org.springframework.security:spring-security-crypto:6.2.1'
+	
+	// Spring Security
 //	implementation 'org.springframework.boot:spring-boot-starter-security'
 
-//	// 비밀번호 암호화
-	implementation 'org.springframework.security:spring-security-crypto:6.2.1'
-//
-//	// JWT
+	// JWT
 //	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
 //	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
 //	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
@@ -81,6 +82,12 @@ dependencies {
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '3.0.5'
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail
 	//implementation 'org.springframework.boot:spring-boot-starter-mail:2.7.2'
+
+	// jsp를 위한 의존성 주입
+//	implementation 'jakarta.servlet:jakarta.servlet-api'
+//	implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api'
+//	implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl'
+//	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
 
 
 }
