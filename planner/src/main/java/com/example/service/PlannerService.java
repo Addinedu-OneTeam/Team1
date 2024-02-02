@@ -3,6 +3,7 @@ package com.example.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class PlannerService {
 	}
 
 	// 일정 조회
-	public List<Map<String, Object>> select(String userEmail) {
+	public List<Map<String, Object>> selectList(String userEmail) {
 		List<Plan> planList = plannerRepository.findAllByuserEmail(userEmail);
 
 		// Plan 객체를 Map으로 변환하는 로직을 추가하면 됩니다.
@@ -40,5 +41,10 @@ public class PlannerService {
 
         return eventList;
 	}
+
+	/*public Optional<Plan> selectDetail(Long planNo, String userEmail) {
+		return plannerRepository.findByUserEmailAndPlanNo(planNo, userEmail);
+	}*/
+
 
 }
