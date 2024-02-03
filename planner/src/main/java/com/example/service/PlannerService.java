@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,19 +33,32 @@ public class PlannerService {
         List<Map<String, Object>> eventList = 
         		planList.stream().map(plan -> {
 							        		    Map<String, Object> event = new HashMap<>();
+							        		    event.put("planNo",plan.getPlanNo());
 							        		    event.put("title", plan.getTitle());
+							        		    event.put("allDay", plan.getAllDay());
 							        		    event.put("start", plan.getStartDate());
 							        		    event.put("end", plan.getEndDate());
+							        		    event.put("startTime", plan.getStartTime());
+							        		    event.put("endTime", plan.getEndTime());
+							        		    event.put("repeat", plan.getRepeat());
+							        		    event.put("content", plan.getContent());
+							        		    event.put("alarm", plan.getAlarm());
 							        		    // 필요한 필드들을 추가로 넣어주면 됩니다.
 							        		    return event;
 							        		})
 							        		.collect(Collectors.toList());
-
         return eventList;
 	}
 
-	/*public Optional<Plan> selectDetail(Long planNo, String userEmail) {
-		return plannerRepository.findByUserEmailAndPlanNo(planNo, userEmail);
-	}*/
+	public Optional<Plan> selectDetail(Long planNo) {
+		return plannerRepository.findById(planNo);
+	}
+
+	public Plan update(Plan plan) {
+	    Plan rePlan = plannerRepository.findById(plan.getPlanNo()).get();
+	    BeanUtils.copyProperties(plan, rePlan, "planNo", "userEmail");
+	    return rePlan;
+	}
+
 
 }

@@ -5,7 +5,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,12 +45,18 @@ public class PlannerApiController {
 	    return plannerService.selectList(userEmail);
 	}
 	
-	/*// 일정 상세 조회
-	@GetMapping("selectDetail")
+	// 일정 상세 조회
+	@GetMapping("/selectDetail")
 	@ResponseBody
-	public Plan selectDetail(@RequestParam("planNo") Long planNo, @RequestParam("userEmail") String userEmail) {
-		
-		return plannerService.selectDetail(planNo, userEmail).orElse(null);
-	}*/
+	public Plan selectDetail(@RequestParam("planNo") Long planNo) {
+		return plannerService.selectDetail(planNo).orElse(null);
+	}
+	
+	// 일정 수정
+	@PutMapping("/update")
+	@ResponseBody
+	public Plan update(@RequestBody Plan plan) {
+		return plannerService.update(plan);
+	}
 	
 }
