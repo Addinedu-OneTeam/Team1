@@ -19,6 +19,7 @@ public class UserService {
 
     public User create(User user) {
         user.setPasswordHash(pEncoder.encode(user.getPasswordHash()));
+        user.setEmail(user.getEmail());
         return UserRepository.save(user);
     }
 

@@ -88,3 +88,14 @@ form > h1 {
     margin-right: 5px; /* 오른쪽 여백 추가 */
     vertical-align: middle; /* 수직 정렬 */
 }
+
+input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    margin-right: 5px; /* Optional: Add some margin to separate checkbox from label */
+}
+#birth_Year, #birth_Month, #birth_Day{
+    width: 70px;
+    display: inline-block;
+    text-align: center;
+}
