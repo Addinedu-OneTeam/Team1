@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +32,6 @@ public class PlannerService {
         List<Map<String, Object>> eventList = 
         		planList.stream().map(plan -> {
 							        		    Map<String, Object> event = new HashMap<>();
-							        		    event.put("planNo",plan.getPlanNo());
 							        		    event.put("title", plan.getTitle());
 							        		    event.put("start", plan.getStartDate());
 							        		    event.put("end", plan.getEndDate());
@@ -46,12 +44,6 @@ public class PlannerService {
 
 	public Optional<Plan> selectDetail(Long planNo) {
 		return plannerRepository.findById(planNo);
-	}
-
-	public Plan update(Plan plan) {
-	    Plan rePlan = plannerRepository.findById(plan.getPlanNo()).get();
-	    BeanUtils.copyProperties(plan, rePlan, "planNo", "userEmail");
-	    return rePlan;
 	}
 
 

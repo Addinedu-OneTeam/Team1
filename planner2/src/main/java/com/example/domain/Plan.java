@@ -28,11 +28,9 @@ public class Plan {
 
     @NonNull
     private String title; // 제목
-
+    
     @Column
     private int allDay; // 하루종일
-    // 0 = 하루종일 off
-    // 1 = 하루종일 on
 
     @NonNull
     private LocalDate startDate; // 시작일
@@ -43,7 +41,7 @@ public class Plan {
     private String startTime; // 시작시간
     private String endTime; // 종료시간
 
-    @Column
+    @Column(insertable = false, columnDefinition = "NUMBER DEFAULT 0")
     private int repeat; // 반복 여부
     // 0 = 반복 off
     // 1 = 매일
@@ -54,7 +52,7 @@ public class Plan {
     private String content; // 내용
     private String place; // 위치
 
-    @Column
+    @Column(insertable = false, columnDefinition = "NUMBER DEFAULT 1")
     private int alarm; // 알람 여부
     // 0 = 알람 off
     // 1 = 알람 on
