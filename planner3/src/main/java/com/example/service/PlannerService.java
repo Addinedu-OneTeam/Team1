@@ -49,8 +49,12 @@ public class PlannerService {
 	}
 
 	public Plan update(Plan plan) {
+		System.out.println("1");
 	    Plan rePlan = plannerRepository.findById(plan.getPlanNo()).get();
 	    BeanUtils.copyProperties(plan, rePlan, "planNo", "userEmail");
+	    System.out.println("2");
 	    return rePlan;
 	}
+
+
 }
