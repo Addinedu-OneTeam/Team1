@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.domain.Plan;
 import com.example.repository.PlannerRepository;
@@ -19,10 +20,9 @@ public class PlannerService {
 	@Autowired
 	public PlannerRepository plannerRepository;
 	
-	// 일정 추가
 	public Plan insert(Plan plan) {
-		System.out.println("저장완료");
-		return plannerRepository.save(plan);
+	    System.out.println("저장완료");
+	    return plannerRepository.save(plan);
 	}
 
 	// 일정 조회
@@ -43,6 +43,7 @@ public class PlannerService {
 							        		.collect(Collectors.toList());
         return eventList;
 	}
+	
 
 	public Optional<Plan> selectDetail(Long planNo) {
 		return plannerRepository.findById(planNo);
@@ -50,8 +51,17 @@ public class PlannerService {
 
 	public Plan update(Plan plan) {
 	    Plan rePlan = plannerRepository.findById(plan.getPlanNo()).get();
-	    BeanUtils.copyProperties(plan, rePlan, "planNo", "userEmail");
-	    return rePlan;
+	    rePlan.setTitle(plan.getTitle());
+	    rePlan.setAllDay(plan.getAllDay());
+	    rePlan.setStartDate(plan.getStartDate());
+	    rePlan.setEndDate(plan.getEndDate());
+	    rePlan.setStartTime(plan.getStartTime());
+	    rePlan.setEndTime(plan.getEndTime());
+	    rePlan.setRepeat(plan.getRepeat());
+	    rePlan.setPlace(plan.getPlace());
+	    rePlan.setContent(plan.getContent());
+	    rePlan.setAlarm(plan.getAlarm());
+	    return plannerRepository.save(rePlan);
 	}
 
 

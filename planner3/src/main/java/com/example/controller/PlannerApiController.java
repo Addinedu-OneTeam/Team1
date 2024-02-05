@@ -53,12 +53,11 @@ public class PlannerApiController {
 	}
 	
 	// 일정 수정
-	@PostMapping("/update")
+	@PutMapping("/update")
 	@ResponseBody
 	public Plan update(@RequestBody Plan plan) {
-		System.out.println("오는거맞냐");
+		System.out.println("3");
 		return plannerService.update(plan);
-		
 	}
 	
 }

@@ -36,7 +36,7 @@ public class UserController {
             return "redirect:/";
         }
 //		session.invalidate();
-        return "calendar/calendar2";
+        return "calendar/calendar3";
     }
     
 	
