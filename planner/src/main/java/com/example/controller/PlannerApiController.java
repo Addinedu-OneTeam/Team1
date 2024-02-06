@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,14 +47,14 @@ public class PlannerApiController {
 	}
 	
 	// 일정 상세 조회
-	@GetMapping("/selectDetail")
-	@ResponseBody
-	public Plan selectDetail(@RequestParam("planNo") Long planNo) {
-		return plannerService.selectDetail(planNo).orElse(null);
-	}
+    @GetMapping("/selectDetail/{planNo}")
+    @ResponseBody
+    public Plan selectDetail(@PathVariable(name = "planNo") Long planNo) {
+        return plannerService.selectDetail(planNo).orElse(null);
+    }
 	
 	// 일정 수정
-	@PostMapping("/update")
+	@PutMapping("/update")
 	@ResponseBody
 	public Plan update(@RequestBody Plan plan) {
 		System.out.println("오는거맞냐");
@@ -61,4 +62,10 @@ public class PlannerApiController {
 		
 	}
 	
+	// 일정 삭제
+    @DeleteMapping("/delete/{planNo}")
+    @ResponseBody
+    public void delete(@PathVariable(name = "planNo") Long planNo) {
+        plannerService.delete(planNo);
+    }
 }
