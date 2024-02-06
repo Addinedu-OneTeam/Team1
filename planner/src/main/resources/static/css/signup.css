@@ -99,3 +99,38 @@ input[type="checkbox"] {
     display: inline-block;
     text-align: center;
 }
+#emailLabel, #verifyLabel{
+    position: relative;
+}
+#fullEmail, #verificationCode {
+    width: 95%;
+}
+#checkDuplicateButton{
+    position: absolute;
+    width: 100px;
+    height: 54px;
+    top: 21px;
+    bottom: 0;
+    right: 0px;
+    margin: auto 0;
+    border-radius: 3px;
+
+} #verifyCodeButton{
+      position: absolute;
+      width: 100px;
+      height: 54px;
+      top: 0;
+      bottom: 0;
+      right: 0px;
+      margin: auto 0;
+      border-radius: 3px;
+  }#verifyEmailButton{
+         position: absolute;
+         width: 100px;
+         height: 54px;
+         top: 21px;
+         bottom: 0;
+         right: 0px;
+         margin: auto 0;
+         border-radius: 3px;
+ }

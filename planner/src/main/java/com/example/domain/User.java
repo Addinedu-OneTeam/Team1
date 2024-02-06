@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -36,6 +37,7 @@ public class User {
     @Column(name = "password_hash", nullable = false, length = 64)
     private String passwordHash;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "birthday", nullable = false)
     private LocalDate birthday;
 
