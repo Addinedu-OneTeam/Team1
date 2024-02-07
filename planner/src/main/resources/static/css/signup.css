@@ -88,3 +88,49 @@ form > h1 {
     margin-right: 5px; /* 오른쪽 여백 추가 */
     vertical-align: middle; /* 수직 정렬 */
 }
+
+input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    margin-right: 5px; /* Optional: Add some margin to separate checkbox from label */
+}
+#birth_Year, #birth_Month, #birth_Day{
+    width: 70px;
+    display: inline-block;
+    text-align: center;
+}
+#emailLabel, #verifyLabel{
+    position: relative;
+}
+#fullEmail, #verificationCode {
+    width: 95%;
+}
+#checkDuplicateButton{
+    position: absolute;
+    width: 100px;
+    height: 54px;
+    top: 21px;
+    bottom: 0;
+    right: 0px;
+    margin: auto 0;
+    border-radius: 3px;
+
+} #verifyCodeButton{
+      position: absolute;
+      width: 100px;
+      height: 54px;
+      top: 0;
+      bottom: 0;
+      right: 0px;
+      margin: auto 0;
+      border-radius: 3px;
+  }#verifyEmailButton{
+         position: absolute;
+         width: 100px;
+         height: 54px;
+         top: 21px;
+         bottom: 0;
+         right: 0px;
+         margin: auto 0;
+         border-radius: 3px;
+ }
