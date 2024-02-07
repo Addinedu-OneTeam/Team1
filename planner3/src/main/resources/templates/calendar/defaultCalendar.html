@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
+<!-- jquery CDN -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- jQuery UI -->
+<link rel="stylesheet" href="/webjars/jquery-ui/1.13.1/jquery-ui.css">
+<script src="/webjars/jquery-ui/1.13.1/jquery-ui.js"></script>
+
+<!-- fullcalendar CDN -->
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js'></script>
+<title>Insert title here</title>
+
+<!-- bootstrap -->
+<link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css">
+<script src="/webjars/bootstrap/5.3.2/js/bootstrap.min.js"></script>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        color: black !important;
+    }
+
+
+    #calendar {
+		display: flex;
+        width: 60%;
+        margin-right: 10px;
+        justify-content: space-evenly;
+        color: black !important;
+    }
+    
+    #detailForm {
+		display: flex;
+		width: 15%;
+		justify-content: space-evenly;
+	}
+</style>
+
+    
+</head>
+<body>
+
+	<div id='calendar'></div>
+	
+		<!-- 일정 입력 폼 -->
+        <div id="detailForm">
+            <form id="eventForm">
+                <table>
+                    <h3 id="eventTag">이벤트</h3>
+                    <tr>
+                        <td colspan="2">
+                            <input id="title" class="form-control" placeholder="제목 및 시간 추가" onfocus="this.placeholder=''"
+                                onblur="this.placeholder='제목 및 시간 추가'" size="27px">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="mini-calendar-input">
+                            시작일 : <input id="startDate" class="form-control"> 
+                            종료일 : <input id="endDate" class="form-control">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            종일 : <input type="checkbox" id="allDay" name="allDay" checked>
+                        </td>
+                    </tr>
+                    <tr id="timeInputs">
+                        <td>
+                            시작시간 :
+                            <select id="startTime" class="form-control"></select>
+                            종료시간 :
+                            <select id="endTime" class="form-control"></select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            장소 <input id="place" name="place" class="form-control">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select id="repeat" class="form-select" aria-label="Default select example">
+                                <option value="1">반복안함</option>
+                                <option value="2">매일</option>
+                                <option value="3">매주</option>
+                                <option value="4">평일</option>
+                                <option value="5">주말</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <textarea id="content" class="form-control" placeholder="설명 추가"
+                                onfocus="this.placeholder=''" onblur="this.placeholder='설명 추가'" cols="30" rows="4"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            알람 : <input type="checkbox" id="alarm" name="alarm" checked>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="right">
+                            <button id="updatePlan" onclick="insertPlan()" class="btn btn-primary">저장</button>
+                        </td>
+                    </tr>
+                </table>
+                <input type="hidden" id="userEmail" name="userEmail">
+                <input id="planNo" name="planNo">
+            </form>
+        </div>
+    </div>
+    
+    
+<script>
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+		googleCalendarApiKey : "AIzaSyB9Pp-FiVX_CbTf6d69RZxnbUJefoQOM_8",
+		    eventSources :[ 
+		        {
+		            googleCalendarId : 'ko.south_korea.official#holiday@group.v.calendar.google.com'
+		            , color: 'white'  
+		            , backgroundColor: 'red' 
+		        } 
+		    ],
+      	initialView: 'dayGridMonth',
+      	editable: true,
+      	
+      	
+    });
+    
+    calendar.render();
+    
+    //공휴일 클릭시 구글캘린더 이동 막기
+    calendar.on('eventClick', function (info) {
+		info.jsEvent.preventDefault();
+	});
+    
+  });
+
+</script>
+
+</body>
+</html>
