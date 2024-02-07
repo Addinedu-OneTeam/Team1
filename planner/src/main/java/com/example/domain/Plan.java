@@ -1,6 +1,8 @@
 package com.example.domain;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,8 +42,8 @@ public class Plan {
     private LocalDate endDate; // 종료일
     // String으로 하면 날짜 변경을 못한다
     
-    private String startTime; // 시작시간
-    private String endTime; // 종료시간
+    private LocalTime startTime; // 시작시간
+    private LocalTime endTime; // 종료시간
 
     @Column
     private int repeat; // 반복 여부

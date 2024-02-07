@@ -35,8 +35,15 @@ public class PlannerService {
 							        		    Map<String, Object> event = new HashMap<>();
 							        		    event.put("planNo",plan.getPlanNo());
 							        		    event.put("title", plan.getTitle());
-							        		    event.put("start", plan.getStartDate());
-							        		    event.put("end", plan.getEndDate());
+							        		    event.put("allDay", plan.getAllDay());
+							        		    event.put("startDate", plan.getStartDate());
+							        		    event.put("endDate", plan.getEndDate());
+							        		    event.put("startTime", plan.getStartTime());
+							        		    event.put("endTime", plan.getEndTime());
+							        		    event.put("place", plan.getPlace());
+							        		    event.put("repeat", plan.getRepeat());
+							        		    event.put("content", plan.getContent());
+							        		    event.put("alarm", plan.getAlarm());
 							        		    // 필요한 필드들을 추가로 넣어주면 됩니다.
 							        		    return event;
 							        		})
@@ -49,19 +56,14 @@ public class PlannerService {
 		return plannerRepository.findById(planNo);
 	}
 
-	public Plan update(Plan plan) {
+	public Plan update(Plan plan) { // 일정 수정
 	    Plan rePlan = plannerRepository.findById(plan.getPlanNo()).get();
-	    rePlan.setTitle(plan.getTitle());
-	    rePlan.setAllDay(plan.getAllDay());
-	    rePlan.setStartDate(plan.getStartDate());
-	    rePlan.setEndDate(plan.getEndDate());
-	    rePlan.setStartTime(plan.getStartTime());
-	    rePlan.setEndTime(plan.getEndTime());
-	    rePlan.setRepeat(plan.getRepeat());
-	    rePlan.setPlace(plan.getPlace());
-	    rePlan.setContent(plan.getContent());
-	    rePlan.setAlarm(plan.getAlarm());
-	    return plannerRepository.save(rePlan);
+	    BeanUtils.copyProperties(plan, rePlan, "planNo", "userEmail");
+	    return rePlan;
+	}
+
+	public void delete(Long planNo) {
+	    plannerRepository.deleteById(planNo);
 	}
 
 
