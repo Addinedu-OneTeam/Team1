@@ -131,6 +131,8 @@
         var emailError = document.getElementById("emailError");
         var email = document.getElementById('fullEmail').value;
         var code = document.getElementById('verificationCode').value;
+        emailError.style.fontWeight = 'bold';
+        emailError.style.fontSize = '12px';
         axios.post('/verification-email-sent', { email: email, verificationCode: code })
             .then(function (response) {
                 if (response.data.valid) {
@@ -139,7 +141,7 @@
                     document.getElementById('verificationSection').style.display = 'none';
                     document.getElementById('submitBtn').disabled = false;
                     alert('인증이 완료 되었습니다.');
-                    emailError.textContent = "인증이 완료 되었습니다^_^."
+                    emailError.textContent = "☑️ 인증이 완료 되었습니다."
                     emailError.style.color = "blue";
                     document.getElementById('verifyEmailButton').disabled = true;
                     document.getElementById('fullEmail').disabled = true;
@@ -164,6 +166,8 @@
         fullEmail = fullEmail.toLowerCase();
         var emailError = document.getElementById("emailError");
         var emailRegex = /^[a-zA-Z0-9_+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$/;
+        emailError.style.fontWeight = 'bold';
+        emailError.style.fontSize = '12px';
         if (emailRegex.test(fullEmail)) {
             $.ajax({
                 type: "GET",
@@ -171,10 +175,10 @@
                 data: {fullEmail: fullEmail},
                 success: function (response) {
                     if (!response) {
-                        emailError.textContent = "이미 가입된 이메일입니다."
+                        emailError.textContent = "❌ 이미 가입된 이메일입니다."
                         emailError.style.color = "red";
                     } else {
-                        emailError.textContent = "사용 가능한 이메일입니다."
+                        emailError.textContent = "✔ 사용 가능한 이메일입니다."
                         emailError.style.color = "green";
                         document.getElementById('verifyEmailButton').style.display = "block"; // 이메일 인증 버튼 표시
                         document.getElementById('checkDuplicateButton').style.display = "none"; // 중복 확인 버튼 숨김
@@ -207,16 +211,16 @@
         var birthMonth = document.getElementById('birth_Month').value;
         var birthDay = document.getElementById('birth_Day').value;
         var birthdayError = document.getElementById("birthdayError");
-
+        birthdayError.style.fontWeight = 'bold';
+        birthdayError.style.fontSize = '12px';
         // 입력값이 숫자로 변환 가능한지 확인
         if (isNaN(birthYear) || isNaN(birthMonth) || isNaN(birthDay)) {
-            birthdayError.textContent = "올바른 생년월일을 입력하세요.";
+            birthdayError.textContent = "❌ 올바른 생년월일을 입력하세요.";
             return false;
         }
-
-        // 1부터 9까지의 값이라면 앞에 0을 붙여줌
-        birthMonth = (birthMonth < 10) ? '0' + birthMonth : birthMonth;
-        birthDay = (birthDay < 10) ? '0' + birthDay : birthDay;
+        // 길이가 1인 1부터 9까지의 값이라면 앞에 0을 붙여줌
+        birthMonth = (birthMonth < 10 && birthMonth.toString().length === 1) ? '0' + birthMonth : birthMonth;
+        birthDay = (birthDay < 10 && birthDay.toString().length === 1) ? '0' + birthDay : birthDay;
 
         var fullBirthday = birthYear + "-" + birthMonth + "-" + birthDay;
         console.log(fullBirthday);
@@ -226,7 +230,7 @@
         if (birthYear < 1920 || birthYear > 2024 ||
             birthMonth < 1 || birthMonth > 12 ||
             birthDay < 1 || birthDay > 31) {
-            birthdayError.textContent = "올바른 생년월일을 입력하세요.";
+            birthdayError.textContent = "❌ 올바른 생년월일을 입력하세요.";
             return false;
         } else {
             birthdayError.textContent = ""; // 오류 메시지 제거
@@ -248,8 +252,10 @@
     function validateGenderSelection() {
         var genderSelected = document.querySelector('input[name="gender"]:checked');
         var genderError = document.getElementById("genderError");
+        genderError.style.fontWeight = 'bold';
+        genderError.style.fontSize = '12px';
         if (!genderSelected) {
-            genderError.textContent = "성별을 선택해주세요."
+            genderError.textContent = "❌ 성별을 선택해주세요."
             return false;
         } else{
             genderError.textContent = ""; // 오류 메시지 제거
@@ -260,9 +266,11 @@
     function validatePassword() {
         var passwordInput = document.getElementById("password");
         var passwordError = document.getElementById("passwordError");
+        passwordError.style.fontWeight = 'bold';
+        passwordError.style.fontSize = '12px';
         var passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{10,16}$/;
         if (!passwordPattern.test(passwordInput.value)) {
-            passwordError.textContent = "비밀번호는 영문, 숫자, 특수 기호포함 10~16자리여야 합니다.";
+            passwordError.textContent = "❌ 비밀번호는 영문, 숫자, 특수 기호포함 10~16자리여야 합니다.";
             return false;
         } else {
             passwordError.textContent = ""; // 오류 메시지 제거
