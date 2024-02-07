@@ -178,7 +178,8 @@
                 hour12: false
             },
 
-            height: '800px', // calendar 높이 설정
+            height: 800, // calendar 전체 높이 설정
+            contentHeight: 600,	// calendar에서 달력의 높이만 설정
             initialView: 'dayGridMonth', // 캘린더를 초기에 월별 뷰로 설정
             initialDate: new Date(), // 달력 처음 로드될때 표시되는 날짜를 현재 날짜로 설정
             navLinks: true, // 요일 및 날짜 클릭 시 일이나 주 단위 보여주는 화면으로 넘어가기
@@ -276,6 +277,13 @@
 		    $('#repeat').val(planDetail.repeat);
 		    $('#content').val(planDetail.content);
 		    $('#alarm').prop('checked', planDetail.alarm);
+		
+			// 클릭한 일정의 종일 여부에 따라 시간 블러처리를 추가하거나 제거  여기다 해줘야 일정 클릭시 일정에 맞는 값 불러옴
+		    if (planDetail.allDay) {
+		        $('#timeInputs').addClass('blurred');
+		    } else {
+		        $('#timeInputs').removeClass('blurred');
+		    }
 		
 		    // 사용자에게 보여주기 위해 폼을 표시
 		    // $('#eventForm').show();
@@ -580,30 +588,30 @@
     populateTimeDropdown(endTimeDropdown);
     
     // startTime 드롭다운에 이벤트 리스너 추가
-		startTimeDropdown.addEventListener('change', function() {
-		    // 선택된 startTime 가져오기
-		    const selectedStartTime = this.value;
-		
-		    // 선택된 startTime을 기반으로 endTime 드롭다운의 옵션 업데이트
-		    updateEndTimeOptions(selectedStartTime);
-		});
-		
-		// endTime 드롭다운의 옵션을 업데이트하는 함수
-		function updateEndTimeOptions(selectedStartTime) {
-		    const endTimeDropdown = document.getElementById('endTime');
-		    
-		    // startTime선택 이후의 옵션만 남기기 (ex - 11:)
-		    const filteredOptions = Array.from(endTimeDropdown.options).filter(option => option.value > selectedStartTime);
-		    
-		    // 옵션을 비우고 새로운 옵션으로 채우기
-		    endTimeDropdown.innerHTML = '';
-		    for (const option of filteredOptions) {
-		        endTimeDropdown.appendChild(option.cloneNode(true));
-		    }
-		
-		    // 기본 선택된 옵션을 첫 번째 유효한 옵션으로 설정
-		    endTimeDropdown.selectedIndex = 0;
+	startTimeDropdown.addEventListener('change', function() {
+	    // 선택된 startTime 가져오기
+	    const selectedStartTime = this.value;
+	
+	    // 선택된 startTime을 기반으로 endTime 드롭다운의 옵션 업데이트
+	    updateEndTimeOptions(selectedStartTime);
+	});
+	
+	// endTime 드롭다운의 옵션을 업데이트하는 함수
+	function updateEndTimeOptions(selectedStartTime) {
+	    const endTimeDropdown = document.getElementById('endTime');
+	    
+	    // startTime선택 이후의 옵션만 남기기 (ex - 11:)
+	    const filteredOptions = Array.from(endTimeDropdown.options).filter(option => option.value > selectedStartTime);
+	    
+	    // 옵션을 비우고 새로운 옵션으로 채우기
+	    endTimeDropdown.innerHTML = '';
+	    for (const option of filteredOptions) {
+	        endTimeDropdown.appendChild(option.cloneNode(true));
 	    }
+	
+	    // 기본 선택된 옵션을 첫 번째 유효한 옵션으로 설정
+	    endTimeDropdown.selectedIndex = 0;
+    }
   </script>
 </body>
 </html>
