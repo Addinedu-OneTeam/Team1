@@ -99,7 +99,7 @@
                     </tr>
                     <tr>
                         <td>
-                            종일終日 : <input type="checkbox" id="allDay" name="allDay">
+                            종일終日 : <input type="checkbox" id="allDay" name="allDay" checked>
                         </td>
                     </tr>
                     <tr id="timeInputs">
@@ -188,6 +188,7 @@
             dayMaxEvents: true, // +more 표시 전 최대 이벤트 갯수, true는 셀 높이에 의해 결정
             dayMaxEventRows: true, // 셀 높이에 따라 이벤트 표시
             fixedWeekCount: false, // 다음 달에 해당되는 날짜 미리 보여짐 여부
+            eventResizableFromStart: true, //이벤트 시작부분을 이전으로 늘릴 수 있게
             locale: 'ko', // 원하는 지역(언어)로 설정
             eventColor: 'hotpink',
 
@@ -528,11 +529,12 @@
 
   <!-- 종일체크시 시간 활성/비활성 -->
   <script>
-    // 종일(all-day) 체크박스
+    // 종일(all-day) 체크박스 선택시 블러처리
     $('#allDay').change(function () {
         if (this.checked) {
             // 종일 체크되었을 때
             $('#timeInputs').addClass('blurred');
+            
         } else {
             // 종일 체크가 해제되었을 때
             $('#timeInputs').removeClass('blurred');

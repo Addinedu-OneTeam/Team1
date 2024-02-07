@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang='ko'>
+<html lang='ja'>
 
 <head>
     <meta charset="UTF-8">
@@ -15,13 +15,10 @@
     <!-- flatpickr (미니 달력) -->
     <link rel="stylesheet" href="/webjars/flatpickr/4.6.13/dist/flatpickr.min.css">
     <script src="/webjars/flatpickr/4.6.13/dist/flatpickr.min.js"></script>
-    <script src="/webjars/flatpickr/4.6.13/dist/l10n/ko.js"></script>
+    <script src="/webjars/flatpickr/4.6.13/dist/l10n/ja.js"></script>
 
     <!-- fullcalendar (메인 달력) -->
     <script src='/webjars/fullcalendar/6.1.10/index.global.min.js'></script>
-    <!-- fullcalendar CDN -->
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js'></script>
-    <script src="https://apis.google.com/js/api.js"></script>
 
     <!-- bootstrap -->
     <link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css">
@@ -74,7 +71,7 @@
     <div class="calendar">
         <!-- 미니 달력 -->
         <div id="mini-calendar">
-            <button id="todayButton" class="btn btn-dark">오늘</button>
+            <button id="todayButton" class="btn btn-dark">今日</button>
             <input id="dateInput" style="display: none;">
         </div>
         <!-- 메인 달력 -->
@@ -139,32 +136,22 @@
                     </tr>
                     <tr>
                         <td colspan="2" align="right">
-                            <button id="updatePlan" onclick="insertPlan()" class="btn btn-primary">저장</button>
+                            <button onclick="insertOrUpdatePlan()" class="btn btn-primary">저장</button>
                         </td>
                     </tr>
                 </table>
                 <input type="hidden" id="userEmail" name="userEmail">
-                <input id="planNo" name="planNo">
+                <input type="hidden" id="planNo" name="planNo">
             </form>
         </div>
     </div>
   
 
   <script>
-	  
     document.addEventListener('DOMContentLoaded', function () {
-		var mainCalendar;
         // 메인 달력 설정 및 렌더링
         var calendarEl = document.getElementById('main-calendar');
-        mainCalendar = new FullCalendar.Calendar(calendarEl, {
-			googleCalendarApiKey : "AIzaSyB9Pp-FiVX_CbTf6d69RZxnbUJefoQOM_8",
-		    eventSources :[ 
-		        {
-		            googleCalendarId : 'ko.south_korea#holiday@group.v.calendar.google.com'
-		            , color: 'white'  
-		            , backgroundColor: 'gold' 
-		        } 
-		    ],
+        var mainCalendar = new FullCalendar.Calendar(calendarEl, {
             headerToolbar: {
                 left: 'prevYear,prev,next,nextYear today',
                 center: 'title',
@@ -177,7 +164,13 @@
                 meridiem: false,
                 hour12: false
             },
-
+            buttonText: {
+                today: '今日',
+                month: '月',
+                week: '週',
+                day: '日',
+                list: '目錄'
+            },
             height: '800px', // calendar 높이 설정
             initialView: 'dayGridMonth', // 캘린더를 초기에 월별 뷰로 설정
             initialDate: new Date(), // 달력 처음 로드될때 표시되는 날짜를 현재 날짜로 설정
@@ -188,8 +181,7 @@
             dayMaxEvents: true, // +more 표시 전 최대 이벤트 갯수, true는 셀 높이에 의해 결정
             dayMaxEventRows: true, // 셀 높이에 따라 이벤트 표시
             fixedWeekCount: false, // 다음 달에 해당되는 날짜 미리 보여짐 여부
-            locale: 'ko', // 원하는 지역(언어)로 설정
-            eventColor: 'hotpink',
+            locale: 'ja', // 원하는 지역(언어)로 설정
 
             dateClick: function (info) {
                 // FullCalendar에서 날짜를 클릭했을 때 flatpickr 시작일 종료일에 날짜만 넘어가게 하기(이렇게 안하면 2024-02-03T09:00:00+09:00 이렇게 넘어감 )
@@ -226,11 +218,31 @@
         }
 
         function addEventToCalendar(plan) {
-			//console.log(plan.planNo);
+			console.log(plan.planNo);
+			
+			// 시작 시간과 종료 시간을 ISO 8601 형식으로 변환
+		    var eventStartTime, eventEndTime;
+		
+		    if (plan.allDay) {
+			    eventStartTime = new Date(plan.start);
+			    eventEndTime = new Date(moment(plan.end).add(1, 'days'));
+			} else {
+			    eventStartTime = new Date(plan.start + ' ' + plan.startTime);
+			    eventEndTime = new Date(plan.end + ' ' + plan.endTime);
+			}
+			
             mainCalendar.addEvent({
+				planNo: plan.planNo,
                 title: plan.title,
-                start: plan.start, // 서버에서 받은 시작 날짜
-                end: plan.end, // 서버에서 받은 종료 날짜
+                allDay: plan.allDay,
+                start: plan.startDate, // 서버에서 받은 시작 날짜
+                end: plan.endDate, // 서버에서 받은 종료 날짜
+                startTime : plan.startTime,
+                endTime: plan.endTime,
+                repeat: plan.repeat,
+                content: plan.content,
+                alarm: plan.alarm,
+                
                 
                 extendedProps: {
 		            planNo: plan.planNo // 이 부분을 추가하여 일정 번호를 저장
@@ -240,11 +252,9 @@
         
         // 클릭 이벤트 핸들러
 		mainCalendar.on('eventClick', function (info) {
+		    // info.event.extendedProps.planNo를 통해 일정 번호를 가져올 수 있음
 		    var planNo = info.event.extendedProps.planNo;
-		    
-		    // 공휴일 클릭 시 동작을 막음
-        	info.jsEvent.preventDefault();
-        	
+		    console.log(planNo);
 		    if (planNo) {
 		        showPlanDetail(planNo);
 		    }
@@ -261,73 +271,26 @@
 	            }
 	        });
 	    };
+    
+    	// 폼을 일정의 상세 정보로 채우는 함수
+        function fillFormWithPlanDetails(plan) {
+            // 폼의 각 입력란에 상세 정보를 설정
+            $('#title').val(plan.title);
+            $('#allDay').prop('checked', plan.allDay);
+            $('#startDate').val(plan.startDate);
+            $('#endDate').val(plan.endDate);
+            $('#startTime').val(plan.startTime);
+            $('#endTime').val(plan.endTime);
+            $('#place').val(plan.place);
+            $('#repeat').val(plan.repeat);
+            $('#content').val(plan.content);
+            $('#alarm').prop('checked', plan.alarm);
 
-		// 폼을 일정의 상세 정보로 채우는 함수
-		function fillFormWithPlanDetails(planDetail) {
-		    $('#planNo').val(planDetail.planNo);
-		    $('#title').val(planDetail.title);
-		    $('#allDay').prop('checked', planDetail.allDay);
-		    $('#startDate').val(planDetail.startDate);
-		    $('#endDate').val(planDetail.endDate);
-		    $('#startTime').val(planDetail.startTime);
-		    $('#endTime').val(planDetail.endTime);
-		    $('#place').val(planDetail.place);
-		    $('#repeat').val(planDetail.repeat);
-		    $('#content').val(planDetail.content);
-		    $('#alarm').prop('checked', planDetail.alarm);
-		
-		    // 사용자에게 보여주기 위해 폼을 표시
-		    // $('#eventForm').show();
-		
-			console.log(planDetail.planNo);
-		
-		    // currentPlanNo 값이 있으면 updatePlan(), 없으면 insertPlan() 호출
-		    
-		   $('#updatePlan').on('click', function () {
-			   // 폼 입력값을 가져와서 planDetail 객체 생성
-			   var planDetail = {
-			       planNo: $('#planNo').val(),
-			       title: $('#title').val(),
-			       allDay: $('#allDay').is(':checked') ? 1 : 0,
-			       startDate: $('#startDate').val(),
-			       endDate: $('#endDate').val(),
-			       startTime: $('#startTime').val(),
-			       endTime: $('#endTime').val(),
-			       repeat: $('#repeat').val(),
-			       place: $('#place').val(),
-			       content: $('#content').val(),
-			   };
-			   console.log(planDetail.planNo);
-			   updatePlan(planDetail);
-       		});  
-		}
-		
-		// 기존 일정 업데이트 함수
-		function updatePlan(planDetail) {
-			 console.log(planDetail.planNo);
-		    $.ajax({
-		        type: 'post',
-		        url: '/api/plan/update',
-		        contentType: 'application/json',
-		        data: JSON.stringify(planDetail),
-		        success: function (response) {
-		            console.log('Update Plan 성공');
-		        },
-		        error: function (error) {
-		            console.error('일정 업데이트 중 오류 발생:', error);
-		        }
-		    });
-		}
-		
-		// 종일(all-day) 체크 여부에 따라 시작 시간과 종료 시간 설정하는 함수
-	    function setTimeIfNotAllDay(planDetail) {
-	
-	        if (!planDetail.allDay) {
-	            planDetail.startTime = $('#startTime').val();
-	            planDetail.endTime = $('#endTime').val();
-	        }
-	    }
+            // 기타 필요한 정보도 필요에 따라 추가
 
+            // 사용자에게 보여주기 위해 폼을 표시
+            $('#eventForm').show();
+        }
         
         // 메인 달력과 미니 달력의 날짜 동기화
         // 이걸 해주면 메인 달력에서 날짜 클릭시 시작일 종료일 달력도 같이 업데이트되어서 해당 날짜로 바뀜
@@ -360,7 +323,7 @@
         // 일정 표시 
         $('#eventForm').submit(function (e) {
             e.preventDefault();
-			var planNo = $('#planNo').val();
+
             var title = $('#title').val();
             var startDate = $('#startDate').val();
             var endDate = $('#endDate').val();
@@ -377,6 +340,10 @@
             } else {
                 eventStartTime = startDate + 'T' + startTime;
                 eventEndTime = endDate + 'T' + endTime;
+
+                // ISO 8601 형식에서 'T'는 날짜와 시간을 나누는 구분자로 사용
+                // "2024-01-31T12:30:00"은 2024년 1월 31일의 날짜와 12시 30분의 시간을 나타냄
+                //  'T'는 "2024-01-31"과 "12:30:00"을 나누는 역할을 함
             }
 
             // 일정추가시 all-day로 가지않게, 날짜와 시간 달력에 출력되게하기 
@@ -385,8 +352,7 @@
                     title: title,
                     start: eventStartTime,
                     end: eventEndTime,
-                    allDay: allDay, // 종일(all-day) 여부
-                    planNo: planNo
+                    allDay: allDay // 종일(all-day) 여부
                 };
                 mainCalendar.addEvent(event);
             }
@@ -414,6 +380,21 @@
             // 선택된 날짜를 fullcalendar에 전달
             mainCalendar.gotoDate(moment(dateStr).format('YYYY-MM-DD'));
         }
+        
+        // 종일체크 여부에 따른 함수처리
+        function updateAllDayTime(selectedDates) {
+		    var allDayChecked = $('#allDay').is(':checked');
+		
+		    if (allDayChecked) {
+		        // 종일(all-day) 체크되어 있으면 시간을 null로 설정
+		        $('#startTime').val('');
+		        $('#endTime').val('');
+		    } else {
+		        // 종일(all-day) 체크되어 있지 않으면 시간을 선택된 시간으로 설정
+		        $('#startTime').val(moment(selectedDates[0]).format('HH:mm'));
+		        $('#endTime').val(moment(selectedDates[0]).add(1, 'hour').format('HH:mm'));
+		    }
+		}
 
         // 좌상단 미니달력
         flatpickr(dateInput, {
@@ -424,12 +405,15 @@
             shorthandCurrentMonth: true,
             static: true,
             defaultDate: 'today',
-            locale: 'ko',
+            locale: 'ja',
             time_24hr: true, // 24시간 형식으로 표시
             onChange: function (selectedDates, dateStr, instance) {
                 // 좌상단 미니 달력의 날짜가 변경될 때 시작일과 종료일 달력에도 업데이트
                 updateDate('#startDate', dateStr);
                 updateDate('#endDate', dateStr);
+                
+                // 종일 체크 여부에 따라 시간 업데이트
+                updateAllDayTime(selectedDates);
             },
         }).open();
 
@@ -439,7 +423,7 @@
             enableTime: false,
             //minDate: 'today',
             defaultDate: 'today',
-            locale: 'ko',
+            locale: 'ja',
             time_24hr: true, // 24시간 형식으로 표시
             onChange: function (selectedDates, dateStr, instance) {
                 // 날짜 선택 이벤트 핸들러 등록
@@ -461,7 +445,7 @@
             enableTime: false,
             //minDate: 'today',
             defaultDate: 'today',
-            locale: 'ko',
+            locale: 'ja',
             time_24hr: true, // 24시간 형식으로 표시
             onChange: function (selectedDates, dateStr, instance) {
                 handleDateChange(selectedDates, dateStr, instance);
@@ -484,22 +468,54 @@
   </script>
   
   <script>
-   function insertPlan(planDetail) {
-		
+    // 일정 추가 또는 업데이트 함수
+    function insertOrUpdatePlan() {
         var planDetail = {
             planNo: $('#planNo').val(),
             title: $('#title').val(),
             allDay: $('#allDay').is(':checked') ? 1 : 0,
             startDate: $('#startDate').val(),
             endDate: $('#endDate').val(),
-            startTime: null,
-            endTime: null,
+            startTime: null,  // 시작 시간 초기화
+            endTime: null,    // 종료 시간 초기화
             repeat: $('#repeat').val(),
             place: $('#place').val(),
             content: $('#content').val(),
             alarm: $('#alarm').is(':checked') ? 1 : 0
         };
         
+
+        // planNo 값에 따라 새로운 일정 추가 또는 기존 일정 업데이트 로직 추가
+        if (planDetail.planNo) {
+            // planNo가 존재하면 기존 일정 업데이트 로직 수행
+            updatePlan(planDetail);
+        } else {
+            // planNo가 없으면 새로운 일정 추가 로직 수행
+            insertPlan(planDetail);
+        }
+    };
+    
+    // 기존 일정 업데이트 함수
+    function updatePlan(planDetail) {
+		
+		setTimeIfNotAllDay(planDetail);
+        
+        $.ajax({
+            type: 'PUT',
+            url: '/api/plan/update',
+            contentType: 'application/json',
+            data: JSON.stringify(planDetail),
+            success: function (response) {
+                console.log('update 성공');
+            },
+            error: function (error) {
+                console.error('일정 업데이트 중 오류 발생:', error);
+            }
+        });
+    }
+      
+    function insertPlan(planDetail) {
+		
         setTimeIfNotAllDay(planDetail);
         
         $.ajax({
@@ -509,6 +525,7 @@
             data: JSON.stringify(planDetail),
             success: function (response) {
                 console.log('저장 성공');
+                console.log(planDetail);
             },
             error: function (error) {
                 console.error('일정 저장 중 오류 발생:', error);
@@ -517,14 +534,19 @@
     };
     
     // 종일(all-day) 체크 여부에 따라 시작 시간과 종료 시간 설정하는 함수
+    // planDetail에 startTime과 endTime을 null처리 해놓고 종일 체크시 변경하는 함수
     function setTimeIfNotAllDay(planDetail) {
+		// allDayChecked 변수 정의
+        var allDayChecked = $('#allDay').is(':checked');
 
-        if (!planDetail.allDay) {
+        if (!allDayChecked) {
             planDetail.startTime = $('#startTime').val();
             planDetail.endTime = $('#endTime').val();
         }
     }
 </script>
+
+
 
   <!-- 종일체크시 시간 활성/비활성 -->
   <script>
@@ -538,18 +560,6 @@
             $('#timeInputs').removeClass('blurred');
         }
     });
-    
-    // 첫 시작시 종일(all-day) 체크박스 블러처리 
-    $(document).ready(function() {
-	    // 페이지 로드 시 종일 체크 여부 확인
-	    if ($('#allDay').is(':checked')) {
-	        // 종일 체크되어 있을 때
-	        $('#timeInputs').addClass('blurred'); // 시간 설정 부분을 블러 처리
-	    }else {
-	        // 종일 체크가 해제되었을 때
-	        $('#timeInputs').removeClass('blurred');
-	    }
-	});
   </script>
 
   <!-- 시간설정 15분단위(24시간) -->
@@ -576,32 +586,6 @@
 
     populateTimeDropdown(startTimeDropdown);
     populateTimeDropdown(endTimeDropdown);
-    
-    // startTime 드롭다운에 이벤트 리스너 추가
-		startTimeDropdown.addEventListener('change', function() {
-		    // 선택된 startTime 가져오기
-		    const selectedStartTime = this.value;
-		
-		    // 선택된 startTime을 기반으로 endTime 드롭다운의 옵션 업데이트
-		    updateEndTimeOptions(selectedStartTime);
-		});
-		
-		// endTime 드롭다운의 옵션을 업데이트하는 함수
-		function updateEndTimeOptions(selectedStartTime) {
-		    const endTimeDropdown = document.getElementById('endTime');
-		    
-		    // startTime선택 이후의 옵션만 남기기 (ex - 11:)
-		    const filteredOptions = Array.from(endTimeDropdown.options).filter(option => option.value > selectedStartTime);
-		    
-		    // 옵션을 비우고 새로운 옵션으로 채우기
-		    endTimeDropdown.innerHTML = '';
-		    for (const option of filteredOptions) {
-		        endTimeDropdown.appendChild(option.cloneNode(true));
-		    }
-		
-		    // 기본 선택된 옵션을 첫 번째 유효한 옵션으로 설정
-		    endTimeDropdown.selectedIndex = 0;
-	    }
   </script>
 </body>
 </html>
