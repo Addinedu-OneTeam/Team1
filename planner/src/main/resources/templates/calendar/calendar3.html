@@ -76,8 +76,17 @@
             dayMaxEventRows: true, // 셀 높이에 따라 이벤트 표시
             fixedWeekCount: false, // 다음 달에 해당되는 날짜 미리 보여짐 여부
             locale: 'ko',
-            
-            events: function (fetchInfo, successCallback, failureCallback) {
+
+            eventDrop: function(info) {
+	            // 일정 이동 시 서버에 업데이트 요청
+	            console.log(info.event.allDay);
+	            updatePlan(info.event);
+	        },
+	        select: function(info) {
+	            // 선택한 날짜 범위 정보를 가져와서 폼에 채우기
+	            fillForm(info);
+	        },
+	        events: function (fetchInfo, successCallback, failureCallback) {
 			    $.ajax({
 			        url: '/api/plan/selectList',
 			        success: function (planList) {
@@ -109,32 +118,6 @@
 			    });
 			},
 
-            dateClick: function (info) {
-                // FullCalendar에서 날짜를 클릭했을 때 flatpickr 시작일 종료일에 날짜만 넘어가게 하기(이렇게 안하면 2024-02-03T09:00:00+09:00 이렇게 넘어감 )
-                var clickedDate = info.date;
-                var formattedDate = moment(clickedDate).format('YYYY-MM-DD');
-
-                // 풀캘린더 날짜 클릭시 우측 시작일 종료일에 동기화
-                document.getElementById('startDate').value = formattedDate;
-                document.getElementById('endDate').value = formattedDate;
-                document.getElementById('dateInput').value = formattedDate;
-
-                // 미니 달력 시작일과 종료일 업데이트 및 열기 이렇게하면 메인 달력 클릭시 미니 달력도 같이 바뀜
-                updateDate('#startDate', formattedDate);
-                updateDate('#endDate', formattedDate);
-                updateDate('#dateInput', formattedDate);
-            },
-            eventDrop: function(info) {
-	            // 일정 이동 시 서버에 업데이트 요청
-	            console.log(info.event.allDay);
-	            updatePlan(info.event);
-	        },
-	        select: function(info) {
-	            // 선택한 날짜 범위 정보를 가져와서 폼에 채우기
-	            fillForm(info);
-	        },
-	        
-
 		    eventClick: function(info) {
 	            // 일정 상세 정보 조회
 	            $.ajax({
@@ -142,13 +125,13 @@
 	                success: function(data) {
 	                    // 상세 정보를 폼에 채워서 페이지에 표시
 	                    fillFormWithPlanDetails(data);
-	                    $('#deletePlan').show();
+	                    console.log('selectDetail allDay:' + info.event.allDay);
 	                },
 	                error: function() {
 	                    alert(info.event.id);
 	                }
 	            });
-	        }
+	        },
         });
         
         // 상세 정보를 폼에 채우는 함수
@@ -166,21 +149,29 @@
 		mainCalendar.on('eventClick', function (info) {
 		    var planNo = info.event.id;
 		    console.log('일정 클릭:' + planNo);
-			$('#deletePlan').click(function(){
-				$.ajax({
-			        type: 'delete',
-			        url: '/api/plan/delete/' + planNo,
-			        success: function (response) {
-			            console.log('일정 삭제 성공');
-			            mainCalendar.getEventById(planNo).remove();
-
-				        $('#deletePlan').hide();
-			        },
-			        error: function (error) {
-			            console.error('일정 삭제 중 오류 발생:', error);
-			        }
-			    });
-			})		
+		    if (planNo) {
+				$('#deletePlan').show().off('click').on('click', function () {
+					$.ajax({
+				        type: 'delete',
+				        url: '/api/plan/delete/' + planNo,
+				        success: function (response) {
+				            console.log('일정 삭제 성공');
+				            
+				            var event = mainCalendar.getEventById(planNo);
+		
+					        // 이벤트가 존재하는 경우에만 제거
+					        if (event) {
+					            event.remove();
+					        }
+					        
+					        $('#deletePlan').hide();
+				        },
+				        error: function (error) {
+				            console.error('일정 삭제 중 오류 발생:', error);
+				        }
+				    });
+				});
+		    }
 		});
 		
 		// 저장 또는 수정 버튼 클릭 시
@@ -233,8 +224,6 @@
 	        });
 	    };
 	    
-	    
-	    
 	    // 종일(all-day) 체크 여부에 따라 시작 시간과 종료 시간 설정하는 함수
 	    function setTimeIfNotAllDay(plan) {
 	        if (!plan.allDay) {
@@ -280,7 +269,7 @@
 		
 		mainCalendar.on('dateClick', function (info) {
 		    // 클릭한 날짜에 일정이 없을 때 초기화
-		    var planDetail = {
+		    const planDetail = {
 		        planNo: null,
 		        title: '',
 		        allDay: true,
@@ -294,8 +283,16 @@
 		        alarm: false
 		    };
 		
-		    fillFormWithPlanDetails(planDetail);
+		    fillFormWithPlanDetails(planDetail); // 폼에 일정의 상세 정보 채우기
+		
+		    // FullCalendar에서 날짜 클릭했을 때 flatpickr 시작일 종료일, 미니 달력에 날짜 동기화
+		    const formattedDate = moment(info.date).format('YYYY-MM-DD');
+		    ['#startDate', '#endDate', '#dateInput'].forEach(selector => {
+		        document.querySelector(selector).value = formattedDate; // 시작일, 종료일, 미니 달력 날짜 업데이트
+		        updateDate(selector, formattedDate); // 미니 달력 업데이트
+		    });
 		});
+
 
 		// 폼을 일정의 상세 정보로 채우는 함수
 		function fillFormWithPlanDetails(planDetail) {
@@ -317,12 +314,10 @@
 		    console.log(planDetail);
 		}
         
-        // 메인 달력과 미니 달력의 날짜 동기화
-        // 이걸 해주면 메인 달력에서 날짜 클릭시 시작일 종료일 달력도 같이 업데이트되어서 해당 날짜로 바뀜
+        // 메인 달력과 미니 달력의 날짜 동기화 => 이걸 해주면 메인 달력에서 날짜 클릭시 시작일 종료일 달력도 같이 업데이트되어서 해당 날짜로 바뀜
         function updateDate(selector, date) {
             // 미니 달력 입력란(시작일 종료일 입력란) 업데이트 및 열기
             var inputElement = document.querySelector(selector);
-
             var flatpickrInstance = inputElement._flatpickr;
 
             if (flatpickrInstance) {
@@ -332,105 +327,60 @@
 
         // FullCalendar 렌더링
         mainCalendar.render();
-
-        // 기본제공되는 today버튼을 커스터마이징한 today버튼으로 교체하고 숨기기
-        $('.fc-today-button').hide(); //숨기기
-        var todayButton = $('.fc-today-button');
-        todayButton.replaceWith($('#todayButton'));
-        // 숨기기를 먼저하고 .replaceWith를 이용하여 커스터마이징버튼으로 바꾸기. 숨기기를 먼저해야 달력전체에 적용이된다。
-
-        // 오늘 버튼 클릭 시의 동작 내가 커스터마이징한 버튼
-        $('#todayButton').on('click', function () {
-            const today = new Date();
-            mainCalendar.gotoDate(today);
-        });
-
-
-        // flatpickr api 
-        const dateInput = document.getElementById('dateInput');
-        const startDateInput = document.getElementById('startDate');
-        const endDateInput = document.getElementById('endDate');
         
-        // todayButton(今日) 버튼 클릭 시 Flatpickr 날짜 갱신(좌상단 flatpickr 버튼)
-        document.getElementById('todayButton').addEventListener('click', function () {
-            const today = new Date();
-            dateInput._flatpickr.setDate(today, true); // 미니달력 갱신
-            startDateInput._flatpickr.setDate(today, true); // 시작일 갱신
-            endDateInput._flatpickr.setDate(today, true); // 종료일 갱신
-
-            // FullCalendar에서 오늘 날짜로 이동
-            mainCalendar.gotoDate(today);
-        });
-
-        // flatpickr 클릭시 fullcalendar 연동
+        
+        // today 버튼을 커스터마이징하고 숨기는 부분
+		$('.fc-today-button').hide(); // FullCalendar에서 기본으로 제공하는 today 버튼 숨기기
+		$('.fc-today-button').replaceWith($('#todayButton')); // 커스텀 today 버튼으로 교체
+		
+		// 커스텀 today 버튼 클릭 시 동작 정의
+		$('#todayButton').on('click', function () {
+		    // 오늘 날짜로 FullCalendar 이동
+		    mainCalendar.gotoDate(new Date());
+		});
+		
+		// flatpickr 클릭시 fullcalendar 연동
         function handleDateChange(selectedDates, dateStr, instance) {
-            //console.log('선택된 날짜:', dateStr);
-            // 선택된 날짜를 fullcalendar에 전달
-            mainCalendar.gotoDate(moment(dateStr).format('YYYY-MM-DD'));
+            mainCalendar.gotoDate(moment(dateStr).format('YYYY-MM-DD')); // 선택된 날짜를 fullcalendar에 전달
         }
 
-        // 좌상단 미니달력
-        flatpickr(dateInput, {
-            parent: document.getElementById('mini-calendar'),
-            inline: true,
-            dateFormat: 'Y-m-d',
-            enableTime: false,
-            shorthandCurrentMonth: true,
-            static: true,
-            defaultDate: 'today',
-            time_24hr: true, // 24시간 형식으로 표시
-            onChange: function (selectedDates, dateStr, instance) {
-                // 좌상단 미니 달력의 날짜가 변경될 때 시작일과 종료일 달력에도 업데이트
-                updateDate('#startDate', dateStr);
-                updateDate('#endDate', dateStr);
-            },
-        }).open();
-
-        // 일정추가 시작달력
-        flatpickr("#startDate", {
-            dateFormat: 'Y-m-d',
-            enableTime: false,
-            //minDate: 'today',
-            defaultDate: 'today',
-            time_24hr: true, // 24시간 형식으로 표시
-            onChange: function (selectedDates, dateStr, instance) {
-                // 날짜 선택 이벤트 핸들러 등록
-                handleDateChange(selectedDates, dateStr, instance);
-                // 종료일의 flatpickr 가져오기
-                const endDatePicker = endDateInput._flatpickr;
-
-                // 종료일이 시작일보다 이전인 경우에만 동기화
-                if (endDatePicker && endDatePicker.selectedDates[0] < selectedDates[0]) {
-                    endDatePicker.setDate(selectedDates, true);
-                }
-            },
-            appendTo: document.getElementById('mini-calendar-input')
-        });
-
-        // 일정추가 종료달력
-        flatpickr("#endDate", {
-            dateFormat: 'Y-m-d',
-            enableTime: false,
-            //minDate: 'today',
-            defaultDate: 'today',
-            time_24hr: true, // 24시간 형식으로 표시
-            onChange: function (selectedDates, dateStr, instance) {
-                handleDateChange(selectedDates, dateStr, instance);
-                // 시작일의 flatpickr 가져오기
-                const startDatePicker = startDateInput._flatpickr;
-
-                if (startDatePicker) {
-                    const startDate = startDatePicker.selectedDates[0];
-
-                    // 종료일이 시작일보다 이전인 경우에는 시작일과 종료일을 동기화
-                    if (startDate && startDate > selectedDates[0]) {
-                        startDatePicker.setDate(selectedDates, true);
-                    }
-                }
-            },
-            appendTo: document.getElementById('endDate').parentNode
-
-        });
+        // flatpickr 초기화 및 설정
+		const flatpickrOptions = {
+		    dateFormat: 'Y-m-d', // 날짜 형식 설정
+		    defaultDate: 'today', // 기본으로 선택되는 날짜 설정 (오늘 날짜)
+		    time_24hr: true, // 24시간 형식으로 표시 설정
+		    onChange: handleDateChange // 날짜 선택 시 동작할 함수 설정
+		};
+		
+		// 날짜 선택을 위한 flatpickr 초기화
+		// 좌상단 미니 달력에 추가하고 인라인 모드로 설정하여 표시
+		flatpickr('#dateInput', {
+		    parent: document.getElementById('mini-calendar'), // 부모 요소 지정
+		    inline: true, // 인라인 모드로 설정하여 항상 표시
+		    shorthandCurrentMonth: true, // 달력 상단에 현재 월 축약 표시 설정
+		    static: true, // 사용자 입력 제한 설정
+		    ...flatpickrOptions // 기타 옵션 적용
+		}).open(); // 달력 열기
+		
+		// 시작일과 종료일 달력 간 동기화
+		['#startDate', '#endDate'].forEach(selector => {
+		    flatpickr(selector, {
+		        ...flatpickrOptions, // 기본 flatpickr 옵션 적용
+		        onChange: function (selectedDates, dateStr, instance) {
+		            // 날짜 선택 이벤트 핸들러 등록
+		            handleDateChange(selectedDates, dateStr, instance);
+		            // 다른 달력의 선택된 날짜와 비교하여 동기화
+		            const otherPicker = selector === '#startDate' ? '#endDate' : '#startDate'; // 다른 달력 선택
+		            const otherPickerInstance = document.querySelector(otherPicker)._flatpickr; // 다른 달력 인스턴스 가져오기
+		            if (otherPickerInstance) { // 다른 달력이 존재하는 경우
+		                const otherDate = otherPickerInstance.selectedDates[0]; // 다른 달력의 선택된 날짜 가져오기
+		                if (otherDate && otherDate > selectedDates[0]) { // 선택된 날짜가 다른 달력의 날짜보다 이전인 경우
+		                    otherPickerInstance.setDate(selectedDates, true); // 다른 달력도 선택된 날짜로 설정
+		                }
+		            }
+		        }
+		    });
+		});
     });
   </script>
 

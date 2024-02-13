@@ -1,7 +1,6 @@
 package com.example.domain;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import jakarta.persistence.Column;
@@ -26,42 +25,28 @@ public class Plan {
             allocationSize = 1
     )
     @GeneratedValue(generator = "myPlannerSEQ")
-    private Long planNo; // 할 일 번호
+    private Long id; // 할 일 번호
 
     @NonNull
     private String title; // 제목
 
-    @Column
-    private int allDay; // 하루종일
-    // 0 = 하루종일 off
-    // 1 = 하루종일 on
+    private String allDay; // 하루종일
 
     @NonNull
-    private LocalDate startDate; // 시작일
-    @NonNull
-    private LocalDate endDate; // 종료일
-    // String으로 하면 날짜 변경을 못한다
-    
-    private LocalTime startTime; // 시작시간
-    private LocalTime endTime; // 종료시간
+    private LocalDate startDate; // 시작 날짜
+    private String startTime; // 시작 시간
 
-    @Column
+    @NonNull
+    private LocalDate endDate; // 종료 날짜
+    private String endTime; // 종료 시간
+ 
     private int repeat; // 반복 여부
-    // 0 = 반복 off
-    // 1 = 매일
-    // 2 = 매주 해당 요일
-    // 3 = 평일만
-    // 4 = 주말 및 공휴일
-
     private String content; // 내용
     private String place; // 위치
 
     @Column
-    private int alarm; // 알람 여부
-    // 0 = 알람 off
-    // 1 = 알람 on
+    private String alarm; // 알람 여부
 
     @NonNull
     private String userEmail;
-
 }

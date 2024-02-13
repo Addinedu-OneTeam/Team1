@@ -1,18 +1,18 @@
-/*
- * 이메일 인증을 위한 기능을 제공하는 컨트롤러
- */
 package com.example.controller;
 
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.example.service.EmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttributes;
+
+import com.example.service.EmailService;
 
 
 @RestController

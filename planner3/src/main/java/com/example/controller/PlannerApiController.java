@@ -46,10 +46,10 @@ public class PlannerApiController {
     }
 
     // 일정 상세 조회
-    @GetMapping("/selectDetail/{planNo}")
+    @GetMapping("/selectDetail/{id}")
     @ResponseBody
-    public Plan selectDetail(@PathVariable(name = "planNo") Long planNo) {
-        return plannerService.selectDetail(planNo).orElse(null);
+    public Plan selectDetail(@PathVariable(name = "id") Long id) {
+        return plannerService.selectDetail(id).orElse(null);
     }
 
     // 일정 수정
@@ -60,10 +60,10 @@ public class PlannerApiController {
     }
 
     // 일정 삭제
-    @DeleteMapping("/delete/{planNo}")
+    @DeleteMapping("/delete/{id}")
     @ResponseBody
-    public void delete(@PathVariable(name = "planNo") Long planNo) {
-        plannerService.delete(planNo);
+    public void delete(@PathVariable(name = "id") Long id) {
+        plannerService.delete(id);
     }
 }
 
