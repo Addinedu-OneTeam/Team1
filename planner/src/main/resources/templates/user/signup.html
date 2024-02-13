@@ -31,6 +31,9 @@
                         <button type="button" id="verifyCodeButton" >확인</button>
                     </div>
                 </label>
+                <div id="timerDisplay" style="display: none;">
+                    <span id="timer"></span>
+                </div>
 
                 <label for="password">비밀번호</label>
                 <input type="password" id="password" placeholder="영문,숫자,특수기호 10~16자리" required>
@@ -38,6 +41,9 @@
                     <input type="checkbox" id="showPassword" onchange="togglePassword()">비밀번호 숨김
                 </label>
                 <div id="passwordError" style="color: red;"></div>
+
+                <label for="phone">휴대폰 번호</label>
+                <input type="text" id="phone" placeholder="휴대폰 번호를 입력시 '-'가 자동 생성됩니다.">
 
                 <label for="purpose">사용목적</label>
                 <select id="purpose">
@@ -50,13 +56,23 @@
                 <!--<input type="text" th:field="*{birthday}" id="birthday" placeholder="ex. 1990-10-24" required>-->
                 <input type="hidden" id="fullBirthday">
                 <div id="birthInput">
-                    <input type="text" id="birth_Year"  minlength="4" maxlength="4" placeholder="ex. 1999"
+<!--                    <input type="text" id="birth_Year"  minlength="4" maxlength="4" placeholder="ex. 1999"
                            oninput="moveToNextInput(this, 'birth_Month')" required>년
                     <input type="text" id="birth_Month" minlength="2" maxlength="2" placeholder="ex. 04"
                            oninput="moveToNextInput(this, 'birth_Day')">월
                     <input type="text" id="birth_Day" minlength="2" maxlength="2" placeholder="ex. 05"required>일
+                    -->
+                    <label for="birthdate">
+                        <input type="date"
+                               id="birthdate"
+                               max="2000-01-01"
+                               min="1930-01-01"
+                               >
+                    </label>
                 </div>
-                <div id="birthdayError" style="color: red;"></div>
+
+                <!--<div id="birthdayError" style="color: red;"></div>-->
+                <div id="birthdateError" style="color: red;"></div>
 
                 <div class="gender-selection">
                     <label for="male">남</label>
@@ -66,9 +82,7 @@
                 </div>
                 <div id="genderError" style="color: red;"></div>
   <!--              <button type="button" id="verifyEmailButton" disabled>이메일 인증</button>-->
-                <div id="timerDisplay" style="display: none;">
-                    <span id="timer"></span>
-                </div>
+
                 <!--                <button type="submit" id="submitBtn" disabled>가입하기</button>-->
                 <button type="button" id="submitBtn" onclick="submitSignUpForm()" disabled>가입하기</button>
             </div>
@@ -76,6 +90,8 @@
     </form>
 </div>
 <script>
+    var dateInput = document.getElementById('birthdate');
+    dateInput.max = getCurrentDate();
     var isRunning = false;
     // 인증 이메일 보내기
     document.getElementById('verifyEmailButton').addEventListener('click', function() {
@@ -155,10 +171,10 @@
             });
     });
 
-    function disableverifyEmailButton() {
+/*    function disableverifyEmailButton() {
 
         $("#verifyEmailButton").prop("disabled", true);
-    }
+    }*/
 
     //이메일 조건 및 중복확인
     document.getElementById('checkDuplicateButton').addEventListener('click', function(event) {
@@ -171,13 +187,14 @@
         if (emailRegex.test(fullEmail)) {
             $.ajax({
                 type: "GET",
-                url: "/web/checkDuplicateEmail",
+                url: "/api/user/checkDuplicateEmail",
                 data: {fullEmail: fullEmail},
                 success: function (response) {
                     if (!response) {
                         emailError.textContent = "❌ 이미 가입된 이메일입니다."
                         emailError.style.color = "red";
                     } else {
+                        console.log(phone.value);
                         emailError.textContent = "✔ 사용 가능한 이메일입니다."
                         emailError.style.color = "green";
                         document.getElementById('verifyEmailButton').style.display = "block"; // 이메일 인증 버튼 표시
@@ -188,12 +205,11 @@
                     console.error("Error checking email:", error);
                 }
             });
-        } else {
-            alert("유효하지 않은 이메일 형식입니다. 다시 확인해주세요.");
         }
     });
+
     //생년월일 무브
-    function moveToNextInput(currentInput, nextInputId) {
+/*    function moveToNextInput(currentInput, nextInputId) {
         var inputValue = currentInput.value;
         var maxLength = parseInt(currentInput.getAttribute("maxlength"));
 
@@ -203,10 +219,10 @@
                 nextInput.focus();
             }
         }
-    }
+    }*/
 
 
-    function combineBirthDay() {
+    /*function combineBirthDay() {
         var birthYear = document.getElementById('birth_Year').value;
         var birthMonth = document.getElementById('birth_Month').value;
         var birthDay = document.getElementById('birth_Day').value;
@@ -236,7 +252,44 @@
             birthdayError.textContent = ""; // 오류 메시지 제거
             return true;
         }
-    }
+    }*/
+
+    //핸드폰
+    var phoneNumber = document.getElementById("phone");
+    // 유효성검사 전화번호
+    phoneNumber.addEventListener("input", function () {
+        var input = this.value.replace(/[^0-9]/g, ""); // 숫자만 추출
+        var formatted = "";
+        var prefix = "010";
+
+        // '010'으로 시작하는지 확인
+        if (input.startsWith(prefix)) {
+            if (input.length <= 3) {
+                formatted = input; // '010'만 입력된 경우
+            } else if (input.length <= 7) {
+                formatted = input.substring(0, 3) + "-" + input.substring(3, 7); // 첫 번째 구분자(-) 추가
+            } else {
+                formatted =
+                    input.substring(0, 3) +
+                    "-" +
+                    input.substring(3, 7) +
+                    "-" +
+                    input.substring(7, 11); // 두 번째 구분자(-) 추가
+            }
+        } else {
+            if (input.length <= 3) {
+                formatted = input; // 입력값이 없을 때는 빈 문자열로 설정
+            } else if (input.length <= 4) {
+                formatted = prefix + "-" + input; // 첫 번째 구분자(-) 추가
+            } else {
+                formatted =
+                    prefix + "-" + input.substring(0, 4) + "-" + input.substring(4, 8); // 두 번째 구분자(-) 추가
+            }
+        }
+        this.value = formatted;
+    });
+
+
 
     //비밀번호 숨김
     function togglePassword() {
@@ -246,6 +299,28 @@
             passwordInput.type = "text";
         } else {
             passwordInput.type = "password";
+        }
+    }
+
+    //생년월일
+    function getCurrentDate() {
+        var currentDate = new Date();
+        var year = currentDate.getFullYear();
+        var month = ('0' + (currentDate.getMonth() + 1)).slice(-2); // 월은 0부터 시작하므로 +1 해줌
+        var day = ('0' + currentDate.getDate()).slice(-2);
+        return year + '-' + month + '-' + day;
+    }
+    function checkBirthdate() {
+        var birthdateInput = document.getElementById('birthdate');
+        var birthdateError = document.getElementById('birthdateError');
+        birthdateError.style.fontSize = '12px';
+        birthdateError.style.fontWeight = 'bold';
+        if (!birthdateInput.value) {
+            birthdateError.textContent = "❌ 생년월일을 선택해주세요.";
+            return false;
+        } else {
+            birthdateError.textContent = "";
+            return true;
         }
     }
 
@@ -278,7 +353,7 @@
         }
     }
     function submitSignUpForm() {
-        combineBirthDay(); // 생년월일 조합
+        //combineBirthDay(); // 생년월일 조합
         var email = document.getElementById('fullEmail').value.toLowerCase();
 
         if (!validatePassword()) {
@@ -288,7 +363,12 @@
         if (!validateGenderSelection()) {
             return; // 성별이 선택되지 않았으므로 여기서 함수 실행 중단
         }
-
+        if(!checkBirthdate()){
+            return;
+        }
+/*        if (!checkBirthdate()) {
+            return; // 생일이 선택되지 않았으므로 여기서 함수 실행 중단
+        }*/
         var genderSelected = document.querySelector('input[name="gender"]:checked');
 
         var userData = {
@@ -296,10 +376,11 @@
             email: email,
             passwordHash: document.getElementById('password').value,
             purpose: document.getElementById('purpose').value,
-            birthday: document.getElementById('fullBirthday').value,
-            gender: genderSelected.value // 성별 값 할당
+            birthday: document.getElementById('birthdate').value,
+            gender: genderSelected.value, // 성별 값 할당
+            phone: document.getElementById('phone').value
         };
-
+        console.log("phone");
         // 회원가입 요청
         axios.post('/api/user', userData)
             .then(function (response) {
@@ -311,9 +392,6 @@
                 console.error("회원가입 오류", error);
             });
     }
-
-
-
 </script>
 </div>
 </body>
