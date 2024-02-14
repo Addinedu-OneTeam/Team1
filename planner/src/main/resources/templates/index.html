@@ -39,9 +39,18 @@
             <p>or</p>
         </div>
         <div class="social-login">
-            <a href="#"><i><img src="img/google.png" alt="google login" id="google"></i></a>
-            <a href="#"><i><img src="img/naver.png" alt="naver login" id="naver"></i></a>
-            <a href="#"><i><img src="img/kakao.png" alt="kakao login" id="kakao"></i></a>
+            <a href="http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:8080&mode=login"><i><img src="img/google.png" alt="google login" id="google"></i></a>
+            <a href="http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:8080&mode=unlink">
+                <button type="button">Google Unlink</button>
+            </a>
+            <a href="http://localhost:8080/oauth2/authorization/naver?redirect_uri=http://localhost:8080&mode=login"><i><img src="img/naver.png" alt="naver login" id="naver"></i></a>
+            <a href="http://localhost:8080/oauth2/authorization/naver?redirect_uri=http://localhost:8080&mode=unlink">
+                <button type="button">Naver Unlink</button>
+            </a>
+            <a href="http://localhost:8080/oauth2/authorization/kakao?redirect_uri=http://localhost:8080&mode=login"><i><img src="img/kakao.png" alt="kakao login" id="kakao"></i></a>
+            <a href="http://localhost:8080/oauth2/authorization/kakao?redirect_uri=http://localhost:8080&mode=unlink">
+                <button type="button">Kakao Unlink</button>
+            </a>
         </div>
     </form>
     <!-- Slider main container -->

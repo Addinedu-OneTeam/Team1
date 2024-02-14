@@ -29,9 +29,9 @@ public class UserApiController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDto loginDto, HttpSession session) {
-        boolean isAuthenticated = userService.authenticate(loginDto);
-        if (isAuthenticated) {
-            session.setAttribute("loginUser", loginDto.getEmail());
+        User loginUser = userService.authenticate(loginDto);
+        if (loginUser != null) {
+            session.setAttribute("loginUser", loginUser);
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -39,15 +39,11 @@ public class UserApiController {
 
     @PutMapping("/password-update")
     public User passwordUpdate(@RequestBody LoginDto loginDto) {
-//        System.out.println("회원가입 해줘" + user.getEmail());
-        System.out.println(loginDto);
-        System.out.println("새로운 비밀번호" + loginDto.getPassword());
         return userService.passwordUpdate(loginDto);
     }
 
     @GetMapping("/checkDuplicateEmail")
     public boolean checkDuplicateEmail(@RequestParam("fullEmail") String email) {
-        System.out.println("이메일 쐈다 받아!!!" + email);
         return userService.isEmailUnique(email);
     }
 

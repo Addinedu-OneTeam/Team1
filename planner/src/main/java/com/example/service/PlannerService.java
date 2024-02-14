@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.example.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +23,9 @@ public class PlannerService {
 		return plannerRepository.save(plan);
 	}
 
-	
-	public List<Map<String, Object>> selectList(String userEmail) { // 일정 목록 조회
-		List<Plan> planList = plannerRepository.findAllByuserEmail(userEmail);
+
+	public List<Map<String, Object>> selectList(User user) {
+		List<Plan> planList = plannerRepository.findAllByUser(user);
 
 		// Plan 객체를 Map으로 변환하는 로직을 추가하면 됩니다.
         List<Map<String, Object>> eventList = 

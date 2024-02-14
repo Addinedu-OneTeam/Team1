@@ -1,12 +1,6 @@
 package com.example.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
@@ -14,6 +8,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -34,7 +30,7 @@ public class User {
     @Column(name = "email", nullable = false, length = 100, unique = true)
     private String email;
 
-    @Column(name = "password_hash", nullable = false, length = 64)
+    @Column(name = "password_hash", nullable = true, length = 64)
     private String passwordHash;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -47,9 +43,32 @@ public class User {
     @Column(name = "purpose", nullable = false, length = 100)
     private String purpose;
 
+    @Column(name = "registered_at", nullable = false)
+    private LocalDateTime registeredAt = LocalDateTime.now();
+
     @Column(name = "phone", nullable = false, length = 64)
     private String phone;
 
+    @OneToMany(mappedBy = "user", orphanRemoval = false)
+    private List<Plan> plans;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SnsInfo> snsInfos;
+
+    @PrePersist
+    protected void onPersist() {
+        if (this.username == null) {
+            this.username = "너의 이름은?";
+        }
+
+        if (this.birthday == null) {
+            this.birthday = LocalDate.of(2000, 1, 1);
+        }
+
+        if (this.phone == null) {
+            this.phone = "010-8282-8282";
+        }
+    }
 }
 
 

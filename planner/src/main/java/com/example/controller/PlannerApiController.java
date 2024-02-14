@@ -3,6 +3,7 @@ package com.example.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.example.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +34,8 @@ public class PlannerApiController {
     @PostMapping("/insert")
     @ResponseBody
     public Plan insert(@RequestBody Plan plan) {
-        plan.setUserEmail((String) session.getAttribute("loginUser"));
+        User user = (User)session.getAttribute("loginUser");
+        plan.setUser(user);
         return plannerService.insert(plan);
     }
 
@@ -41,8 +43,8 @@ public class PlannerApiController {
     @GetMapping("/selectList")
     @ResponseBody
     public List<Map<String, Object>> selectList() {
-        String userEmail = (String) session.getAttribute("loginUser");
-        return plannerService.selectList(userEmail);
+        User user = (User)session.getAttribute("loginUser");
+        return plannerService.selectList(user);
     }
 
     // 일정 상세 조회
