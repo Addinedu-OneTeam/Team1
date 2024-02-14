@@ -1,12 +1,9 @@
 package com.example.domain;
 
 import java.time.LocalDate;
+import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,12 +21,12 @@ public class Plan {
             allocationSize = 1
     )
     @GeneratedValue(generator = "myPlannerSEQ")
-    private Long planNo; // 할 일 번호
+    private Long id; // 할 일 번호
 
     @NonNull
     private String title; // 제목
 
-    @Column(insertable = false, columnDefinition = "NUMBER DEFAULT 1")
+    @Column
     private int allDay; // 하루종일
     // 0 = 하루종일 off
     // 1 = 하루종일 on
@@ -39,11 +36,11 @@ public class Plan {
     @NonNull
     private LocalDate endDate; // 종료일
     // String으로 하면 날짜 변경을 못한다
-    
+
     private String startTime; // 시작시간
     private String endTime; // 종료시간
 
-    @Column(insertable = false, columnDefinition = "NUMBER DEFAULT 0")
+    @Column
     private int repeat; // 반복 여부
     // 0 = 반복 off
     // 1 = 매일
@@ -54,12 +51,20 @@ public class Plan {
     private String content; // 내용
     private String place; // 위치
 
-    @Column(insertable = false, columnDefinition = "NUMBER DEFAULT 1")
+    @Column
     private int alarm; // 알람 여부
     // 0 = 알람 off
     // 1 = 알람 on
 
-    @NonNull
-    private String userEmail;
+//    @NonNull
+//    private String userEmail;
+
+    @ManyToOne()
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    // Plan 엔티티 예시
+    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Alarm> alarms;
 
 }

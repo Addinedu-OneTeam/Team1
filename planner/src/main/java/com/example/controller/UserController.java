@@ -27,7 +27,11 @@ public class UserController {
     public String root() throws Exception {
         return "index";
     }
-
+    @GetMapping("/passwordUpdate")
+    public String passwordUpadte(Model model) {
+        model.addAttribute("user", new User());
+        return "user/passwordUpdate";
+    }
     @GetMapping("/signup")
     public String sign(Model model) {
         model.addAttribute("user", new User());
@@ -41,16 +45,7 @@ public class UserController {
             return "redirect:/";
         }
 //		session.invalidate();
-        return "calendar/calendar2";
-    }
-
-
-
-    @GetMapping("/checkDuplicateEmail")
-    @ResponseBody
-    public boolean checkDuplicateEmail(@RequestParam("fullEmail") String email) {
-        System.out.println("이메일 쐈다 받아!!!" + email);
-        return userService.isEmailUnique(email);
+        return "calendar/calendar";
     }
 
 

@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.example.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,34 +19,59 @@ public class PlannerService {
 	@Autowired
 	public PlannerRepository plannerRepository;
 	
-	// 일정 추가
-	public Plan insert(Plan plan) {
-		System.out.println("저장완료");
+	public Plan insert(Plan plan) { // 일정 추가
 		return plannerRepository.save(plan);
 	}
 
-	// 일정 조회
-	public List<Map<String, Object>> selectList(String userEmail) {
-		List<Plan> planList = plannerRepository.findAllByuserEmail(userEmail);
+
+	public List<Map<String, Object>> selectList(User user) {
+		List<Plan> planList = plannerRepository.findAllByUser(user);
 
 		// Plan 객체를 Map으로 변환하는 로직을 추가하면 됩니다.
         List<Map<String, Object>> eventList = 
-        		planList.stream().map(plan -> {
-							        		    Map<String, Object> event = new HashMap<>();
-							        		    event.put("title", plan.getTitle());
-							        		    event.put("start", plan.getStartDate());
-							        		    event.put("end", plan.getEndDate());
-							        		    // 필요한 필드들을 추가로 넣어주면 됩니다.
-							        		    return event;
-							        		})
-							        		.collect(Collectors.toList());
+        	planList.stream().map(plan -> {
+        		
+	        	Map<String, Object> event = new HashMap<>();
+			    event.put("id",plan.getId());
+			    event.put("title", plan.getTitle());
+			    event.put("allDay", plan.getAllDay());
+			    event.put("startDate", plan.getStartDate());
+			    event.put("startTime", plan.getStartTime());
+			    event.put("endDate", plan.getEndDate());
+			    event.put("endTime", plan.getEndTime());
+			    event.put("place", plan.getPlace());
+			    event.put("repeat", plan.getRepeat());
+			    event.put("content", plan.getContent());
+			    event.put("alarm", plan.getAlarm());
 
-        return eventList;
+    		    return event;
+    		}).collect(Collectors.toList());
+        	return eventList;
 	}
 
-	/*public Optional<Plan> selectDetail(Long planNo, String userEmail) {
-		return plannerRepository.findByUserEmailAndPlanNo(planNo, userEmail);
-	}*/
+	public Optional<Plan> selectDetail(Long id) { // 일정 상세 조회
+		return plannerRepository.findById(id);
+	}
+
+	
+	public Plan update(Plan plan) { // 일정 수정
+	    Plan rePlan = plannerRepository.findById(plan.getId()).get();
+	    rePlan.setTitle(plan.getTitle());
+	    rePlan.setAllDay(plan.getAllDay());
+	    rePlan.setStartDate(plan.getStartDate());
+	    rePlan.setStartTime(plan.getStartTime());
+	    rePlan.setEndDate(plan.getEndDate());
+	    rePlan.setEndTime(plan.getEndTime());
+	    rePlan.setRepeat(plan.getRepeat());
+	    rePlan.setPlace(plan.getPlace());
+	    rePlan.setContent(plan.getContent());
+	    rePlan.setAlarm(plan.getAlarm());
+	    return plannerRepository.save(rePlan);
+	}
+	
+    public void delete(Long	Id) { // 일정 삭제
+        plannerRepository.deleteById(Id);
+    }
 
 
 }
