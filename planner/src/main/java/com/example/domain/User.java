@@ -47,6 +47,9 @@ public class User {
     @Column(name = "purpose", nullable = false, length = 100)
     private String purpose;
 
+    @Column(name = "phone", nullable = false, length = 64)
+    private String phone;
+
 }
 
 
