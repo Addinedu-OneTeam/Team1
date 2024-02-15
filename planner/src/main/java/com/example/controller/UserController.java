@@ -11,8 +11,6 @@ import com.example.domain.User;
 import com.example.service.PlannerService;
 
 import jakarta.servlet.http.HttpSession;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/web")
@@ -48,5 +46,8 @@ public class UserController {
         return "calendar/calendar";
     }
 
-
+    @GetMapping("/mlogin")
+    public String mlogin() {
+        return "user/mlogin";
+    }
 }

@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <!-- For CSS -->
-    <link rel="stylesheet" th:href="@{/css/swiper.css}"/>
     <link rel="stylesheet" th:href="@{/css/login.css}"/>
     <link rel="stylesheet" th:href="@{/css/header.css}"/>
     <link rel="stylesheet" th:href="@{/css/footer.css}"/>
@@ -17,33 +16,8 @@
 <div class="header">365-Day Schedule Management Program
 
     <div id="menuContainer">
-        <img src="/img/mypage.png" id="clickableImage">
-
-        <div class="menu" id="menu">
-            <div class="menu-item"><a href="/web/mlogin">로그인</a></div>
-            <div class="menu-item"><a href="#">메뉴 2</a></div>
-            <div class="menu-item"><a href="#">메뉴 3</a></div>
-        </div>
-    </div>
-    <script>
-        // 메뉴 클릭시 메뉴 토글
-        document.getElementById("clickableImage").addEventListener("click", function() {
-            var menu = document.getElementById("menu");
-            menu.style.display = menu.style.display === "block" ? "none" : "block";
-        });
-
-        // 문서 클릭시 메뉴 숨김
-        document.addEventListener("click", function(event) {
-            var menu = document.getElementById("menu");
-            var clickableImage = document.getElementById("clickableImage");
-            var target = event.target;
-
-            // 메뉴가 표시되어 있고, 클릭된 요소가 메뉴나 이미지가 아닌 경우 메뉴 숨김
-            if (menu.style.display === "block" && target !== menu && target !== clickableImage) {
-                menu.style.display = "none";
-            }
-        });
-    </script>
+        <a href="http://localhost:8080"><img src="/img/home2.png" width="50" height="50" id="clickableImage"></a>
+   </div>
 
 </div>
 <!-------------------------------- header// ------------------------------------------->
@@ -51,7 +25,7 @@
 
 <div class="entire" id="loginForm">
     <form>
-        <img src="img/logo.png" alt="logo" id="logo" width="50%"></a>
+        <img src="/img/logo.png" alt="logo" id="logo" width="50%"></a>
         <div class="sign-in">
             <div class="sign-box">
                 <label for="email">Email</label>
@@ -76,40 +50,23 @@
             <p>or</p>
         </div>
         <div class="social-login">
-            <a href="http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:8080&mode=login"><i><img src="img/google.png" alt="google login" id="google"></i></a>
+            <a href="http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:8080&mode=login"><i><img src="/img/google.png" alt="google login" id="google"></i></a>
             <a href="http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:8080&mode=unlink">
                 <button type="button">Google Unlink</button>
             </a>
-            <a href="http://localhost:8080/oauth2/authorization/naver?redirect_uri=http://localhost:8080&mode=login"><i><img src="img/naver.png" alt="naver login" id="naver"></i></a>
+            <a href="http://localhost:8080/oauth2/authorization/naver?redirect_uri=http://localhost:8080&mode=login"><i><img src="/img/naver.png" alt="naver login" id="naver"></i></a>
             <a href="http://localhost:8080/oauth2/authorization/naver?redirect_uri=http://localhost:8080&mode=unlink">
                 <button type="button">Naver Unlink</button>
             </a>
-            <a href="http://localhost:8080/oauth2/authorization/kakao?redirect_uri=http://localhost:8080&mode=login"><i><img src="img/kakao.png" alt="kakao login" id="kakao"></i></a>
+            <a href="http://localhost:8080/oauth2/authorization/kakao?redirect_uri=http://localhost:8080&mode=login"><i><img src="/img/kakao.png" alt="kakao login" id="kakao"></i></a>
             <a href="http://localhost:8080/oauth2/authorization/kakao?redirect_uri=http://localhost:8080&mode=unlink">
                 <button type="button">Kakao Unlink</button>
             </a>
         </div>
     </form>
-    <!-- Slider main container -->
-    <div class="swiper">
-        <!-- Additional required wrapper -->
-        <div class="swiper-wrapper">
-            <!-- Slides -->
-            <!--            <img th:src="@{/img/month.png}" alt="Month Image">-->
-            <!--            <img th:src="@{/img/week.png}" alt="Week Image">-->
-            <!--            <img th:src="@{/img/day.png}" alt="Day Image">-->
-            <div class="swiper-slide">
-                <img src="img/month.png">
-            </div>
-            <div class="swiper-slide">
-                <img src="img/week.png">
-            </div>
-            <div class="swiper-slide">
-                <img src="img/day.png">
-            </div>
-        </div>
-    </div>
 </div>
+
+
 <script>
     function loginErrorMassage(){
         var email = $('#email').val();
@@ -125,8 +82,8 @@
             return true;
         }
     }
-     $(document).ready(function() {
-         var loginError = document.getElementById('loginError');
+    $(document).ready(function() {
+        var loginError = document.getElementById('loginError');
         $('#loginForm').on('submit', function(e) {
             e.preventDefault(); // 폼 기본 제출 방지
 
