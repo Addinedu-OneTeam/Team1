@@ -16,75 +16,68 @@
         <h1>회원가입</h1>
         <div class="sign-up">
             <div class="sign-box">
-                <label for="username" >이름</label>
-                <input type="text" id="username" placeholder="이름을 입력하세요." required>
-
-                <label id="emailLabel" for="fullEmail"> 이메일</이메일>
+                <div>
+                    <input type="text" id="username" placeholder="이름을 입력하세요." required>
+                    <label for="username" ><span>*</span> 이름</label>
+                </div>
+                <div>
                     <input type="email" id="fullEmail" placeholder="example@Example.com" required>
-                    <button type="button" id="checkDuplicateButton">중복 체크</button>
-                    <button type="button" id="verifyEmailButton" style="display: none;">인증하기</button>
-                </label>
+                    <button type="button" id="checkDuplicateButton">중복</button>
+                    <button type="button" id="verifyEmailButton" style="display: none;">인증</button>
+                    <label id="emailLabel" for="fullEmail"><span>*</span> 이메일</label>
+                </div>
                 <div id="emailError"></div>
-                <label id="verifyLabel">
-                    <div id="verificationSection" style="display: none">
-                        <input type="text" id="verificationCode" placeholder="인증번호를 입력하세요." required>
-                        <button type="button" id="verifyCodeButton" >확인</button>
-                    </div>
-                </label>
+                <div id="verificationSection" style="display: none">
+                    <input type="text" id="verificationCode" placeholder="인증번호를 입력하세요." required>
+                    <button type="button" id="verifyCodeButton" >확인</button>
+                    <label id="verifyLabel"><span>*</span> 인증하기</label>
+                </div>
                 <div id="timerDisplay" style="display: none;">
                     <span id="timer"></span>
                 </div>
 
-                <label for="password">비밀번호</label>
-                <input type="password" id="password" placeholder="영문,숫자,특수기호 10~16자리" required>
-                <label>
-                    <input type="checkbox" id="showPassword" onchange="togglePassword()">비밀번호 숨김
-                </label>
-                <div id="passwordError" style="color: red;"></div>
-
-                <label for="phone">휴대폰 번호</label>
-                <input type="text" id="phone" placeholder="휴대폰 번호를 입력시 '-'가 자동 생성됩니다.">
-
-                <label for="purpose">사용목적</label>
-                <select id="purpose">
-                    <option value="Personal">개인용</option>
-                    <option value="Academic">학업용</option>
-                    <option value="Business">기업용</option>
-                </select>
-
-                <label for="birthInput">생년월일</label>
-                <!--<input type="text" th:field="*{birthday}" id="birthday" placeholder="ex. 1990-10-24" required>-->
-                <input type="hidden" id="fullBirthday">
-                <div id="birthInput">
-<!--                    <input type="text" id="birth_Year"  minlength="4" maxlength="4" placeholder="ex. 1999"
-                           oninput="moveToNextInput(this, 'birth_Month')" required>년
-                    <input type="text" id="birth_Month" minlength="2" maxlength="2" placeholder="ex. 04"
-                           oninput="moveToNextInput(this, 'birth_Day')">월
-                    <input type="text" id="birth_Day" minlength="2" maxlength="2" placeholder="ex. 05"required>일
-                    -->
-                    <label for="birthdate">
-                        <input type="date"
-                               id="birthdate"
-                               max="2000-01-01"
-                               min="1930-01-01"
-                               >
+                <div class="password-field">
+                    <input type="password" id="password" placeholder="영문,숫자,특수기호 10~16자리" required>
+                    <label for="password"><span>*</span> 비밀번호</label>
+                    <input type="checkbox" id="showPassword" onchange="togglePassword()" style="visibility: hidden;">
+                    <label for="showPassword" id="showPasswordLabel">
+                    <img src="../img/password.png" alt="비밀번호 숨김" id="passwordImage">
                     </label>
                 </div>
 
+
+                <div id="passwordError" style="color: red;"></div>
+                <div>
+                    <input type="text" id="phone" placeholder="입력시 ' - '을 자동으로 생성" maxlength="13">
+                    <label for="phone"><span>*</span> 휴대폰</label>
+                </div>
+                <div id="phoneError" style="color: red;"></div>
+                <div id="birthInput">
+                    <input type="hidden" id="fullBirthday">
+                    <input type="date" id="birthdate" max="2000-01-01"min="1930-01-01" >
+                    <label for="birthdate"><span>*</span> 생년월일</label>
+                </div>
                 <!--<div id="birthdayError" style="color: red;"></div>-->
                 <div id="birthdateError" style="color: red;"></div>
 
+                <div id="purposeDiv">
+                    <label for="purpose"><span>*</span> 사용목적</label>
+                    <select id="purpose">
+                        <option value="Personal">개인용</option>
+                        <option value="Academic">학업용</option>
+                        <option value="Business">기업용</option>
+                    </select>
+                </div>
                 <div class="gender-selection">
-                    <label for="male">남</label>
-                    <input type="radio" name="gender" id="male" value="Male">
-                    <label for="female">여</label>
-                    <input type="radio" name="gender" id="female" value="Female">
+                    <label for="gender"><span>*</span> 성별</label>
+                    <select id="gender">
+                        <option value="Male">남성</option>
+                        <option value="Female">여성</option>
+                        <option value="Other">기타</option>
+                    </select>
                 </div>
                 <div id="genderError" style="color: red;"></div>
-  <!--              <button type="button" id="verifyEmailButton" disabled>이메일 인증</button>-->
-
-                <!--                <button type="submit" id="submitBtn" disabled>가입하기</button>-->
-                <button type="button" id="submitBtn" onclick="submitSignUpForm()" disabled>가입하기</button>
+                <button type="button" id="submitBtn" onclick="submitSignUpForm();" disabled>가입하기</button>
             </div>
         </div>
     </form>
@@ -104,6 +97,7 @@
         alert('인증번호가 전송 되었습니다.')
         var email = document.getElementById('fullEmail').value;
         axios.post('/verify-email', { email: email })
+
             .then(function (response) {
                 document.getElementById('verificationSection').style.display = 'block';
             })
@@ -127,7 +121,7 @@
             seconds = seconds < 10 ? "0" + seconds : seconds;
 
             display.textContent = minutes + ":" + seconds;
-
+            display.style.color = "black";
             if (--timer < 0) {
                 clearInterval(window.timer);
                 display.textContent = "시간 초과";
@@ -157,7 +151,7 @@
                     document.getElementById('verificationSection').style.display = 'none';
                     document.getElementById('submitBtn').disabled = false;
                     alert('인증이 완료 되었습니다.');
-                    emailError.textContent = "☑️ 인증이 완료 되었습니다."
+                    emailError.textContent = "☑ 인증이 완료 되었습니다."
                     emailError.style.color = "blue";
                     document.getElementById('verifyEmailButton').disabled = true;
                     document.getElementById('fullEmail').disabled = true;
@@ -191,10 +185,9 @@
                 data: {fullEmail: fullEmail},
                 success: function (response) {
                     if (!response) {
-                        emailError.textContent = "❌ 이미 가입된 이메일입니다."
+                        emailError.textContent = "이미 가입된 이메일입니다."
                         emailError.style.color = "red";
                     } else {
-                        console.log(phone.value);
                         emailError.textContent = "✔ 사용 가능한 이메일입니다."
                         emailError.style.color = "green";
                         document.getElementById('verifyEmailButton').style.display = "block"; // 이메일 인증 버튼 표시
@@ -205,6 +198,9 @@
                     console.error("Error checking email:", error);
                 }
             });
+        }else if(fullEmail === "") {
+            emailError.textContent = "이메일을 입력해주세요."
+            emailError.style.color = "red";
         }
     });
 
@@ -253,7 +249,19 @@
             return true;
         }
     }*/
-
+    function phoneChecking() {
+        var phone = document.getElementById("phone").value;
+        var phoneError = document.getElementById("phoneError");
+        phoneError.style.fontWeight = 'bold';
+        phoneError.style.fontSize = '12px';
+        if (phone === "") {
+            phoneError.textContent = "핸드폰 번호를 입력해주세요.";
+            return false;
+        } else {
+            phoneError.textContent = "";
+            return true;
+        }
+    }
     //핸드폰
     var phoneNumber = document.getElementById("phone");
     // 유효성검사 전화번호
@@ -261,7 +269,6 @@
         var input = this.value.replace(/[^0-9]/g, ""); // 숫자만 추출
         var formatted = "";
         var prefix = "010";
-
         // '010'으로 시작하는지 확인
         if (input.startsWith(prefix)) {
             if (input.length <= 3) {
@@ -291,6 +298,7 @@
 
 
 
+
     //비밀번호 숨김
     function togglePassword() {
         var passwordInput = document.getElementById("password");
@@ -301,7 +309,21 @@
             passwordInput.type = "password";
         }
     }
+    //비밀번호 숨김 이미지 변경
+    function changeImage() {
+        var imgElement = document.getElementById("passwordImage");
+        var isChecked = document.getElementById("showPassword").checked;
 
+        // 체크 여부에 따라 이미지 변경
+        if (isChecked) {
+            imgElement.src = "../img/password.png";
+        } else {
+            imgElement.src = "../img/password2.png";
+        }
+    }
+
+    // 이미지를 클릭했을 때 changeImage 함수 실행
+    document.getElementById("passwordImage").addEventListener("click", changeImage);
     //생년월일
     function getCurrentDate() {
         var currentDate = new Date();
@@ -316,7 +338,7 @@
         birthdateError.style.fontSize = '12px';
         birthdateError.style.fontWeight = 'bold';
         if (!birthdateInput.value) {
-            birthdateError.textContent = "❌ 생년월일을 선택해주세요.";
+            birthdateError.textContent = "생년월일을 선택해주세요.";
             return false;
         } else {
             birthdateError.textContent = "";
@@ -325,12 +347,12 @@
     }
 
     function validateGenderSelection() {
-        var genderSelected = document.querySelector('input[name="gender"]:checked');
+        var genderSelected = document.getElementById("gender");
         var genderError = document.getElementById("genderError");
         genderError.style.fontWeight = 'bold';
         genderError.style.fontSize = '12px';
         if (!genderSelected) {
-            genderError.textContent = "❌ 성별을 선택해주세요."
+            genderError.textContent = "성별을 선택해주세요."
             return false;
         } else{
             genderError.textContent = ""; // 오류 메시지 제거
@@ -345,7 +367,7 @@
         passwordError.style.fontSize = '12px';
         var passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{10,16}$/;
         if (!passwordPattern.test(passwordInput.value)) {
-            passwordError.textContent = "❌ 비밀번호는 영문, 숫자, 특수 기호포함 10~16자리여야 합니다.";
+            passwordError.textContent = "영문, 숫자, 특수기호 포함 10~16자리 입력.";
             return false;
         } else {
             passwordError.textContent = ""; // 오류 메시지 제거
@@ -353,8 +375,6 @@
         }
     }
     function submitSignUpForm() {
-        //combineBirthDay(); // 생년월일 조합
-        var email = document.getElementById('fullEmail').value.toLowerCase();
 
         if (!validatePassword()) {
             return; // 비밀번호가 유효하지 않으면 함수 실행 중단
@@ -363,21 +383,22 @@
         if (!validateGenderSelection()) {
             return; // 성별이 선택되지 않았으므로 여기서 함수 실행 중단
         }
-        if(!checkBirthdate()){
+        if (!checkBirthdate()) {
             return;
         }
-/*        if (!checkBirthdate()) {
-            return; // 생일이 선택되지 않았으므로 여기서 함수 실행 중단
-        }*/
-        var genderSelected = document.querySelector('input[name="gender"]:checked');
+        if (!phoneChecking()) {
+            return;
+        }
+
+            /*        var genderSelected = document.getElementById()*/
 
         var userData = {
             username: document.getElementById('username').value,
-            email: email,
+            email: document.getElementById('fullEmail').value,
             passwordHash: document.getElementById('password').value,
             purpose: document.getElementById('purpose').value,
             birthday: document.getElementById('birthdate').value,
-            gender: genderSelected.value, // 성별 값 할당
+            gender: document.getElementById('gender').value,
             phone: document.getElementById('phone').value
         };
         console.log("phone");
@@ -391,7 +412,8 @@
             .catch(function (error) {
                 console.error("회원가입 오류", error);
             });
-    }
+
+}
 </script>
 </div>
 </body>

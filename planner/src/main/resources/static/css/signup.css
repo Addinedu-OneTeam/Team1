@@ -1,11 +1,15 @@
 /*sign-in*/
+body{
+    background-color: #F9F9F9;
+}
 form {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 30%;
+    width: 20%;
+    height: 50%;
     border-radius: 18px;
-    background-color: ghostwhite;
+    background-color: white;
     margin: 150px auto;
     padding: 54px 120px 50px;
 }
@@ -14,10 +18,131 @@ form > p {
     text-align: center;
 }
 form > h1 {
-    font-size: 36px;
+    font-size: 40px;
     font-weight: bold;
 }
+.sign-up {
+    text-align: center;
+    width: 100%;
+}
+.sign-up button {
+    width: 70%;
+    height: 50px;
+    border-radius: 5px;
+    background-color: black;
+    border: none;
+    font-size: 18px;
+    color: #fff;
+    cursor: pointer;
+}
+.sign-up button:disabled {
+    background-color: grey;
+    color: white;
+    cursor: not-allowed;
+}
+.sign-up > div {
+    position: relative;
+    text-align: center;
+}
+.sign-up > div input{
+    width: 70%;
+    height: 40px;
+    margin: 10px 0;
+    border: 1px solid dimgray;
+    box-sizing: border-box;
+    border-radius: 5px;
+    padding: 0 1.4em;
+}.sign-up > div label{
+    position: absolute;
+    padding: 1px 1px;
+    left: 70px;
+    background-color: white;
+    color: gray;
+    font-size: 12px; font-weight: bold;
+    border-radius: 100px;
+}.sign-up > div span {
+    color: #da4841;
+}.password-field{
+    position: relative;
+}
+#checkDuplicateButton, #verifyEmailButton{
+    position: absolute;
+    right: 58px;
+    top: 72px;
+    width: 50px;
+    height: 36px;
+    border: none;
+    border-radius: 5px;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+#verifyCodeButton{
+    right: 58px;
+    top: 148px;
+    width: 50px;
+    height: 36px;
+    border: none;
+    position: absolute;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+#showPassword{
+    width: 1px;
+    height: 1px;
+}#showPasswordLabel{
+     top: 16px;
+     position: absolute;
+     margin-left: 210px;
+}
+#passwordImage {
+    width: 27px;
+    height: 27px;
+    cursor: pointer;
+}
+#purpose, #gender {
+    width: 70%;
+    height: 40px;
+    margin: 10px 0;
+    border: 1px solid dimgray;
+    border-radius: 5px;
+    padding: 0 1.4em;
+    appearance: none; /* 기본 스타일 제거 */
+    background: url('data:image/svg+xml;utf8,<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill="%23666" d="M8.25 12.5l3.5-3.5 3.5 3.5h-7z"/></svg>') no-repeat right 1rem center/1.5em;
+    background-color: white;
+    cursor: pointer;
+}
 
+/* Hover 스타일 */
+#purpose:hover, #gender:hover {
+    border-color: #aaa;
+}
+
+/* Focus 스타일 */
+#purpose:focus, #gender:focus {
+    outline: none;
+    border-color: dodgerblue;
+    box-shadow: 0 0 0 2px rgba(30, 144, 255, 0.2);
+}
+#timerDisplay {
+    text-align: left;
+    padding-left: 60px;
+    margin-bottom: 4px;
+    display: none;
+    font-size: 13px;
+
+}
+/*#submitBtn{
+     background-color: black;
+     color: white;
+     width: 265px;
+     height: 40px;
+     border-radius: 7px;
+     font-size: 20px;
+     cursor: pointer;
+ }*/
+/*
 .sign-up {
     display: flex;
     flex-direction: column;
@@ -61,38 +186,40 @@ form > h1 {
     border: none;
     font-size: 18px;
     color: #fff;
+    cursor: pointer;
 }
 
 .sign-up button:disabled {
     background-color: grey;
     color: white;
+    cursor: not-allowed;
 }
 
 .sign-up select {
-    height: 50px; /* 높이 설정 */
-    padding: 0 14px; /* 패딩 설정 */
-    border-radius: 5px; /* 테두리 둥글기 설정 */
-    border: 1px solid #8e8383; /* 테두리 색상 */
+    height: 50px; !* 높이 설정 *!
+    padding: 0 14px; !* 패딩 설정 *!
+    border-radius: 5px; !* 테두리 둥글기 설정 *!
+    border: 1px solid #8e8383; !* 테두리 색상 *!
 }
 
-/* 성별 선택 부분의 라벨 스타일 조정 */
+!* 성별 선택 부분의 라벨 스타일 조정 *!
 .gender-selection label {
-    font-size: 16px; /* 폰트 크기 조정 */
-    color: #333; /* 텍스트 색상 */
-    font-weight: bold; /* 글꼴 두께 */
-    margin-right: 10px; /* 오른쪽 여백 추가 */
+    font-size: 16px; !* 폰트 크기 조정 *!
+    color: #333; !* 텍스트 색상 *!
+    font-weight: bold; !* 글꼴 두께 *!
+    margin-right: 10px; !* 오른쪽 여백 추가 *!
 }
 
-/* 라디오 버튼 스타일 조정 */
+!* 라디오 버튼 스타일 조정 *!
 .gender-selection input[type="radio"] {
-    margin-right: 5px; /* 오른쪽 여백 추가 */
-    vertical-align: middle; /* 수직 정렬 */
+    margin-right: 5px; !* 오른쪽 여백 추가 *!
+    vertical-align: middle; !* 수직 정렬 *!
 }
 
 input[type="checkbox"] {
     width: 15px;
     height: 15px;
-    margin-right: 5px; /* Optional: Add some margin to separate checkbox from label */
+    margin-right: 5px; !* Optional: Add some margin to separate checkbox from label *!
 }
 #birth_Year, #birth_Month, #birth_Day{
     width: 70px;
@@ -133,4 +260,4 @@ input[type="checkbox"] {
          right: 0;
          margin: auto 0;
          border-radius: 3px;
- }
+ }*/
