@@ -201,6 +201,8 @@
             eventResizableFromStart: true, //이벤트 시작부분을 이전으로 늘릴 수 있게
             locale: 'ko', // 원하는 지역(언어)로 설정
             eventColor: 'hotpink',
+            scrollTimeReset: false,	//주, 일 달력에서 처음 보이는 시간을 계속 초기화할지(ex - 2월17일 보다가 18일로 넘어가면 처음 보이는 시간 초기화)
+            eventResizableFromStart: true, //이벤트 시작부분을 이전으로 늘릴 수 있게
 
             dateClick: function (info) {
                 // FullCalendar에서 날짜를 클릭했을 때 flatpickr 시작일 종료일에 날짜만 넘어가게 하기(이렇게 안하면 2024-02-03T09:00:00+09:00 이렇게 넘어감 )
