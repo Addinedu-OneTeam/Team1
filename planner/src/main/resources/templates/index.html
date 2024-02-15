@@ -9,8 +9,45 @@
     <!-- For CSS -->
     <link rel="stylesheet" th:href="@{/css/swiper.css}"/>
     <link rel="stylesheet" th:href="@{/css/login.css}"/>
+    <link rel="stylesheet" th:href="@{/css/header.css}"/>
+    <link rel="stylesheet" th:href="@{/css/footer.css}"/>
 </head>
 <body>
+<!-------------------------------- //header ----------------------------------------->
+<div class="header">365-Day Schedule Management Program
+
+    <div id="menuContainer">
+        <img src="/img/mypage.png" id="clickableImage">
+
+        <div class="menu" id="menu">
+            <div class="menu-item"><a href="#">메뉴 1</a></div>
+            <div class="menu-item"><a href="#">메뉴 2</a></div>
+            <div class="menu-item"><a href="#">메뉴 3</a></div>
+        </div>
+    </div>
+    <script>
+        // 메뉴 클릭시 메뉴 토글
+        document.getElementById("clickableImage").addEventListener("click", function() {
+            var menu = document.getElementById("menu");
+            menu.style.display = menu.style.display === "block" ? "none" : "block";
+        });
+
+        // 문서 클릭시 메뉴 숨김
+        document.addEventListener("click", function(event) {
+            var menu = document.getElementById("menu");
+            var clickableImage = document.getElementById("clickableImage");
+            var target = event.target;
+
+            // 메뉴가 표시되어 있고, 클릭된 요소가 메뉴나 이미지가 아닌 경우 메뉴 숨김
+            if (menu.style.display === "block" && target !== menu && target !== clickableImage) {
+                menu.style.display = "none";
+            }
+        });
+    </script>
+
+</div>
+<!-------------------------------- header// ------------------------------------------->
+
 
 <div class="entire" id="loginForm">
     <form>
@@ -129,5 +166,46 @@
 </script>
 <!-- For JavaScript 자바스크립트 div 마치고 적용됨-->
 <script th:src="@{/js/main.js}"></script>
+
+<!-------------------------------- // footer ----------------------------------------->
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <h3>One Planner</h3>
+            <p>Software Development Team</p>
+            <p>Seoul Geumcheon-gu Gasan-dong Newty Castle</p>
+            <p>Email: contact@oneplanner.com</p>
+            <p>Phone: (123) 456-7890</p>
+        </div>
+        <div class="footer-section">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="/about">About Us</a></li>
+                <li><a href="/services">Our Services</a></li>
+                <li><a href="/portfolio">Portfolio</a></li>
+                <li><a href="/contact">Contact Us</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h3>Follow Us</h3>
+            <a href="https://facebook.com/techinnovations">Facebook</a> |
+            <a href="https://twitter.com/techinnovations">Twitter</a> |
+            <a href="https://instagram.com/techinnovations">Instagram</a>
+        </div>
+        <div class="footer-section">
+            <h3>Newsletter</h3>
+            <p>Subscribe to our newsletter for the latest updates.</p>
+            <form action="subscribe" method="post">
+                <input type="email" name="email" placeholder="Enter your email">
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>Copyright &copy; 2024 One Planner Technology. All rights reserved.</p>
+    </div>
+</footer>
+<!-------------------------------- footer // ------------------------------------------->
+
 </body>
 </html>
