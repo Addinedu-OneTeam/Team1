@@ -1,7 +1,7 @@
 /*
  * 이메일 전송과 관련된 기능을 제공하는 서비스 클래스
  */
-package com.example.service;
+package com.example.emailverify;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;

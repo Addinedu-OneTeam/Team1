@@ -93,8 +93,8 @@
                 System.out.println(targetUrl);
                 targetUrl = "/web/main";
                 return UriComponentsBuilder.fromUriString(targetUrl)
-                        .queryParam("access_token", accessToken)
-                        .queryParam("refresh_token", refreshToken)
+//                        .queryParam("access_token", accessToken)
+//                        .queryParam("refresh_token", refreshToken)
                         .build().toUriString();
 
             } else if ("unlink".equalsIgnoreCase(mode)) {
@@ -113,7 +113,7 @@
             }
 
             return UriComponentsBuilder.fromUriString(targetUrl)
-                    .queryParam("error", "Login failed")
+//                    .queryParam("error", "Login failed")
                     .build().toUriString();
         }
 

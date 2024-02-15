@@ -39,8 +39,8 @@ public class Alarm {
     // 3 = 평일만
     // 4 = 주말 및 공휴일
 
-    @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "plan_id", nullable = false)
     private Plan plan;
 
 }

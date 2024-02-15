@@ -1,4 +1,4 @@
-package com.example.controller;
+package com.example.emailverify;
 
 import java.security.SecureRandom;
 import java.util.HashMap;
@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
-
-import com.example.service.EmailService;
 
 
 @RestController

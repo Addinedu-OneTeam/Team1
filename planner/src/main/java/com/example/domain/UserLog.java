@@ -19,7 +19,7 @@ public class UserLog {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_log_id_seq")
     @SequenceGenerator(name = "user_log_id_seq", sequenceName = "user_log_id_seq", allocationSize = 1)
-    private Long id;
+    private Long logId;
 
     @Column(name = "login_date")
     private LocalDateTime loginDate;

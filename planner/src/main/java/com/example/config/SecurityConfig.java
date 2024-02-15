@@ -30,10 +30,11 @@ public class SecurityConfig {
 
         http.csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable)
+//                .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/**").permitAll()
-//                       .requestMatchers("/", "api/user/login", "/css/**", "/img/**", "/js/**").permitAll()
+//                       .requestMatchers("/", "api/user/**", "api/plan/**", "/css/**", "/img/**", "/js/**").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 // 세션 처리 STATELESS => 세션 사용 x

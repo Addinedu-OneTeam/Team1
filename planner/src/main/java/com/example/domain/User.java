@@ -1,5 +1,6 @@
 package com.example.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -49,7 +50,8 @@ public class User {
     @Column(name = "phone", nullable = false, length = 64)
     private String phone;
 
-    @OneToMany(mappedBy = "user", orphanRemoval = false)
+    @OneToMany(mappedBy = "user", orphanRemoval = false, fetch = FetchType.EAGER)
+    @JsonManagedReference
     private List<Plan> plans;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
