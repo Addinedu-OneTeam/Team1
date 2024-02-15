@@ -39,7 +39,7 @@ public class UserController {
     }
 
     @GetMapping("/main")
-    public String main(User user, Model model, HttpSession session) {
+    public String main(HttpSession session) {
     	
         if (session.getAttribute("loginUser") == null) {
             return "redirect:/";

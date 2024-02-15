@@ -19,6 +19,8 @@
 
     <!-- fullcalendar (메인 달력) -->
     <script src='/webjars/fullcalendar/6.1.10/index.global.min.js'></script>
+    <!-- fullcalendar CDN 구글 캘린더 연동-->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js'></script>
 
     <!-- bootstrap -->
     <link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css">
@@ -35,7 +37,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            width: 1900px;
+            width: 100%;
         }
 
         .calendar {
@@ -47,6 +49,21 @@
 
         #main-calendar {
             width: 50%;
+        }
+
+        #detailForm {
+            display: flex;
+            width: 15%;
+            justify-content: space-evenly;
+        }
+        a{
+            color: inherit;
+            text-decoration: none;
+        }
+
+        a:hover{
+            color: black;
+            text-decoration: none;
         }
     </style>
 
@@ -65,7 +82,7 @@
     <div id="main-calendar"></div>
 
     <!-- 일정 입력 폼 -->
-    <div>
+    <div id="detailForm">
         <form id="eventForm">
             <table>
                 <h3 id="eventTag">일정</h3>
@@ -138,6 +155,14 @@
         // 메인 달력 설정 및 렌더링
         var calendarEl = document.getElementById('main-calendar');
         mainCalendar = new FullCalendar.Calendar(calendarEl, {
+            googleCalendarApiKey : "AIzaSyB9Pp-FiVX_CbTf6d69RZxnbUJefoQOM_8",
+            eventSources :[
+                {
+                    googleCalendarId : 'ko.south_korea.official#holiday@group.v.calendar.google.com'
+                    , color: 'white'
+                    , backgroundColor: 'red'
+                }
+            ],
             headerToolbar: {
                 left: 'prevYear,prev,next,nextYear today',
                 center: 'title',
@@ -151,29 +176,45 @@
             dayMaxEventRows: true, // 셀 높이에 따라 이벤트 표시
             fixedWeekCount: false, // 다음 달에 해당되는 날짜 미리 보여짐 여부
             locale: 'ko',
+            weekNumbers: true,
+            scrollTimeReset: false,	//주, 일 달력에서 처음 보이는 시간을 계속 초기화할지(ex - 2월17일 보다가 18일로 넘어가면 처음 보이는 시간 초기화)
+            eventResizableFromStart: true, //이벤트 시작부분을 이전으로 늘릴 수 있게
+            eventStartEditable: true,
+            eventDurationEditable: true,
+            eventResourceEditable: true,
+            draggable:true,
 
             dateClick: function (info) {
-                // FullCalendar에서 날짜 클릭했을 때 flatpickr 시작일 종료일, 미니 달력에 날짜 동기화
-                const formattedDate = moment(info.date).format('YYYY-MM-DD');
-                ['#startDate', '#endDate', '#dateInput'].forEach(selector => {
-                    document.querySelector(selector).value = formattedDate; // 시작일, 종료일, 미니 달력 날짜 업데이트
-                    updateDate(selector, formattedDate); // 미니 달력 업데이트
+
+                // FullCalendar에서 날짜 클릭했을 때의 처리
+                const date = new Date(info.date);
+
+                // 날짜를 'YYYY-MM-DD' 형식으로 포맷팅
+                const formattedDate = moment(date).format('YYYY-MM-DD');
+
+                // 시간을 'HH:MM' 형식으로 포맷팅
+                const formattedTime = moment(date).format('HH:mm');
+
+                ['#startDate', '#endDate'].forEach(selector => {
+                    document.querySelector(selector).value = formattedDate; // 날짜 업데이트
                 });
+
+                // flatpickr 미니 달력에 날짜 동기화
+                document.querySelector('#dateInput').value = formattedDate;
 
                 const planDetail = {
                     id: null,
                     title: '',
                     allDay: true,
-                    startDate: info.dateStr,
-                    endDate: info.dateStr,
-                    startTime: '09:00',
-                    endTime: '09:30',
+                    startDate: formattedDate,
+                    endDate: formattedDate,
+                    startTime: formattedTime,
+                    endTime: formattedTime,
                     repeat: '',
                     place: '',
                     content: '',
                     alarm: true
                 };
-
 
                 fillFormWithPlanDetails(planDetail);
 
@@ -235,6 +276,8 @@
 
             eventClick: function(info) {
                 console.log(info);
+                info.jsEvent.preventDefault();
+                this.editable = true;
                 $.ajax({
                     url: '/api/plan/selectDetail/' + info.event.id,
                     success: function(response) {
