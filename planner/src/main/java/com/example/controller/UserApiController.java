@@ -29,10 +29,9 @@ public class UserApiController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDto loginDto, HttpSession session) {
-        boolean isAuthenticated = userService.authenticate(loginDto);
-        if (isAuthenticated) {
-            session.setAttribute("loginUser", loginDto.getEmail());
-            System.out.println(loginDto.getEmail());
+        User loginUser = userService.authenticate(loginDto);
+        if (loginUser != null) {
+            session.setAttribute("loginUser", loginUser);
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
