@@ -32,6 +32,11 @@ public class UserController {
         model.addAttribute("user", new User());
         return "user/passwordUpdate";
     }
+    @GetMapping("/login")
+    public String login(Model model) {
+        model.addAttribute("user", new User());
+        return "user/login";
+    }
     @GetMapping("/signup")
     public String sign(Model model) {
         model.addAttribute("user", new User());
