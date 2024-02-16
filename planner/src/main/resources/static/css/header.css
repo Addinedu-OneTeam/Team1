@@ -1,0 +1,32 @@
+@charset "UTF-8";
+
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+.header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: black;
+    color: white;
+    text-align: center;
+
+    padding: 10px 0;
+    z-index: 1000;
+    margin-right: 30px;
+    height: 70px;   /* 헤더높이 */
+    font-size: 24px;
+    line-height: 70px;
+
+}
+
+/* 이미지를 한번클릭하면 바로밑에 메뉴가 세로로 뜨며 마우스 오버시 색상변경*/
+#menuContainer {
+    position: relative; 		/* 컨테이너 위치 설정 */
+    display: inline-block; 		/* 이미지와 메뉴 그룹을 인라인 블록으로 설정 */
+    float: right; 				/* 오른쪽으로 부동 설정 */
+    margin-right: 30px;  		/* 오른쪽 여백 */
+    text-align: right;
+}

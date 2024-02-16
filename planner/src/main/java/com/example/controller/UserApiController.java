@@ -32,9 +32,15 @@ public class UserApiController {
         boolean isAuthenticated = userService.authenticate(loginDto);
         if (isAuthenticated) {
             session.setAttribute("loginUser", loginDto.getEmail());
+            System.out.println(loginDto.getEmail());
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+    @PostMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/";
     }
 
     @PutMapping("/password-update")
@@ -52,5 +58,15 @@ public class UserApiController {
     }
 
 
+
+    @GetMapping("/checkSession")
+    @ResponseBody
+    public String checkSession(HttpSession session) {
+        if (session.getAttribute("loginUser") != null) {
+            return "ok"; // 세션이 유효한 경우
+        } else {
+            return "expired"; // 세션이 만료된 경우
+        }
+    }
 }
 

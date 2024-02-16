@@ -6,62 +6,75 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" th:href="@{/css/signup.css}" />
+    <link rel="stylesheet" th:href="@{/css/header.css}" />
 </head>
 <body>
-
+<div class="header">365-Day Schedule Management Program</div>
 <div class="entire">
     <form id="sign-up-form">
         <!--    <form method="post" th:action="@{/api/user}" th:object="${user}">-->
         <img src="../img/logo.png" alt="logo" id="logo" width="50%"></a>
-        <h1>회원가입</h1>
+        <h3>회원가입</h3>
+        <h6>서비스 가입 후 무료로 혜택을 받아보시오.....</h6>
         <div class="sign-up">
             <div class="sign-box">
                 <div>
                     <input type="text" id="username" placeholder="이름을 입력하세요." required>
-                    <label for="username" ><span>*</span> 이름</label>
+                    <label for="username" class="textLabel" ><span>*</span> 이름</label>
                 </div>
                 <div>
                     <input type="email" id="fullEmail" placeholder="example@Example.com" required>
                     <button type="button" id="checkDuplicateButton">중복</button>
                     <button type="button" id="verifyEmailButton" style="display: none;">인증</button>
-                    <label id="emailLabel" for="fullEmail"><span>*</span> 이메일</label>
+                    <label for="fullEmail" class="textLabel"><span>*</span> 이메일</label>
                 </div>
                 <div id="emailError"></div>
                 <div id="verificationSection" style="display: none">
                     <input type="text" id="verificationCode" placeholder="인증번호를 입력하세요." required>
                     <button type="button" id="verifyCodeButton" >확인</button>
-                    <label id="verifyLabel"><span>*</span> 인증하기</label>
-                </div>
-                <div id="timerDisplay" style="display: none;">
-                    <span id="timer"></span>
+                    <label for="verificationCode" class="textLabel"><span>*</span> 인증하기</label>
+                    <div id="timerDisplay" style="display: none;">
+                        <span id="timer"></span>
+                    </div>
                 </div>
 
-                <div class="password-field">
+
+       <!--         <div class="password-field">
                     <input type="password" id="password" placeholder="영문,숫자,특수기호 10~16자리" required>
-                    <label for="password"><span>*</span> 비밀번호</label>
+                    <label for="password" class="textLabel"><span>*</span> 비밀번호</label>
                     <input type="checkbox" id="showPassword" onchange="togglePassword()" style="visibility: hidden;">
                     <label for="showPassword" id="showPasswordLabel">
                     <img src="../img/password.png" alt="비밀번호 숨김" id="passwordImage">
                     </label>
                 </div>
-
+                -->
+                <div class="password-field">
+                    <input type="password" id="password" placeholder="영문,숫자,특수기호 10~16자리" required>
+                    <label for="password" class="textLabel"><span>*</span> 비밀번호</label>
+                    <div class="show-password-wrapper">
+                        <input type="checkbox" id="showPassword" onchange="togglePassword()" class="show-password-checkbox">
+                        <label for="showPassword" class="show-password-label">
+                            <img src="../img/password.png" alt="비밀번호 숨김" id="passwordImage">
+                        </label>
+                    </div>
+                </div>
 
                 <div id="passwordError" style="color: red;"></div>
                 <div>
                     <input type="text" id="phone" placeholder="입력시 ' - '을 자동으로 생성" maxlength="13">
-                    <label for="phone"><span>*</span> 휴대폰</label>
+                    <label for="phone" class="textLabel"><span>*</span> 휴대폰</label>
                 </div>
                 <div id="phoneError" style="color: red;"></div>
                 <div id="birthInput">
                     <input type="hidden" id="fullBirthday">
                     <input type="date" id="birthdate" max="2000-01-01"min="1930-01-01" >
-                    <label for="birthdate"><span>*</span> 생년월일</label>
+                    <label for="birthdate" class="textLabel"><span>*</span> 생년월일</label>
                 </div>
                 <!--<div id="birthdayError" style="color: red;"></div>-->
                 <div id="birthdateError" style="color: red;"></div>
 
                 <div id="purposeDiv">
-                    <label for="purpose"><span>*</span> 사용목적</label>
+                    <label for="purpose" class="textLabel"><span>*</span> 사용목적</label>
                     <select id="purpose">
                         <option value="Personal">개인용</option>
                         <option value="Academic">학업용</option>
@@ -69,7 +82,7 @@
                     </select>
                 </div>
                 <div class="gender-selection">
-                    <label for="gender"><span>*</span> 성별</label>
+                    <label for="gender" class="textLabel"><span>*</span> 성별</label>
                     <select id="gender">
                         <option value="Male">남성</option>
                         <option value="Female">여성</option>
@@ -88,18 +101,19 @@
     var isRunning = false;
     // 인증 이메일 보내기
     document.getElementById('verifyEmailButton').addEventListener('click', function() {
-        this.disabled = true; // 버튼 비활성화
+        this.disabled = true;
+        document.getElementById('verifyEmailButton').style.backgroundColor = 'gray';
         // 이메일 인증 버튼 클릭 시 타이머 시작
-        var fiveMinutes = 60 * 1; // 5분
+        var fiveMinutes = 60 * 3; // 3분
         var display = document.getElementById('timer');
         startTimer(fiveMinutes, display);
+        document.getElementById('verificationSection').style.display = 'block'; // 인증 코드 입력창 표시
         document.getElementById("timerDisplay").style.display = "block";
         alert('인증번호가 전송 되었습니다.')
         var email = document.getElementById('fullEmail').value;
         axios.post('/verify-email', { email: email })
-
             .then(function (response) {
-                document.getElementById('verificationSection').style.display = 'block';
+
             })
             .catch(function (error) {
                 console.log(error);
@@ -121,12 +135,13 @@
             seconds = seconds < 10 ? "0" + seconds : seconds;
 
             display.textContent = minutes + ":" + seconds;
-            display.style.color = "black";
+            display.style.color = '#A4A4A4';
             if (--timer < 0) {
                 clearInterval(window.timer);
                 display.textContent = "시간 초과";
                 isRunning = false;
-                document.getElementById("verifyEmailButton").disabled = true;
+                document.getElementById("verifyEmailButton").disabled = false;
+                document.getElementById('verifyEmailButton').style.backgroundColor = 'black';
                 document.getElementById("timerDisplay").style.display = "none";
                 document.getElementById("verificationSection").style.display = "none";
                 alert('입력 시간이 초과되었습니다, 다시 시도해주세요.');
