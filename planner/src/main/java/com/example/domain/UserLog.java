@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.time.LocalDateTime;
 
 @Getter
@@ -21,13 +20,14 @@ public class UserLog {
     @SequenceGenerator(name = "user_log_id_seq", sequenceName = "user_log_id_seq", allocationSize = 1)
     private Long logId;
 
-    @Column(name = "login_date")
-    private LocalDateTime loginDate;
+    @Column(name = "login_date", nullable = false)
+    private LocalDateTime loginDate = LocalDateTime.now();
 
-    @Column(name = "login_status")
-    private String loginStatus;
+    @Column(name = "login_type", nullable = false)
+    private String loginType;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "userId")
+    @JoinColumn(name = "user_id")
     private User user;
+
 }

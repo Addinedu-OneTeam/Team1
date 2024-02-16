@@ -50,7 +50,8 @@ public class User {
     @Column(name = "phone", nullable = false, length = 64)
     private String phone;
 
-    @OneToMany(mappedBy = "user", orphanRemoval = false, fetch = FetchType.EAGER)
+//    @OneToMany(mappedBy = "user", orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Plan> plans;
 
@@ -72,5 +73,3 @@ public class User {
         }
     }
 }
-
-

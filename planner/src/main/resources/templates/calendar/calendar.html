@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang='ja'>
+<html lang='ko'>
 
 <head>
     <meta charset="UTF-8">
@@ -18,6 +18,8 @@
     <script src="/webjars/flatpickr/4.6.13/dist/l10n/ja.js"></script>
 
     <!-- fullcalendar (메인 달력) -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
+
     <script src='/webjars/fullcalendar/6.1.10/index.global.min.js'></script>
     <!-- fullcalendar CDN 구글 캘린더 연동-->
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js'></script>
@@ -161,6 +163,7 @@
                     googleCalendarId : 'ko.south_korea.official#holiday@group.v.calendar.google.com'
                     , color: 'white'
                     , backgroundColor: 'red'
+                    , editable: false
                 }
             ],
             headerToolbar: {
@@ -183,6 +186,7 @@
             eventDurationEditable: true,
             eventResourceEditable: true,
             draggable:true,
+
 
             dateClick: function (info) {
 
@@ -219,7 +223,7 @@
                 fillFormWithPlanDetails(planDetail);
 
                 console.log(info);
-                $('#deletePlan').hide();
+                // $('#deletePlan').hide();
                 // 저장 버튼 클릭 시
                 $('#iuButton').off('click').on('click', function() {
                     var plan = {
@@ -274,10 +278,73 @@
                 });
             },
 
+
+
+
+            // $(document).on('mousedown', '.fc-event', function(info) {
+                // var eventId = $(this).data('event-id'); // 이벤트 ID를 얻는 방식은 FullCalendar 설정에 따라 다를 수 있음
+                // 이벤트 ID를 사용하여 AJAX 요청을 수행하거나 폼을 채우는 등의 작업을 수행
+
+            dateClick: function (info) {
+
+                // FullCalendar에서 날짜 클릭했을 때의 처리
+                const date = new Date(info.date);
+
+                // 날짜를 'YYYY-MM-DD' 형식으로 포맷팅
+                const formattedDate = moment(date).format('YYYY-MM-DD');
+
+                // 시간을 'HH:MM' 형식으로 포맷팅
+                const formattedTime = moment(date).format('HH:mm');
+
+                ['#startDate', '#endDate'].forEach(selector => {
+                    document.querySelector(selector).value = formattedDate; // 날짜 업데이트
+                });
+            },
+            eventDrop: function (event) {
+                // var id = event.id;
+                // var start_date = moment(event.start).format('YYYY-MM-DD');
+                // var end_date = moment(event.end).format('YYYY-MM-DD');
+
+                var dragPlan = {
+                    planId: event.event.id,
+                    title: "drag 업데이트 성공",
+                    title: "drag 업데이트 성공",
+                    startDate: moment(event.event.start).format('YYYY-MM-DD'), // 새 시작 날짜
+                    endDate: event.event.end ? moment(event.event.end).format('YYYY-MM-DD') : '', // 새 종료 날짜 (존재하는 경우)
+                    startTime: moment(event.event.start).format('HH:mm'), // 새 시작 시간
+                    endTime: event.event.end ? moment(event.event.end).format('HH:mm') : '', // 새 종료 시간 (존재하는 경우)
+                    place: $('#place').val(),
+                    repeat: $('#repeat').val(),
+                    content: $('#content').val(),
+                    allDay: parseInt($('#allDay').val(), 10), // 문자열을 int로 변환
+                    alarm: parseInt($('#alarm').val(), 10), // 문자열을 int로 변환
+                };
+
+
+                console.log(dragPlan);
+                // if (dragPlan.planId != null) {
+                //
+                // }
+                $.ajax({
+                    type: 'PUT',
+                    url: '/api/plan/update',
+                    contentType: 'application/json',
+                    data: JSON.stringify(dragPlan),
+                    success: function (response) {
+                        console.log("수정 성공");
+                        mainCalendar.getEventById(response.planId).remove();
+                        selectPlan(response.planId);
+                        // 수정이 성공하면 어떤 작업을 수행할지 추가할 수 있음
+                    },
+                    error: function () {
+                        console.log("수정 실패");
+                    }
+                });
+            },
             eventClick: function(info) {
-                console.log(info);
+                // console.log(info);
                 info.jsEvent.preventDefault();
-                this.editable = true;
+                // this.editable = true;
                 $.ajax({
                     url: '/api/plan/selectDetail/' + info.event.id,
                     success: function(response) {

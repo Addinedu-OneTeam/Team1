@@ -16,6 +16,7 @@ import lombok.NonNull;
 @AllArgsConstructor
 @Data
 @Entity
+@Table(name = "PLAN")
 public class Plan {
     @Id
     @SequenceGenerator (
@@ -54,7 +55,7 @@ public class Plan {
     private String content; // 내용
     private String place; // 위치
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @JsonBackReference
     private User user;

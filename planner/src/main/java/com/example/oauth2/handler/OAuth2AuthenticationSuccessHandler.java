@@ -90,7 +90,6 @@
                 System.out.println(principal.getUserInfo().getName());
                 User user = userService.findOrCreateUser(principal, principal.getEmail());
                 httpSession.setAttribute("loginUser", user);
-                System.out.println(targetUrl);
                 targetUrl = "/web/main";
                 return UriComponentsBuilder.fromUriString(targetUrl)
 //                        .queryParam("access_token", accessToken)

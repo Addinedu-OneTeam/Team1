@@ -2,14 +2,16 @@ package com.example.service;
 
 import com.example.domain.SnsInfo;
 import com.example.domain.User;
+import com.example.domain.UserLog;
 import com.example.dto.LoginDto;
 import com.example.repository.SnsInfoRepository;
 import com.example.oauth2.service.OAuth2UserPrincipal;
+import com.example.repository.UserLogRepository;
 import com.example.repository.UserRepository;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -26,6 +28,9 @@ public class UserService {
 
     @Autowired
     private SnsInfoRepository snsInfoRepository;
+
+    @Autowired
+    private UserLogRepository userLogRepository;
 
     public User create(User user) {
         user.setPasswordHash(pEncoder.encode(user.getPasswordHash()));
@@ -44,6 +49,10 @@ public class UserService {
         Optional<User> user = userRepository.findByEmail(loginDto.getEmail());
         if (user.isPresent()) {
             if (pEncoder.matches(loginDto.getPassword(), user.get().getPasswordHash())) {
+                UserLog userLog = new UserLog();
+                userLog.setUser(user.get());
+                userLog.setLoginType("LOCAL");
+                userLogRepository.save(userLog);
                 return user.get();
             }
         }
@@ -57,14 +66,15 @@ public class UserService {
     }
 
     public User passwordUpdate(LoginDto loginDto) {
-        Optional<User> user = userRepository.findByEmail(loginDto.getEmail());
-        System.out.println(user);
-        user.get().setPasswordHash(pEncoder.encode(loginDto.getPassword()));
-        return userRepository.save(user.get());
+        User user = userRepository.findByEmail(loginDto.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + loginDto.getEmail()));
+
+        user.setPasswordHash(pEncoder.encode(loginDto.getPassword()));
+        return userRepository.save(user);
     }
 
-    public User findOrCreateUser(OAuth2UserPrincipal oAuth2UserPrincipal, String registrationId) {
-        Optional<User> userOptional = userRepository.findByEmail(oAuth2UserPrincipal.getEmail());
+    public User findOrCreateUser(OAuth2UserPrincipal oAuth2UserPrincipal, String email) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
         User user = userOptional.orElseGet(() -> new User());
         if (!userOptional.isPresent()) {
             user.setEmail(oAuth2UserPrincipal.getEmail());
@@ -79,24 +89,32 @@ public class UserService {
             // SNS 정보 설정
             SnsInfo snsInfo = new SnsInfo();
             snsInfo.setSnsId(oAuth2UserPrincipal.getUserInfo().getId());
-            snsInfo.setSnsType(registrationId);
             snsInfo.setSnsName(oAuth2UserPrincipal.getName());
 //            snsInfo.setSnsProfile(oAuth2UserInfo.getImageUrl());
             snsInfo.setSnsConnectDate(new Date());
             snsInfo.setProvider(oAuth2UserPrincipal.getUserInfo().getProvider().name());
+            snsInfo.setSnsType(snsInfo.getProvider());
             snsInfo.setProviderUserId(oAuth2UserPrincipal.getUserInfo().getId());
             snsInfo.setUser(user);
-
+//            snsInfoRepository.save(snsInfo);
             user.setSnsInfos(Arrays.asList(snsInfo));
+            userRepository.save(user);
         }
-        return userRepository.save(user);
+        // UserLog에 로그인 데이터 저장
+        UserLog userLog = new UserLog();
+        userLog.setUser(user);
+        userLog.setLoginType(oAuth2UserPrincipal.getUserInfo().getProvider().name());  // SNS 로그인 타입 (예: "google", "facebook")
+        userLogRepository.save(userLog);
+        return user;
     }
 
+//    @Transactional
     public void deleteUser(String email) {
-        Optional<User> userOptional = userRepository.findByEmail(email);
-        if (userOptional.isPresent()) {
-            userRepository.delete(userOptional.get());
-            snsInfoRepository.deleteById(userOptional.get().getUserId());
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isPresent()) {
+            userRepository.delete(user.get());
+            snsInfoRepository.deleteById(user.get().getUserId());
         }
     }
+
 }
