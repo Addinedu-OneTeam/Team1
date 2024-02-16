@@ -12,15 +12,15 @@
     <link rel="stylesheet" th:href="@{/css/footer.css}"/>
 </head>
 <body>
-<!-------------------------------- //header ----------------------------------------->
-<div class="header">365-Day Schedule Management Program
-
-    <div id="menuContainer">
-        <a href="http://localhost:8080"><img src="/img/home2.png" width="50" height="50" id="clickableImage"></a>
-   </div>
-
+<!-------------------- //header (로그인 상태에 따라 다른 헤더 프래그먼트)-------------------------->
+<!--꼭 두줄로 해야함 한줄로 하면 안먹음!!-->
+<div th:if="${loginUser == null}" >
+    <div th:replace="/fragments/header_login :: header_login"></div>
 </div>
-<!-------------------------------- header// ------------------------------------------->
+<div th:if="${loginUser != null}">
+    <div th:replace="/fragments/header_logout :: header_logout"></div>
+</div>
+<!-------------------------------------- header// ------------------------------------------->
 
 
 <div class="entire" id="loginForm">

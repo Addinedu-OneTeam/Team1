@@ -21,8 +21,15 @@ public class UserController {
 
     @Autowired
     public UserService userService;
-    @RequestMapping("/")
-    public String root() throws Exception {
+
+    @Autowired
+    HttpSession session;
+    @RequestMapping("")
+    public String root(Model model) throws Exception {
+        System.out.println("세션값" + session.getAttribute("loginUser"));
+        if (session.getAttribute("loginUser") != null) {
+            model.addAttribute("loginUser", session.getAttribute("loginUser"));
+        }
         return "index";
     }
     @GetMapping("/passwordUpdate")
@@ -48,6 +55,13 @@ public class UserController {
 
     @GetMapping("/mlogin")
     public String mlogin() {
+
         return "user/mlogin";
+    }
+
+    @GetMapping("/logout")
+    public String logout() {
+        session.invalidate();
+        return "redirect:/web";
     }
 }

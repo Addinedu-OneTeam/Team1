@@ -91,10 +91,10 @@
                 User user = userService.findOrCreateUser(principal, principal.getEmail());
                 httpSession.setAttribute("loginUser", user);
                 System.out.println(targetUrl);
-                targetUrl = "/web/main";
+                targetUrl = "/web";
                 return UriComponentsBuilder.fromUriString(targetUrl)
-                        .queryParam("access_token", accessToken)
-                        .queryParam("refresh_token", refreshToken)
+//                        .queryParam("access_token", accessToken)
+//                        .queryParam("refresh_token", refreshToken)
                         .build().toUriString();
 
             } else if ("unlink".equalsIgnoreCase(mode)) {
