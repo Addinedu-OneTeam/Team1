@@ -23,7 +23,6 @@ public class UserApiController {
 
     @PostMapping("")
     public User create(@RequestBody User user) {
-        System.out.println("회원가입 해줘" + user.getEmail());
         return userService.create(user);
     }
 

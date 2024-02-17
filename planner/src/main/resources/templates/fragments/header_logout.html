@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>header_logout</title>
+</head>
+<body>
+<!----찍어보기----->
+로그아웃해주세요
+<span th:text="${loginUser}"></span>
+<!------------------->
+<div th:fragment="header_logout">
+
+    <div class="header">로그인 성공 365-Day Schedule Management Program
+
+        <div id="logoutMenuContainer">
+            <a href="/web"><img src="/img/home2.png" width="50" height="50"></a> &nbsp;&nbsp;&nbsp;
+            <img src="/img/logout.png" width="50" height="50"  id="logoutClickableImage">
+
+            <div class="menu" id="logoutMenu">
+                <div class="menu-item"><a href="/web/logout">로그아웃</a></div>
+                <div class="menu-item"><a href="/web/main">나의스케쥴</a></div>
+                <div class="menu-item"><a href="#">메뉴 3</a></div>
+            </div>
+        </div>
+        <script>
+            // 메뉴 클릭시 메뉴 토글
+            document.getElementById("logoutClickableImage").addEventListener("click", function() {
+                var logoutMenu = document.getElementById("logoutMenu");
+                logoutMenu.style.display = logoutMenu.style.display === "block" ? "none" : "block";
+            });
+
+            // 문서 클릭시 메뉴 숨김
+            document.addEventListener("click", function(event) {
+                var logoutMenu = document.getElementById("logoutMenu");
+                var logoutClickableImage = document.getElementById("logoutClickableImage");
+                var target = event.target;
+
+                // 메뉴가 표시되어 있고, 클릭된 요소가 메뉴나 이미지가 아닌 경우 메뉴 숨김
+                if (logoutMenu.style.display === "block" && target !== logoutMenu && target !== logoutClickableImage) {
+                    logoutMenu.style.display = "none";
+                }
+            });
+        </script>
+
+    </div>
+
+    <!--clickableImage-->
+
+</div>
+</body>
+</html>

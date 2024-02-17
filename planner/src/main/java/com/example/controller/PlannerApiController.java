@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.domain.Plan;
@@ -66,6 +65,7 @@ public class PlannerApiController {
     // 일정 상세 조회
     @GetMapping("/selectDetail/{id}")
     public Plan selectDetail(@PathVariable(name = "id") Long id) {
+        System.out.println("컨트롤러에 들어옴" + id);
         return plannerService.selectDetail(id).orElse(null);
     }
 
