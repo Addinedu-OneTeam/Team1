@@ -1,0 +1,74 @@
+// 메인 달력과 미니 달력의 날짜 동기화 => 이걸 해주면 메인 달력에서 날짜 클릭시 시작일 종료일 달력도 같이 업데이트되어서 해당 날짜로 바뀜
+        function updateDate(selector, date) {
+            // 미니 달력 입력란(시작일 종료일 입력란) 업데이트 및 열기
+            var inputElement = document.querySelector(selector);
+            var flatpickrInstance = inputElement._flatpickr;
+
+            if (flatpickrInstance) {
+                flatpickrInstance.setDate(date, true);
+            }
+        }
+
+        // today 버튼을 커스터마이징하고 숨기는 부분
+        $('.fc-today-button').hide(); // FullCalendar에서 기본으로 제공하는 today 버튼 숨기기
+        $('.fc-today-button').replaceWith($('#todayButton')); // 커스텀 today 버튼으로 교체
+
+        // 커스텀 today 버튼 클릭 시 동작 정의
+        $('#todayButton').on('click', function () {
+            const today = new Date();
+            dateInput._flatpickr.setDate(today, true); // 미니달력 갱신
+            startDateInput._flatpickr.setDate(today, true); // 시작일 갱신
+            endDateInput._flatpickr.setDate(today, true); // 종료일 갱신
+
+            // FullCalendar에서 오늘 날짜로 이동
+            mainCalendar.gotoDate(today);
+        });
+
+        // flatpickr api
+        const dateInput = document.getElementById('dateInput');
+        const startDateInput = document.getElementById('startDate');
+        const endDateInput = document.getElementById('endDate');
+
+
+        // flatpickr 클릭시 fullcalendar 연동
+        function handleDateChange(selectedDates, dateStr, instance) {
+            mainCalendar.gotoDate(moment(dateStr).format('YYYY-MM-DD')); // 선택된 날짜를 fullcalendar에 전달
+        }
+
+        // flatpickr 초기화 및 설정
+        const flatpickrOptions = {
+            dateFormat: 'Y-m-d', // 날짜 형식 설정
+            defaultDate: 'today', // 기본으로 선택되는 날짜 설정 (오늘 날짜)
+            time_24hr: true, // 24시간 형식으로 표시 설정
+            onChange: handleDateChange // 날짜 선택 시 동작할 함수 설정
+        };
+
+        // 날짜 선택을 위한 flatpickr 초기화
+        // 좌상단 미니 달력에 추가하고 인라인 모드로 설정하여 표시
+        flatpickr('#dateInput', {
+            parent: document.getElementById('mini-calendar'), // 부모 요소 지정
+            inline: true, // 인라인 모드로 설정하여 항상 표시
+            shorthandCurrentMonth: true, // 달력 상단에 현재 월 축약 표시 설정
+            static: true, // 사용자 입력 제한 설정
+            ...flatpickrOptions // 기타 옵션 적용
+        }).open(); // 달력 열기
+
+        // 시작일과 종료일 달력 간 동기화
+        ['#startDate', '#endDate'].forEach(selector => {
+            flatpickr(selector, {
+                ...flatpickrOptions, // 기본 flatpickr 옵션 적용
+                onChange: function (selectedDates, dateStr, instance) {
+                    // 날짜 선택 이벤트 핸들러 등록
+                    handleDateChange(selectedDates, dateStr, instance);
+                    // 다른 달력의 선택된 날짜와 비교하여 동기화
+                    const otherPicker = selector === '#startDate' ? '#endDate' : '#startDate'; // 다른 달력 선택
+                    const otherPickerInstance = document.querySelector(otherPicker)._flatpickr; // 다른 달력 인스턴스 가져오기
+                    if (otherPickerInstance) { // 다른 달력이 존재하는 경우
+                        const otherDate = otherPickerInstance.selectedDates[0]; // 다른 달력의 선택된 날짜 가져오기
+                        if (otherDate && otherDate > selectedDates[0]) { // 선택된 날짜가 다른 달력의 날짜보다 이전인 경우
+                            otherPickerInstance.setDate(selectedDates, true); // 다른 달력도 선택된 날짜로 설정
+                        }
+                    }
+                }
+            });
+        });
