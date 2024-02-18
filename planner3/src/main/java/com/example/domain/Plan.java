@@ -20,7 +20,7 @@ import lombok.NonNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Entity
+@Entity(name = "planner")
 public class Plan {
     @Id
     @SequenceGenerator (
