@@ -17,13 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/web")
 public class UserController {
-	
-	@Autowired 
-	public PlannerService plannerService;
-
-    @Autowired
-    public UserService userService;
-    @RequestMapping("/")
+    @RequestMapping("")
     public String root() throws Exception {
         return "index";
     }
@@ -34,7 +28,7 @@ public class UserController {
     }
     @GetMapping("/login")
     public String login(Model model) {
-        model.addAttribute("user", new User());
+        model.addAttribute("loginUser", new User());
         return "user/login";
     }
     @GetMapping("/signup")
@@ -44,12 +38,11 @@ public class UserController {
     }
 
     @GetMapping("/main")
-    public String main(User user, Model model, HttpSession session) {
+    public String main(HttpSession session) {
     	
         if (session.getAttribute("loginUser") == null) {
             return "redirect:/";
         }
-//		session.invalidate();
         return "calendar/calendar";
     }
 

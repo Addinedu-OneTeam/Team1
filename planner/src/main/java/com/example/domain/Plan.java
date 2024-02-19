@@ -1,12 +1,12 @@
 package com.example.domain;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
+import com.example.util.BooleanToNumberConverter;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +16,7 @@ import lombok.NonNull;
 @AllArgsConstructor
 @Data
 @Entity
+@Table(name = "PLAN")
 public class Plan {
     @Id
     @SequenceGenerator (
@@ -24,45 +25,43 @@ public class Plan {
             allocationSize = 1
     )
     @GeneratedValue(generator = "myPlannerSEQ")
-    private Long planNo; // 할 일 번호
+    private Long planId; // 할 일 번호
 
     @NonNull
     private String title; // 제목
 
-    @Column(insertable = false, columnDefinition = "NUMBER DEFAULT 1")
-    private int allDay; // 하루종일
-    // 0 = 하루종일 off
-    // 1 = 하루종일 on
+    @Convert(converter = BooleanToNumberConverter.class)
+    private boolean allDay; // 하루종일 여부
+
+    @Convert(converter = BooleanToNumberConverter.class)
+    private boolean alarm; // 알람 여부
 
     @NonNull
+//    @JsonSerialize(using = CustomDateSerializer.class)
     private LocalDate startDate; // 시작일
 
     @NonNull
-    private String startTime; // 시작시간
-
-    @NonNull
     private LocalDate endDate; // 종료일
+    // String으로 하면 날짜 변경을 못한다
 
     @NonNull
-    private String endTime; // 종료시간
+    private LocalTime startTime; // 시작 시간
 
-    @Column(insertable = false, columnDefinition = "NUMBER DEFAULT 0")
-    private int repeat; // 반복 여부
-    // 0 = 반복 off
-    // 1 = 매일
-    // 2 = 매주 해당 요일
-    // 3 = 평일만
-    // 4 = 주말 및 공휴일
+    @NonNull
+    private LocalTime endTime; // 종료 시간
+
+    private String repeat; // 반복 여부
 
     private String content; // 내용
     private String place; // 위치
 
-    @Column(insertable = false, columnDefinition = "NUMBER DEFAULT 1")
-    private int alarm; // 알람 여부
-    // 0 = 알람 off
-    // 1 = 알람 on
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
+    private User user;
 
-    @NonNull
-    private String userEmail;
+    // Plan 엔티티 예시
+    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Alarm> alarms;
 
 }

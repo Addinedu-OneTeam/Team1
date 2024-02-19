@@ -1,7 +1,7 @@
 /*
  * 이메일 전송을 위한 JavaMailSender를 구성하는 설정 클래스
  */
-package com.example.config;
+package com.example.emailverify;
 
 import java.util.Properties;
 

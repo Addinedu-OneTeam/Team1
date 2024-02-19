@@ -1,5 +1,3 @@
-console.log("안녕하세요");
-
 const swiper = new Swiper('.swiper' , {
     // Optional parameters
     spaceBetween: 30,
