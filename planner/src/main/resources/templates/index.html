@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Insert title here</title>
+    <title>One Planner Index Page</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -11,9 +11,15 @@
     <link rel="stylesheet" th:href="@{/css/login.css}"/>
     <link rel="stylesheet" th:href="@{/css/header.css}"/>
     <link rel="stylesheet" th:href="@{/css/footer.css}"/>
+    <link rel="stylesheet" th:href="@{/css/contents.css}"/>
+    <!--favicon-->
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+    <!--google font-->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-<!-------------------- //header (로그인 상태에 따라 다른 헤더 프래그먼트)-------------------------->
+<!-------------------- //header (로그인 상태에 따라 다른 헤더 프레그먼트)-------------------------->
 <!--꼭 두줄로 해야함 한줄로 하면 안먹음!!-->
 <div th:if="${loginUser == null}" >
     <div th:replace="/fragments/header_login :: header_login"></div>
@@ -24,129 +30,57 @@
 <!-------------------------------------- header// ------------------------------------------->
 
 
-<div class="entire" id="loginForm">
-    <form>
-        <img src="img/logo.png" alt="logo" id="logo" width="50%"></a>
-        <div class="sign-in">
-            <div class="sign-box">
-                로그인유저는?
-                <span th:text="${loginUser}"></span>
-                <label for="email">Email</label>
-                <input type="text" name="email" id="email" placeholder="Email@domain.com">
-                <label for="password">Password</label>
-                <input type="password" name="password" id="password" placeholder="Password">
-
-                <div id="loginError" style="color: red;"></div>
-
-                <div class="password-update-text">
-                    <span>비밀번호를 왜 까먹는데 왜!!!!</span>
-                    <a href="/web/passwordUpdate">찾으러 와라...</a>
-                </div>
-                <button>Login</button>
-                <div class="sign-up-text">
-                    <span>아직도 회원이 아니세요?</span>
-                    <a href="/web/signup">지금 바로 시작!</a>
-                </div>
-            </div>
+<!--------------------------------------// main contents ------------------------------------>
+<div class="content">
+    <div class="left-content">
+        <br>
+        <img src="/img/logo.png" alt="logo" id="logo" width="80%">
+        <h1>세상에 없던 플래너!<br>누구나 편리하게!<br>365일 당신과 함께!</h1>
+        <div th:if="${loginUser == null}">
+            <a href="/web/mlogin"><button class="button">지금 체험해 보세요!</button></a>
         </div>
-        <div class="line">
-            <p>or</p>
+        <div th:if="${loginUser != null}">
+            <a href="/web/main"><button class="button">나의 스케쥴보기</button></a>
         </div>
-        <div class="social-login">
-            <a href="http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:8080&mode=login"><i><img src="img/google.png" alt="google login" id="google"></i></a>
-            <a href="http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:8080&mode=unlink">
-                <button type="button">Google Unlink</button>
-            </a>
-            <a href="http://localhost:8080/oauth2/authorization/naver?redirect_uri=http://localhost:8080&mode=login"><i><img src="img/naver.png" alt="naver login" id="naver"></i></a>
-            <a href="http://localhost:8080/oauth2/authorization/naver?redirect_uri=http://localhost:8080&mode=unlink">
-                <button type="button">Naver Unlink</button>
-            </a>
-            <a href="http://localhost:8080/oauth2/authorization/kakao?redirect_uri=http://localhost:8080&mode=login"><i><img src="img/kakao.png" alt="kakao login" id="kakao"></i></a>
-            <a href="http://localhost:8080/oauth2/authorization/kakao?redirect_uri=http://localhost:8080&mode=unlink">
-                <button type="button">Kakao Unlink</button>
-            </a>
-        </div>
-    </form>
-    <!-- Slider main container -->
-    <div class="swiper">
-        <!-- Additional required wrapper -->
-        <div class="swiper-wrapper">
-            <!-- Slides -->
-            <!--            <img th:src="@{/img/month.png}" alt="Month Image">-->
-            <!--            <img th:src="@{/img/week.png}" alt="Week Image">-->
-            <!--            <img th:src="@{/img/day.png}" alt="Day Image">-->
-            <div class="swiper-slide">
-                <img src="img/month.png">
+    </div>
+    <div class="right-content">
+        <br><br>
+        <div class="slideshow-container">
+            <div class="mySlides fade">
+                <img src="/img/month.png" style="width:100%">
             </div>
-            <div class="swiper-slide">
-                <img src="img/week.png">
+            <div class="mySlides fade">
+                <img src="/img/week.png" style="width:100%">
             </div>
-            <div class="swiper-slide">
-                <img src="img/day.png">
+            <div class="mySlides fade">
+                <img src="/img/day.png" style="width:100%">
             </div>
         </div>
     </div>
 </div>
 <script>
-    function loginErrorMassage(){
-        var email = $('#email').val();
-        var password = $('#password').val();
-        var loginError = document.getElementById('loginError');
-        loginError.style.fontWeight = 'bold';
-        loginError.style.fontSize = '12px';
-        if(email === "" || password === ""){
-            loginError.textContent = "❌ 이메일 또는 비밀번호를 입력해주세요.";
-            return false;
-        }else{
-            loginError.textContent = "";
-            return true;
+    var slideIndex = 0;
+    showSlides();
+
+    function showSlides() {
+        var i;
+        var slides = document.getElementsByClassName("mySlides");
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
         }
+        slideIndex++;
+        if (slideIndex > slides.length) {slideIndex = 1}
+        slides[slideIndex-1].style.display = "block";
+        setTimeout(showSlides, 3000); // Change image every 3 seconds
     }
-     $(document).ready(function() {
-         var loginError = document.getElementById('loginError');
-        $('#loginForm').on('submit', function(e) {
-            e.preventDefault(); // 폼 기본 제출 방지
 
-            if (!loginErrorMassage()) {
-                return;
-            }
-            var loginData = {
-                email: $('#email').val(),
-                password: $('#password').val()
-            };
-
-            $.ajax({
-                url: '/api/user/login',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(loginData),
-                success: function(response) {
-                    console.log(loginData);
-                    window.location.href = '/web/main';
-                    // if (response.success) {
-                    //     window.location.href = '/main'; // 메인 페이지로 리다이렉트
-                    // } else {
-                    //     // 로그인 실패 처리
-                    //     alert('로그인 실패');
-                    // }
-                },
-                error: function(xhr,textStatus,error) {
-                    if (xhr.status === 401) {
-                        loginError.textContent = "❌이메일 또는 비밀번호가 일치하지 않습니다.";
-                    } else {
-                        loginError.textContent = "❌오류로 인하여 로그인에 실패하였습니다 다시 시도해주세요.";
-                    }
-                }
-            });
-        });
-    });
 </script>
-<!-- For JavaScript 자바스크립트 div 마치고 적용됨-->
-<!--<script th:src="@{/js/main.js}"></script>-->
+<!-------------------------------------- main contents //------------------------------------>
+<
 
-<!-------------------------------- // footer ----------------------------------------->
+<!--------------------------------------- // footer ----------------------------------------->
 <div th:replace="/fragments/footer :: footer"></div>
-<!-------------------------------- footer // ------------------------------------------->
+<!------------------------------------- footer // ------------------------------------------->
 
 </body>
 </html>

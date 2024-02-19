@@ -5,17 +5,15 @@
     <title>header_logout</title>
 </head>
 <body>
-<!----찍어보기----->
-로그아웃해주세요
-<span th:text="${loginUser}"></span>
-<!------------------->
+
 <div th:fragment="header_logout">
 
-    <div class="header">로그인 성공 365-Day Schedule Management Program
+    <div class="header">
+        환영합니다! 365일 당신의 일상을 One Planner와 함께 하세요!
 
         <div id="logoutMenuContainer">
-            <a href="/web"><img src="/img/home2.png" width="50" height="50"></a> &nbsp;&nbsp;&nbsp;
-            <img src="/img/logout.png" width="50" height="50"  id="logoutClickableImage">
+            <a href="/web"><img src="/img/home2.png" width="40" height="40"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <img src="/img/logout.png" width="40" height="40"  id="logoutClickableImage">
 
             <div class="menu" id="logoutMenu">
                 <div class="menu-item"><a href="/web/logout">로그아웃</a></div>
@@ -45,7 +43,6 @@
 
     </div>
 
-    <!--clickableImage-->
 
 </div>
 </body>

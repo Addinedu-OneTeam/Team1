@@ -5,12 +5,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.domain.User;
 import com.example.service.PlannerService;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/web")
@@ -53,15 +57,18 @@ public class UserController {
         return "calendar/calendar";
     }
 
-    @GetMapping("/mlogin")
-    public String mlogin() {
 
+    @GetMapping("/mlogin")
+    public String mlogin(){
         return "user/mlogin";
     }
 
+
+
     @GetMapping("/logout")
     public String logout() {
-        session.invalidate();
+        session.invalidate();    //세션무효화
         return "redirect:/web";
     }
+
 }

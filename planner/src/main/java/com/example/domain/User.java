@@ -69,6 +69,7 @@ public class User {
             this.phone = "010-8282-8282";
         }
     }
+
 }
 
 

@@ -6,7 +6,6 @@ import com.example.dto.LoginDto;
 import com.example.repository.SnsInfoRepository;
 import com.example.oauth2.service.OAuth2UserPrincipal;
 import com.example.repository.UserRepository;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -99,4 +98,8 @@ public class UserService {
             snsInfoRepository.deleteById(userOptional.get().getUserId());
         }
     }
+
+
+
+
 }

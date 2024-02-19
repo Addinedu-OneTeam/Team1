@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <!-- For CSS -->
+    <link rel="stylesheet" th:href="@{/css/swiper.css}"/>
     <link rel="stylesheet" th:href="@{/css/login.css}"/>
     <link rel="stylesheet" th:href="@{/css/header.css}"/>
     <link rel="stylesheet" th:href="@{/css/footer.css}"/>
@@ -25,9 +26,11 @@
 
 <div class="entire" id="loginForm">
     <form>
-        <img src="/img/logo.png" alt="logo" id="logo" width="50%"></a>
+        <img src="img/logo.png" alt="logo" id="logo" width="50%"></a>
         <div class="sign-in">
             <div class="sign-box">
+                로그인유저는?
+                <span th:text="${loginUser}"></span>
                 <label for="email">Email</label>
                 <input type="text" name="email" id="email" placeholder="Email@domain.com">
                 <label for="password">Password</label>
@@ -36,8 +39,8 @@
                 <div id="loginError" style="color: red;"></div>
 
                 <div class="password-update-text">
-                    <span>비밀번호가 생각나지 않으시나요?</span>
-                    <a href="/web/passwordUpdate">비밀번호 찾기</a>
+                    <span>비밀번호를 왜 까먹는데 왜!!!!</span>
+                    <a href="/web/passwordUpdate">찾으러 와라...</a>
                 </div>
                 <button>Login</button>
                 <div class="sign-up-text">
@@ -50,23 +53,40 @@
             <p>or</p>
         </div>
         <div class="social-login">
-            <a href="http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:8080&mode=login"><i><img src="/img/google.png" alt="google login" id="google"></i></a>
-<!--            <a href="http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:8080&mode=unlink">-->
-<!--                <button type="button">Google Unlink</button>-->
+            <a href="http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:8080&mode=login"><i><img src="img/google.png" alt="google login" id="google"></i></a>
+            <a href="http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:8080&mode=unlink">
+                <button type="button">Google Unlink</button>
             </a>
-            <a href="http://localhost:8080/oauth2/authorization/naver?redirect_uri=http://localhost:8080&mode=login"><i><img src="/img/naver.png" alt="naver login" id="naver"></i></a>
-<!--            <a href="http://localhost:8080/oauth2/authorization/naver?redirect_uri=http://localhost:8080&mode=unlink">-->
-<!--                <button type="button">Naver Unlink</button>-->
+            <a href="http://localhost:8080/oauth2/authorization/naver?redirect_uri=http://localhost:8080&mode=login"><i><img src="img/naver.png" alt="naver login" id="naver"></i></a>
+            <a href="http://localhost:8080/oauth2/authorization/naver?redirect_uri=http://localhost:8080&mode=unlink">
+                <button type="button">Naver Unlink</button>
             </a>
-            <a href="http://localhost:8080/oauth2/authorization/kakao?redirect_uri=http://localhost:8080&mode=login"><i><img src="/img/kakao.png" alt="kakao login" id="kakao"></i></a>
-<!--            <a href="http://localhost:8080/oauth2/authorization/kakao?redirect_uri=http://localhost:8080&mode=unlink">-->
-<!--                <button type="button">Kakao Unlink</button>-->
+            <a href="http://localhost:8080/oauth2/authorization/kakao?redirect_uri=http://localhost:8080&mode=login"><i><img src="img/kakao.png" alt="kakao login" id="kakao"></i></a>
+            <a href="http://localhost:8080/oauth2/authorization/kakao?redirect_uri=http://localhost:8080&mode=unlink">
+                <button type="button">Kakao Unlink</button>
             </a>
         </div>
     </form>
+    <!-- Slider main container -->
+    <div class="swiper">
+        <!-- Additional required wrapper -->
+        <div class="swiper-wrapper">
+            <!-- Slides -->
+            <!--            <img th:src="@{/img/month.png}" alt="Month Image">-->
+            <!--            <img th:src="@{/img/week.png}" alt="Week Image">-->
+            <!--            <img th:src="@{/img/day.png}" alt="Day Image">-->
+            <div class="swiper-slide">
+                <img src="img/month.png">
+            </div>
+            <div class="swiper-slide">
+                <img src="img/week.png">
+            </div>
+            <div class="swiper-slide">
+                <img src="img/day.png">
+            </div>
+        </div>
+    </div>
 </div>
-
-
 <script>
     function loginErrorMassage(){
         var email = $('#email').val();
@@ -82,8 +102,8 @@
             return true;
         }
     }
-    $(document).ready(function() {
-        var loginError = document.getElementById('loginError');
+     $(document).ready(function() {
+         var loginError = document.getElementById('loginError');
         $('#loginForm').on('submit', function(e) {
             e.preventDefault(); // 폼 기본 제출 방지
 
@@ -122,7 +142,7 @@
     });
 </script>
 <!-- For JavaScript 자바스크립트 div 마치고 적용됨-->
-<script th:src="@{/js/main.js}"></script>
+<!--<script th:src="@{/js/main.js}"></script>-->
 
 <!-------------------------------- // footer ----------------------------------------->
 <div th:replace="/fragments/footer :: footer"></div>
