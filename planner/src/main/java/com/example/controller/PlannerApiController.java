@@ -34,6 +34,7 @@ public class PlannerApiController {
     // 일정 추가
     @PostMapping("/insert")
     public ResponseEntity<Plan> insert(@RequestBody Plan plan) {
+        System.out.println("이벤트 insert 요청 컨트롤러에 들어왔습니다");
         try {
             User user = (User) session.getAttribute("loginUser");
             if (user == null) {

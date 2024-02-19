@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>header_login</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}"/>
 </head>
 <body>
 <!----찍어보기----->
@@ -42,6 +43,26 @@
                     loginMenu.style.display = "none";
                 }
             });
+
+            // CSS 파일 동적 추가
+            function loadCSS(href) {
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = href;
+                document.head.appendChild(link);
+            }
+
+            // JavaScript 파일 동적 추가
+            // function loadJS(src) {
+            //     const script = document.createElement('script');
+            //     script.src = src;
+            //     script.async = false; // 필요에 따라 true로 설정
+            //     document.body.appendChild(script);
+            // }
+
+            // 사용 예
+            loadCSS('/css/header.css');
+            // loadJS('/js/header.js');
         </script>
 
     </div>

@@ -22,6 +22,7 @@ public class PlannerService {
 
 	@Transactional
 	public Plan insert(Plan plan) {
+		System.out.println("이벤트 insert 요청 서비스에 들어왔습니다");
 		try {
 			// 일정 추가
 			Plan newPlan = plannerRepository.save(plan);
