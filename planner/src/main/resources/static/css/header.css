@@ -5,11 +5,12 @@ body, html {
     padding: 0;
     font-family: Arial, sans-serif;
 }
+
 .header {
     position: fixed;
     top: 0;
     width: 100%;
-    background-color: #010348;
+    background-color: #333;
     color: white;
     text-align: center;
 
@@ -21,6 +22,7 @@ body, html {
     line-height: 70px;
 
 }
+
 .content {
     margin-top: 60px;
     padding: 20px;
@@ -56,12 +58,10 @@ body, html {
     line-height: 40px;
     color: black;
 }
-
 .menu-item a {
     color: black;
     text-decoration: none;
 }
-
 .menu-item:hover {
     background-color: lightgray; 		/* 마우스 오버시 메뉴배경색 변경 */
     color: lightgray; 					/* 마우스 오버시 메뉴글자색 변경 */

@@ -14,6 +14,7 @@
 <body>
 <!-------------------- //header (로그인 상태에 따라 다른 헤더 프래그먼트)-------------------------->
 <!--꼭 두줄로 해야함 한줄로 하면 안먹음!!-->
+
 <div th:if="${loginUser == null}" >
     <div th:replace="/fragments/header_login :: header_login"></div>
 </div>
@@ -68,7 +69,7 @@
 
 
 <script>
-    function loginErrorMassage(){
+    function loginErrorMessage(){
         var email = $('#email').val();
         var password = $('#password').val();
         var loginError = document.getElementById('loginError');
@@ -87,7 +88,7 @@
         $('#loginForm').on('submit', function(e) {
             e.preventDefault(); // 폼 기본 제출 방지
 
-            if (!loginErrorMassage()) {
+            if (!loginErrorMessage()) {
                 return;
             }
             var loginData = {

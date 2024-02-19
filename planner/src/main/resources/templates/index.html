@@ -29,12 +29,12 @@
 </div>
 <!-------------------------------------- header// ------------------------------------------->
 
-
 <!--------------------------------------// main contents ------------------------------------>
 <div class="content">
     <div class="left-content">
         <br>
         <img src="/img/logo.png" alt="logo" id="logo" width="80%">
+
         <h1>세상에 없던 플래너!<br>누구나 편리하게!<br>365일 당신과 함께!</h1>
         <div th:if="${loginUser == null}">
             <a href="/web/mlogin"><button class="button">지금 체험해 보세요!</button></a>
@@ -47,13 +47,13 @@
         <br><br>
         <div class="slideshow-container">
             <div class="mySlides fade">
-                <img src="/img/month.png" style="width:100%">
+                <img src="/img/month2.png">
             </div>
             <div class="mySlides fade">
-                <img src="/img/week.png" style="width:100%">
+                <img src="/img/week2.png">
             </div>
             <div class="mySlides fade">
-                <img src="/img/day.png" style="width:100%">
+                <img src="/img/day2.png">
             </div>
         </div>
     </div>
@@ -76,7 +76,7 @@
 
 </script>
 <!-------------------------------------- main contents //------------------------------------>
-<
+
 
 <!--------------------------------------- // footer ----------------------------------------->
 <div th:replace="/fragments/footer :: footer"></div>
