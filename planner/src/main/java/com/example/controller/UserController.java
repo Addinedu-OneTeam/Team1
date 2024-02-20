@@ -28,9 +28,11 @@ public class UserController {
     HttpSession session;
     @RequestMapping("")
     public String root(Model model) throws Exception {
-        System.out.println("세션값" + session.getAttribute("loginUser"));
         if (session.getAttribute("loginUser") != null) {
-            model.addAttribute("loginUser", session.getAttribute("loginUser"));
+            System.out.println("세션값" + session.getAttribute("loginUser"));
+            User user = (User)session.getAttribute("loginUser");
+            System.out.println(user.getUsername());
+            model.addAttribute("loginUser", user);
         }
         return "index";
     }
