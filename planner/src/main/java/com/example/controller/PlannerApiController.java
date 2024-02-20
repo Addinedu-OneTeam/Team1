@@ -56,7 +56,7 @@ public class PlannerApiController {
     }
 
     @GetMapping("/{planId}")
-    public Map<String, Object> selectPlan(@PathVariable Long planId) {
+    public Map<String, Object> selectPlan(@PathVariable(name = "planId") Long planId) {
         User user = (User)session.getAttribute("loginUser");
         return plannerService.selectPlan(planId, user);
     }

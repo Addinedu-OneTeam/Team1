@@ -39,6 +39,18 @@ public class EmailVerificationController {
         return response;
     }
 
+    @PostMapping("/passwordUpdate-email")
+    public Map<String, Object> passwordUpdateEmail(@RequestBody Map<String, String> payload) {
+        String email = payload.get("email");
+        String verificationCode = generateRandomCode();
+        emailService.passwordUpdateEmail(email, verificationCode);
+        verificationCodes.put(email, verificationCode);
+        logger.info("Verification code sent to: " + email);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Verification code sent");
+        return response;
+    }
     @PostMapping("/verification-email-sent")
     public Map<String, Object> verifyEmailCode(@RequestBody Map<String, String> payload) {
         String email = payload.get("email");

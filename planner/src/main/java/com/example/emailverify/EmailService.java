@@ -46,5 +46,29 @@ public class EmailService {
 
         }
     }
+    public void passwordUpdateEmail(String to, String verificationCode) {
+
+        MimeMessage message = emailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        try {
+
+            helper.setTo(to);
+            helper.setSubject("[One Planner 이메일 인증]");
+
+            // Thymeleaf를 사용하여 HTML 템플릿을 렌더링
+            Context context = new Context();
+            context.setVariable("verificationCode", verificationCode);
+
+            String htmlContent = templateEngine.process("verification/passwordUpdate-email", context);  //verification/verification-email.html
+            helper.setText(htmlContent, true);   // true 전달하여 HTML 형식으로 설정
+
+            emailSender.send(message);
+
+        } catch (MessagingException e) {
+            e.printStackTrace();  // 예외처리
+
+        }
+    }
 
 }

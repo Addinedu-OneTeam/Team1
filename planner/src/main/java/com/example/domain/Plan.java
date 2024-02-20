@@ -37,17 +37,14 @@ public class Plan {
     private boolean alarm; // 알람 여부
 
     @NonNull
-//    @JsonSerialize(using = CustomDateSerializer.class)
+//  @JsonSerialize(using = CustomDateSerializer.class)
     private LocalDate startDate; // 시작일
 
-    @NonNull
     private LocalDate endDate; // 종료일
     // String으로 하면 날짜 변경을 못한다
 
-    @NonNull
     private LocalTime startTime; // 시작 시간
 
-    @NonNull
     private LocalTime endTime; // 종료 시간
 
     private String repeat; // 반복 여부

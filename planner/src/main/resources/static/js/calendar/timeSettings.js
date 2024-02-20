@@ -55,28 +55,29 @@ const endTimeDropdown = document.getElementById('endTime');
 populateTimeDropdown(startTimeDropdown);
 populateTimeDropdown(endTimeDropdown);
 
+
 // startTime 드롭다운에 이벤트 리스너 추가
 startTimeDropdown.addEventListener('change', function() {
-    // 선택된 startTime 가져오기
-    const selectedStartTime = this.value;
+    const selectedStartTime = this.value; // 선택된 시작 시간 가져오기
+    const momentStartTime = moment(selectedStartTime, 'HH:mm'); // moment 객체로 변환
 
-    // 선택된 startTime을 기반으로 endTime 드롭다운의 옵션 업데이트
-    updateEndTimeOptions(selectedStartTime);
+    // 종료 시간 설정
+    const momentEndTime = momentStartTime.clone().add(30, 'minutes'); // 시작 시간으로부터 30분 후의 시간 계산
+    const formattedEndTime = momentEndTime.format('HH:mm'); // 포맷팅된 종료 시간
+
+    // 종료 시간 드롭다운에 반영
+    endTimeDropdown.value = formattedEndTime;
 });
 
-// endTime 드롭다운의 옵션을 업데이트하는 함수
-function updateEndTimeOptions(selectedStartTime) {
-    const endTimeDropdown = document.getElementById('endTime');
-    
-    // startTime선택 이후의 옵션만 남기기 (ex - 11:)
-    const filteredOptions = Array.from(endTimeDropdown.options).filter(option => option.value > selectedStartTime);
-    
-    // 옵션을 비우고 새로운 옵션으로 채우기
-    endTimeDropdown.innerHTML = '';
-    for (const option of filteredOptions) {
-        endTimeDropdown.appendChild(option.cloneNode(true));
-    }
+// endTime 드롭다운에 이벤트 리스너 추가
+endTimeDropdown.addEventListener('change', function() {
+    const selectedEndTime = this.value; // 선택된 종료 시간 가져오기
+    const momentEndTime = moment(selectedEndTime, 'HH:mm'); // moment 객체로 변환
 
-    // 기본 선택된 옵션을 첫 번째 유효한 옵션으로 설정
-    endTimeDropdown.selectedIndex = 0;
-}
+    // 시작 시간 설정
+    const momentStartTime = momentEndTime.clone().subtract(30, 'minutes'); // 종료 시간으로부터 30분 전의 시간 계산
+    const formattedStartTime = momentStartTime.format('HH:mm'); // 포맷팅된 시작 시간
+
+    // 시작 시간 드롭다운에 반영
+    startTimeDropdown.value = formattedStartTime;
+});
