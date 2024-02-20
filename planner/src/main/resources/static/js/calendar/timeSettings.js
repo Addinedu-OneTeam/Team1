@@ -16,7 +16,7 @@ $('#allDay').change(function () {
 
 // 첫 시작시 종일(all-day) 체크박스 블러처리 
 $(document).ready(function() {
-	$('#deletePlan').hide();
+    $('#deletePlan').hide();
     // 페이지 로드 시 종일 체크 여부 확인
     if ($('#allDay').is(':checked')) {
         // 종일 체크되어 있을 때
@@ -59,25 +59,46 @@ populateTimeDropdown(endTimeDropdown);
 // startTime 드롭다운에 이벤트 리스너 추가
 startTimeDropdown.addEventListener('change', function() {
     const selectedStartTime = this.value; // 선택된 시작 시간 가져오기
-    const momentStartTime = moment(selectedStartTime, 'HH:mm'); // moment 객체로 변환
+    const selectedEndTime = endTimeDropdown.value; // 선택된 종료 시간 가져오기
 
-    // 종료 시간 설정
-    const momentEndTime = momentStartTime.clone().add(30, 'minutes'); // 시작 시간으로부터 30분 후의 시간 계산
-    const formattedEndTime = momentEndTime.format('HH:mm'); // 포맷팅된 종료 시간
-
-    // 종료 시간 드롭다운에 반영
-    endTimeDropdown.value = formattedEndTime;
+    // 종료 시간 업데이트
+    updateEndTime(selectedStartTime, selectedEndTime);
 });
 
 // endTime 드롭다운에 이벤트 리스너 추가
 endTimeDropdown.addEventListener('change', function() {
+    const selectedStartTime = startTimeDropdown.value; // 선택된 시작 시간 가져오기
     const selectedEndTime = this.value; // 선택된 종료 시간 가져오기
-    const momentEndTime = moment(selectedEndTime, 'HH:mm'); // moment 객체로 변환
 
-    // 시작 시간 설정
-    const momentStartTime = momentEndTime.clone().subtract(30, 'minutes'); // 종료 시간으로부터 30분 전의 시간 계산
-    const formattedStartTime = momentStartTime.format('HH:mm'); // 포맷팅된 시작 시간
-
-    // 시작 시간 드롭다운에 반영
-    startTimeDropdown.value = formattedStartTime;
+    // 시작 시간 업데이트
+    updateStartTime(selectedStartTime, selectedEndTime);
 });
+
+// 선택된 시작 시간을 기반으로 종료 시간 업데이트
+function updateEndTime(selectedStartTime, selectedEndTime) {
+    const momentStartTime = moment(selectedStartTime, 'HH:mm');
+    const momentEndTime = moment(selectedEndTime, 'HH:mm');
+    const duration = momentEndTime.diff(momentStartTime, 'minutes');
+
+    // 시작 시간과 종료 시간의 차이가 30분보다 작으면 종료 시간 업데이트
+    if (duration < 30) {
+        const newEndTime = momentStartTime.clone().add(30, 'minutes');
+        endTimeDropdown.value = newEndTime.format('HH:mm');
+    }
+}
+
+// 선택된 종료 시간을 기반으로 시작 시간 업데이트
+function updateStartTime(selectedStartTime, selectedEndTime) {
+    const momentStartTime = moment(selectedStartTime, 'HH:mm');
+    const momentEndTime = moment(selectedEndTime, 'HH:mm');
+    const duration = momentEndTime.diff(momentStartTime, 'minutes');
+
+    // 종료 시간과 시작 시간의 차이가 30분 이상이면 그대로 시작 시간 유지
+    if (duration >= 30) {
+        startTimeDropdown.value = selectedStartTime;
+    } else {
+        // 종료 시간과 시작 시간의 차이가 30분보다 작으면 시작 시간을 종료 시간 - 30으로 업데이트
+        const newStartTime = momentEndTime.clone().subtract(30, 'minutes');
+        startTimeDropdown.value = newStartTime.format('HH:mm');
+    }
+}

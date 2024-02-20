@@ -33,6 +33,8 @@ public class SecurityConfig {
 //                .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/**").permitAll()
+                        .requestMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/img/**", "/webjars/**", "/**/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js").permitAll()
+
 //                       .requestMatchers("/", "api/user/**", "api/plan/**", "/css/**", "/img/**", "/js/**").permitAll()
 
                         .anyRequest().authenticated()
