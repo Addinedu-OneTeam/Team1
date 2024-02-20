@@ -61,7 +61,7 @@ public class User {
     @PrePersist
     protected void onPersist() {
         if (this.username == null) {
-            this.username = "너의 이름은?";
+            this.username = "익명";
         }
 
         if (this.birthday == null) {
@@ -72,4 +72,14 @@ public class User {
             this.phone = "010-8282-8282";
         }
     }
+
+
+
+
+
+
+
+
+
+
 }

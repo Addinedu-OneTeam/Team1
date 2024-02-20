@@ -66,11 +66,22 @@ body, html {
     background-color: lightgray; 		/* 마우스 오버시 메뉴배경색 변경 */
     color: lightgray; 					/* 마우스 오버시 메뉴글자색 변경 */
 }
-
-
-#loginClickableImage, #logoutClickableImage {
+i{
+    color: white;
+    font-size: 36px;
+}
+.userButton{
+    border: none;
+    background: none;
+    padding: 0;
     cursor: pointer;
-    display: block; 		/* 이미지 블록레벨 요소 설정 */
-    max-width: 600px; 		/* 이미지 최대너비 */
-    width: 100%; 			/* 이미지 너비 */
+    z-index: 1;
+    bottom: 4px;
+    position: relative;
+}
+#logoutMenuContainer a {
+    margin-left: 23px;
+}
+#loginMenuContainer a{
+    margin-right: 8px;
 }

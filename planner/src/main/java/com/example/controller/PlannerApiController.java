@@ -34,7 +34,6 @@ public class PlannerApiController {
     // 일정 추가
     @PostMapping("/insert")
     public ResponseEntity<Plan> insert(@RequestBody Plan plan) {
-        System.out.println("이벤트 insert 요청 컨트롤러에 들어왔습니다");
         try {
             User user = (User) session.getAttribute("loginUser");
             if (user == null) {
@@ -52,7 +51,6 @@ public class PlannerApiController {
     // 일정 목록 조회
     @GetMapping("/selectList")
     public List<Map<String, Object>> selectList() {
-        System.out.println("까꿍 리스트를 보여달라!!");
         User user = (User)session.getAttribute("loginUser");
         return plannerService.selectList(user);
     }
@@ -66,14 +64,12 @@ public class PlannerApiController {
     // 일정 상세 조회
     @GetMapping("/selectDetail/{id}")
     public Plan selectDetail(@PathVariable(name = "id") Long id) {
-        System.out.println("컨트롤러에 들어옴" + id);
         return plannerService.selectDetail(id).orElse(null);
     }
 
     // 일정 수정
     @PutMapping("/update")
     public Plan update(@RequestBody Plan plan) {
-        System.out.println("update 들어왔다");
         return plannerService.update(plan);
     }
 

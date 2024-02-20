@@ -86,8 +86,6 @@
                 String accessToken = "test_access_token";
                 String refreshToken = "test_refresh_token";
 
-                System.out.println("소셜 로그인 성공입니다");
-                System.out.println(principal.getUserInfo().getName());
                 User user = userService.findOrCreateUser(principal, principal.getEmail());
                 httpSession.setAttribute("loginUser", user);
                 targetUrl = "/web/main";
@@ -100,7 +98,6 @@
 
                 String accessToken = principal.getUserInfo().getAccessToken();
                 OAuth2Provider provider = principal.getUserInfo().getProvider();
-                System.out.println("소셜로그인 해제하자 삭제 만들어부라잉");
                 // TODO: DB 삭제
                 // TODO: 리프레시 토큰 삭제
                 oAuth2UserUnlinkManager.unlink(provider, accessToken);

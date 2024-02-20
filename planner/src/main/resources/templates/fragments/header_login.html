@@ -16,21 +16,17 @@
     <div class="header">로그아웃 성공 365-Day Schedule Management Program
 
         <div id="loginMenuContainer">
-            <a href="/web"><img src="/img/home2.png" width="50" height="50"></a>&nbsp;&nbsp;
-            <img src="/img/login.png" width="50" height="50"  id="loginClickableImage">
-
-            <div class="menu" id="loginMenu">
-                <div class="menu-item"><a href="/web/login">로그인</a></div>
-                <div class="menu-item"><a href="#">메뉴 2</a></div>
-                <div class="menu-item"><a href="#">메뉴 3</a></div>
-            </div>
+            <a class="headerA" href="/web"><i class="fa-solid fa-house"></i></a>&nbsp;&nbsp;
+            <a class="headerA" href="/web/login"><i class="fa-solid fa-power-off"></i></a>
+            <button class="userButton"><i class="fa-solid fa-user" id="loginMenu"></i></button>
         </div>
+
         <script>
             // 메뉴 클릭시 메뉴 토글
-            document.getElementById("loginClickableImage").addEventListener("click", function() {
-                var loginMenu = document.getElementById("loginMenu");
-                loginMenu.style.display = loginMenu.style.display === "block" ? "none" : "block";
-            });
+            // document.getElementById("loginClickableImage").addEventListener("click", function() {
+            //     var loginMenu = document.getElementById("loginMenu");
+            //     loginMenu.style.display = loginMenu.style.display === "block" ? "none" : "block";
+            // });
 
             // 문서 클릭시 메뉴 숨김
             document.addEventListener("click", function(event) {

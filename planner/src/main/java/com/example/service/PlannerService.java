@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.example.domain.User;
+import com.example.repository.AlarmRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,19 +19,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class PlannerService {
 
 	@Autowired
-	public PlannerRepository plannerRepository;
+	private PlannerRepository plannerRepository;
+	@Autowired
+	private AlarmRepository alarmRepository;
 
 	@Transactional
 	public Plan insert(Plan plan) {
-		System.out.println("이벤트 insert 요청 서비스에 들어왔습니다");
 		try {
 			// 일정 추가
 			Plan newPlan = plannerRepository.save(plan);
-			System.out.println("새로운 일정" + newPlan);
 			return plan;
 		} catch (Exception e) {
 			// 예외 로깅
-			System.out.println("에러 발생: " + e.getMessage());
 			// 필요한 경우 클라이언트에게 에러 응답 반환
 			// 여기서는 null을 반환하거나, 사용자 정의 예외를 던질 수 있습니다.
 			return null;

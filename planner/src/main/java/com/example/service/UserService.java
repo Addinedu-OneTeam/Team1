@@ -11,7 +11,6 @@ import com.example.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -61,7 +60,6 @@ public class UserService {
 
     public boolean isEmailUnique(String email) {
         Optional<User> existingUser = userRepository.findByEmail(email);
-        System.out.println("있으니가 가입 불가능 false" + !existingUser.isPresent());
         return !existingUser.isPresent();
     }
 
@@ -79,9 +77,6 @@ public class UserService {
         if (!userOptional.isPresent()) {
             user.setEmail(oAuth2UserPrincipal.getEmail());
             user.setUsername(oAuth2UserPrincipal.getName());
-            // 소셜 로그인 사용자는 비밀번호 설정 없음
-            // user.setPasswordHash(null);
-//            user.setBirthday()); // 예시로 현재 날짜를 넣었습니다. 실제로는 적절한 값을 설정해야 합니다.
             user.setGender("male"); // SNS에서 제공하지 않으면 'unknown'과 같은 기본값을 설정할 수 있습니다.
             user.setPurpose("개인용"); // 목적 필드에 대해 SNS 로그인으로 설정
             user.setRegisteredAt(LocalDateTime.now());
@@ -90,7 +85,6 @@ public class UserService {
             SnsInfo snsInfo = new SnsInfo();
             snsInfo.setSnsId(oAuth2UserPrincipal.getUserInfo().getId());
             snsInfo.setSnsName(oAuth2UserPrincipal.getName());
-//            snsInfo.setSnsProfile(oAuth2UserInfo.getImageUrl());
             snsInfo.setSnsConnectDate(new Date());
             snsInfo.setProvider(oAuth2UserPrincipal.getUserInfo().getProvider().name());
             snsInfo.setSnsType(snsInfo.getProvider());

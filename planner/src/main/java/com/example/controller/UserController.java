@@ -1,49 +1,54 @@
 package com.example.controller;
 
-import com.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import com.example.domain.User;
-import com.example.service.PlannerService;
-
 import jakarta.servlet.http.HttpSession;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 
 @Controller
 @RequestMapping("/web")
 public class UserController {
+    @Autowired
+    HttpSession session;
     @RequestMapping("")
-    public String root() throws Exception {
+    public String root(Model model) throws Exception {
+        if(session.getAttribute("loginUser") != null) {
+            model.addAttribute("loginUser", session.getAttribute("loginUser"));
+        }
         return "index";
     }
     @GetMapping("/passwordUpdate")
-    public String passwordUpadte(Model model) {
-        model.addAttribute("user", new User());
+    public String passwordUpadte() {
         return "user/passwordUpdate";
     }
     @GetMapping("/login")
-    public String login(Model model) {
-        model.addAttribute("loginUser", new User());
+    public String login() {
+        if(session.getAttribute("loginUser") != null) {
+            return "redirect:/";
+        }
         return "user/login";
     }
     @GetMapping("/signup")
-    public String sign(Model model) {
-        model.addAttribute("user", new User());
+    public String sign() {
         return "user/signup";
     }
 
     @GetMapping("/main")
-    public String main(HttpSession session) {
+    public String main() {
     	
         if (session.getAttribute("loginUser") == null) {
             return "redirect:/";
         }
         return "calendar/calendar";
+    }
+
+    @GetMapping("/logout")
+    public String logout() {
+        session.invalidate();
+        return "redirect:/";
     }
 
 

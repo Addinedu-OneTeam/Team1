@@ -253,9 +253,12 @@
                 document.querySelector('#endDate').value = formattedDate;
 
                 // 미니 달력 시작일과 종료일 업데이트 및 열기 이렇게하면 메인 달력 다음달부분 날짜 클릭시 다음달 달력으로 이동
-                updateDate('#startDate', formattedDate);
-                updateDate('#endDate', formattedDate);
-                updateDate('#dateInput', formattedDate);
+                if (info.date.getMonth() !== info.view.currentStart.getMonth()) {
+                    mainCalendar.gotoDate(info.date);
+                }
+                // if (info.date.getMonth() !== info.view.currentStart.getMonth()) {
+                //     mainCalendar.gotoDate(info.date);
+                // }
 
                 const planDetail = {
                     id: null,
@@ -277,8 +280,20 @@
                 $('#deletePlan').hide();
 
                 // 저장 버튼 클릭 시
-                $('#iuButton').off('click').on('click', function () {
-                    event.preventDefault();
+                $('#iuButton').off('click').on('click', function (e) {
+                    e.preventDefault(); // 기본 동작 방지
+                    console.log("저장 버튼을 눌렀습니다 일정 저장해주세요!");
+                    // 입력값 가져오기
+                    // var startTime = $('#startTime').val();
+                    // var endTime = $('#endTime').val();
+                    // var allDayChecked = $('#allDay').is(':checked');
+
+                    // allDay가 아니고, startTime과 endTime이 같거나 endTime이 더 이르면 경고
+                    // if (!allDayChecked && (startTime === endTime || startTime > endTime)) {
+                    //     alert('종료 시간은 시작 시간보다 나중이어야 합니다.');
+                    //     return; // 함수 종료
+                    // }
+
                     var plan = {
                         title: $('#title').val(),
                         startDate: $('#startDate').val(),
@@ -298,15 +313,17 @@
                         plan.endTime ='23:59';
                     }
 
-
                     createEvent(plan, function (response) {
-                        console.log("저장 성공", response);
+                        console.log("저장성공" + response);
                         selectPlan(response.planId);
                     });
+
+
                 });
             },
 
             eventDrop: function (selectedPlan) {
+
                 fetchEventDetails(selectedPlan.event.id, function (response) {
                     // 서버로부터 받은 일정 상세 정보를 바탕으로 dragPlan 객체 정의
                     var dragPlan = {
@@ -349,8 +366,7 @@
                         allDay: response.allDay,
                         alarm: response.alarm,
                     };
-                    console.log("드래그 성공");
-                    console.log(dragPlan);
+
                     // 여기에서 dragPlan 객체를 사용하여 일정 업데이트 요청
                     updateEvent(dragPlan, function (updateResponse) {
                         console.log("수정 성공", updateResponse);
@@ -378,6 +394,7 @@
 
 
                 $('#iuButton').off('click').on('click', function () {
+                    console.log("수정 버튼을 눌렀습니다 일정 저장해주세요!");
                     var updatedPlan = {
                         planId: info.event.id,
                         title: $('#title').val(),
@@ -394,9 +411,17 @@
                         alarm: $('#alarm').is(':checked') ? 1 : 0,
                     };
 
-                    if (updatedPlan.allDay) {
+                    // allDay가 아닐 때 startTime과 endTime 유효성 검사
+                    if (!updatedPlan.allDay) {
+                        // startTime과 endTime 비교하여 유효성 검사
+                        if (updatedPlan.startTime >= updatedPlan.endTime) {
+                            alert('종료 시간은 시작 시간보다 나중이어야 합니다.');
+                            return; // 함수 종료
+                        }
+                    } else {
+                        // allDay일 때 startTime과 endTime 설정
                         updatedPlan.startTime = '00:00';
-                        updatedPlan.endTime = updatedPlan.startDate === updatedPlan.endDate ? null : '00:00';
+                        updatedPlan.endTime = '23:59';
                     }
                     console.log(updatedPlan);
                     // 여기에서 dragPlan 객체를 사용하여 일정 업데이트 요청
@@ -586,14 +611,34 @@
                 response.forEach(function (event) {
 
                     const { start, end } = parseDateTime(event.startDate, event.startTime, event.endDate, event.endTime);
-
-                    mainCalendar.addEvent({
+                    let eventOptions = {
                         id: event.id,
                         title: event.title,
                         start: start,
                         end: end,
-                        allDay: event.allDay // 변환된 allDay 값을 사용
-                    });
+                        allDay: event.allDay, // 변환된 allDay 값을 사용
+                    };
+
+                    // repeat값에 따라 daysOfWeek 값을 설정하지 않거나(반복 없음) 설정
+                    switch (event.repeat) {
+                        case '2': // 매일
+                            eventOptions.daysOfWeek = [0, 1, 2, 3, 4, 5, 6];
+                            break;
+                        case '3': // 매주
+                            // 이 예시에서는 매주 반복 로직 구현이 필요함
+                            eventOptions.daysOfWeek = [getDaysOfWeek(event.startDate, event.endDate)];
+                            break;
+                        case '4': // 평일
+                            eventOptions.daysOfWeek = [1, 2, 3, 4, 5];
+                            break;
+                        case '5': // 주말
+                            eventOptions.daysOfWeek = [0, 6];
+                            break;
+                        default:
+                            break;
+                        // "반복 없음"의 경우 daysOfWeek 속성을 추가하지 않음
+                    }
+                    mainCalendar.addEvent(eventOptions);
                 });
             },
             error: function () {
@@ -608,20 +653,55 @@
             success: function (event) {
 
                 const { start, end } = parseDateTime(event.startDate, event.startTime, event.endDate, event.endTime);
-
-                mainCalendar.addEvent({
+                let eventOptions = {
                     id: event.id,
                     title: event.title,
                     start: start,
                     end: end,
                     allDay: event.allDay, // 변환된 allDay 값을 사용
-                });
+                };
+
+                // repeat값에 따라 daysOfWeek 값을 설정하지 않거나(반복 없음) 설정
+                switch (event.repeat) {
+                    case '2': // 매일
+                        eventOptions.daysOfWeek = [0, 1, 2, 3, 4, 5, 6];
+                        break;
+                    case '3': // 매주
+                        // 이 예시에서는 매주 반복 로직 구현이 필요함
+                        eventOptions.daysOfWeek = [getDaysOfWeek(event.startDate, event.endDate)];
+                        break;
+                    case '4': // 평일
+                        eventOptions.daysOfWeek = [1, 2, 3, 4, 5];
+                        break;
+                    case '5': // 주말
+                        eventOptions.daysOfWeek = [0, 6];
+                        break;
+                    default:
+                        break;
+                    // "반복 없음"의 경우 daysOfWeek 속성을 추가하지 않음
+                }
+                mainCalendar.addEvent(eventOptions);
             },
             error: function () {
                 console.log("일정 가져오기 실패");
             }
         });
     }
+
+    // 주어진 시작일과 종료일 사이의 모든 요일을 계산하는 함수
+    function getDaysOfWeek(startDate, endDate) {
+        var start = moment(startDate);
+        var end = moment(endDate).add(1, 'days'); // endDate를 포함하기 위해 1일 추가
+        var daysOfWeek = [];
+
+        for (var m = moment(start); m.isBefore(end); m.add(1, 'days')) {
+            daysOfWeek.push(m.day());
+        }
+
+        // 중복 제거를 위해 Set을 사용하고, 다시 배열로 변환
+        return [...new Set(daysOfWeek)];
+    }
+
 
 
 </script>
