@@ -147,11 +147,6 @@
                               onfocus="this.placeholder=''" onblur="this.placeholder='설명 추가'" cols="30" rows="4"></textarea>
                     </td>
                 </tr>
-                <tr>
-                    <td>
-                        알람 <input type="checkbox" id="alarm" name="alarm" checked>
-                    </td>
-                </tr>
                 <tr class="save-delete">
                     <td align="right">
                         <button type="button" id="iuButton" class="btn btn-primary">저장</button>
@@ -358,7 +353,6 @@
                     repeat: '',
                     place: '',
                     content: '',
-                    alarm: true
                 };
 
                 fillFormWithPlanDetails(planDetail);
@@ -380,7 +374,6 @@
                         content: $('#content').val(),
                         // 체크박스의 checked 여부에 따라 1 또는 0으로 설정
                         allDay: $('#allDay').is(':checked') ? 1 : 0,
-                        alarm: $('#alarm').is(':checked') ? 1 : 0,
                     };
 
                     if (plan.allDay) {
@@ -414,7 +407,6 @@
                         repeat: response.repeat,
                         content: response.content,
                         allDay: response.allDay,
-                        alarm: response.alarm,
                     };
 
                     // 서버로부터 받은 일정 상세 정보를 바탕으로 dragPlan 객체 정의
@@ -477,7 +469,6 @@
                         repeat: response.repeat,
                         content: response.content,
                         allDay: response.allDay,
-                        alarm: response.alarm,
                     };
                     // 서버로부터 받은 일정 상세 정보를 바탕으로 dragPlan 객체 정의
                     if (mainCalendar.view.type === 'timeGridWeek' || mainCalendar.view.type === 'timeGridDay') {
@@ -528,7 +519,6 @@
                         content: $('#content').val(),
                         // 체크박스의 checked 여부에 따라 1 또는 0으로 설정
                         allDay: $('#allDay').is(':checked') ? 1 : 0,
-                        alarm: $('#alarm').is(':checked') ? 1 : 0,
                     };
 
                     if (updatedPlan.allDay) {
@@ -591,7 +581,6 @@
             $('#place').val(plan.place);
             $('#repeat').val(plan.repeat);
             $('#content').val(plan.content);
-            $('#alarm').prop('checked', plan.alarm);
         }
 
         function updateDate(selector, date) {

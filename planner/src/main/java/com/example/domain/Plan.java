@@ -33,9 +33,6 @@ public class Plan {
     @Convert(converter = BooleanToNumberConverter.class)
     private boolean allDay; // 하루종일 여부
 
-    @Convert(converter = BooleanToNumberConverter.class)
-    private boolean alarm; // 알람 여부
-
     @NonNull
 //  @JsonSerialize(using = CustomDateSerializer.class)
     private LocalDate startDate; // 시작일

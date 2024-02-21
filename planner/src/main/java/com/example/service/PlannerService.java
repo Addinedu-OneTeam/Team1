@@ -51,7 +51,6 @@ public class PlannerService {
 			    event.put("place", plan.getPlace());
 			    event.put("repeat", plan.getRepeat());
 			    event.put("content", plan.getContent());
-			    event.put("alarm", plan.isAlarm());
 
     		    return event;
     		}).collect(Collectors.toList());
@@ -76,7 +75,6 @@ public class PlannerService {
 	    rePlan.setRepeat(plan.getRepeat());
 	    rePlan.setPlace(plan.getPlace());
 	    rePlan.setContent(plan.getContent());
-	    rePlan.setAlarm(plan.isAlarm());
 	    return plannerRepository.save(rePlan);
 	}
 
@@ -100,7 +98,6 @@ public class PlannerService {
 		event.put("place", plan.getPlace());
 		event.put("repeat", plan.getRepeat());
 		event.put("content", plan.getContent());
-		event.put("alarm", plan.isAlarm());
 		return event;
 	}
 }
