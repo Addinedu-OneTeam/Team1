@@ -12,7 +12,13 @@
     <link rel="stylesheet" th:href="@{/css/login.css}"/>
     <link rel="stylesheet" th:href="@{/css/header.css}"/>
     <link rel="stylesheet" th:href="@{/css/footer.css}"/>
+    <link rel="stylesheet" th:href="@{/css/contents.css}"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" integrity="sha512-10/jx2EXwxxWqCLX/hHth/vu2KY3jCF70dCQB8TSgNjbCVAC/8vai53GfMDrO2Emgwccf2pJqxct9ehpzG+MTw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!--favicon-->
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+    <!--google font-->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <!-------------------- //header (로그인 상태에 따라 다른 헤더 프래그먼트)-------------------------->
@@ -25,14 +31,28 @@
 </div>
 <!-------------------------------------- header// ------------------------------------------->
 
+<div class="content">
+    <div class="left-content">
+        <br>
+        <img src="/img/logo.png" alt="logo" id="logo" width="80%">
+
+        <h1>요즘 플래너 뭐써??<br>난 One Planner 써!!<br></h1>
+        <div th:if="${loginUser == null}">
+            <a href="/web/login"><button class="button">지금 체험해 보세요!</button></a>
+        </div>
+        <div th:if="${loginUser != null}">
+            <a href="/web/main"><button class="button">나의 스케쥴 보기</button></a>
+        </div>
+    </div>
+    <!--    <div class="right-content">-->
     <!-- Slider main container -->
     <div class="swiper">
         <!-- Additional required wrapper -->
         <div class="swiper-wrapper">
             <!-- Slides -->
-            <!--            <img th:src="@{/img/month.png}" alt="Month Image">-->
-            <!--            <img th:src="@{/img/week.png}" alt="Week Image">-->
-            <!--            <img th:src="@{/img/day.png}" alt="Day Image">-->
+            <!--            <img th:src="@{/img/month2.png}" alt="Month Image">-->
+            <!--            <img th:src="@{/img/week2.png}" alt="Week Image">-->
+            <!--            <img th:src="@{/img/day2.png}" alt="Day Image">-->
             <div class="swiper-slide">
                 <img src="img/month.png">
             </div>
@@ -44,61 +64,8 @@
             </div>
         </div>
     </div>
+    <!--    </div>-->
 </div>
-<script>
-    function loginErrorMassage(){
-        var email = $('#email').val();
-        var password = $('#password').val();
-        var loginError = document.getElementById('loginError');
-        loginError.style.fontWeight = 'bold';
-        loginError.style.fontSize = '12px';
-        if(email === "" || password === ""){
-            loginError.textContent = " 이메일 또는 비밀번호를 입력해주세요.";
-            return false;
-        }else{
-            loginError.textContent = "";
-            return true;
-        }
-    }
-    $(document).ready(function() {
-        var loginError = document.getElementById('loginError');
-        $('#loginForm').on('submit', function(e) {
-            e.preventDefault(); // 폼 기본 제출 방지
-
-            if (!loginErrorMassage()) {
-                return;
-            }
-            var loginData = {
-                email: $('#email').val(),
-                password: $('#password').val()
-            };
-
-            $.ajax({
-                url: '/api/user/login',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(loginData),
-                success: function(response) {
-                    console.log(loginData);
-                    window.location.href = '/web';
-                    // if (response.success) {
-                    //     window.location.href = '/main'; // 메인 페이지로 리다이렉트
-                    // } else {
-                    //     // 로그인 실패 처리
-                    //     alert('로그인 실패');
-                    // }
-                },
-                error: function(xhr,textStatus,error) {
-                    if (xhr.status === 401) {
-                        loginError.textContent = "이메일 또는 비밀번호가 일치하지 않습니다.";
-                    } else {
-                        loginError.textContent = "오류로 인하여 로그인에 실패하였습니다 다시 시도해주세요.";
-                    }
-                }
-            });
-        });
-    });
-</script>
 <!-- For JavaScript 자바스크립트 div 마치고 적용됨-->
 <script th:src="@{/js/main.js}"></script>
 <!-------------------------------- // footer ----------------------------------------->

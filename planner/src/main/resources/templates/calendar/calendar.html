@@ -34,6 +34,8 @@
     <link href="/css/calendar/mini-calendar.css" rel="stylesheet">
     <link href="/css/calendar/main-calendar.css" rel="stylesheet" >
     <link href="/css/calendar/plan.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" integrity="sha512-10/jx2EXwxxWqCLX/hHth/vu2KY3jCF70dCQB8TSgNjbCVAC/8vai53GfMDrO2Emgwccf2pJqxct9ehpzG+MTw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 
     <title>Calendar</title>
 
@@ -46,7 +48,7 @@
         .calendar {
             display: flex;
             width: 100%;
-            padding-top: 40px;
+            padding-top: 100px;
             justify-content: space-evenly;
         }
 
@@ -69,12 +71,21 @@
             color: black;
             text-decoration: none;
         }
+        .save-delete {
+            display: flex;
+        }
     </style>
 
 
 </head>
 
 <body>
+<!-------------------- //header (로그인 상태에 따라 다른 헤더 프래그먼트)-------------------------->
+<!--꼭 두줄로 해야함 한줄로 하면 안먹음!!-->
+<div th:if="${loginUser != null}">
+    <div th:replace="/fragments/header_logout :: header_logout"></div>
+</div>
+<!-------------------------------------- header// ------------------------------------------->
 <div class="calendar">
 
     <!-- 미니 달력 -->
@@ -138,8 +149,8 @@
                               onfocus="this.placeholder=''" onblur="this.placeholder='설명 추가'" cols="30" rows="4"></textarea>
                     </td>
                 </tr>
-                
-                    <td colspan="2" align="right">
+                <tr class="start-delete">
+                    <td align="right">
                         <button type="button" id="iuButton" class="btn btn-primary">저장</button>
                         <button type="button" style="display: none;" id="deletePlan" class="btn btn-primary">삭제</button>
                     </td>
@@ -505,7 +516,7 @@
                     console.log(response);
                     // 삭제 버튼을 보이도록 설정합니다.
                     $(document).ready(function () {
-                        $('#deletePlan').css('display', 'block');
+                        $('#deletePlan').css('display', 'inline');
                     });
                 });
 

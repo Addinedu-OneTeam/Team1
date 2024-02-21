@@ -37,11 +37,12 @@ public class UserController {
     }
 
     @GetMapping("/main")
-    public String main() {
-    	
+    public String main(Model model) {
+
         if (session.getAttribute("loginUser") == null) {
             return "redirect:/";
         }
+        model.addAttribute("loginUser", session.getAttribute("loginUser"));
         return "calendar/calendar";
     }
 
@@ -50,6 +51,4 @@ public class UserController {
         session.invalidate();
         return "redirect:/";
     }
-
-
 }

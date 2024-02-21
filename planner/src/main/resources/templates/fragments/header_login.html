@@ -6,14 +6,12 @@
     <link rel="stylesheet" th:href="@{/css/header.css}"/>
 </head>
 <body>
-<!----찍어보기----->
-로그인해주세요
-<span th:text="${loginUser}"></span>
-<!------------------->
+
 
 <div th:fragment="header_login">
 
-    <div class="header">로그아웃 성공 365-Day Schedule Management Program
+    <div class="header">
+        만나서 반가워요, One Planner로 일상을 업그레이드하세요!
 
         <div id="loginMenuContainer">
             <a class="headerA" href="/web"><i class="fa-solid fa-house"></i></a>&nbsp;&nbsp;
@@ -22,11 +20,6 @@
         </div>
 
         <script>
-            // 메뉴 클릭시 메뉴 토글
-            // document.getElementById("loginClickableImage").addEventListener("click", function() {
-            //     var loginMenu = document.getElementById("loginMenu");
-            //     loginMenu.style.display = loginMenu.style.display === "block" ? "none" : "block";
-            // });
 
             // 문서 클릭시 메뉴 숨김
             document.addEventListener("click", function(event) {
@@ -48,22 +41,12 @@
                 document.head.appendChild(link);
             }
 
-            // JavaScript 파일 동적 추가
-            // function loadJS(src) {
-            //     const script = document.createElement('script');
-            //     script.src = src;
-            //     script.async = false; // 필요에 따라 true로 설정
-            //     document.body.appendChild(script);
-            // }
-
             // 사용 예
             loadCSS('/css/header.css');
             // loadJS('/js/header.js');
         </script>
 
     </div>
-
-    <!--clickableImage-->
 
 </div>
 </body>

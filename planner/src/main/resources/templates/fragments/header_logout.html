@@ -6,15 +6,14 @@
     <link rel="stylesheet" th:href="@{/css/header.css}"/>
 </head>
 <body>
-<!----찍어보기----->
-로그아웃해주세요
-<span th:text="${loginUser}"></span>
-<!------------------->
+
 <div th:fragment="header_logout">
 
-    <div class="header">로그인 성공 365-Day Schedule Management Program
+    <div th:if="${loginUser != null}" th:fragment="header_logout">
+        <div class="header">
+            <span th:text="${loginUser.username}"></span>님, One Planner와 함께 더 나은 하루를 시작하세요!
 
-        <div id="logoutMenuContainer">
+            <div id="logoutMenuContainer">
             <a class="headerA" href="/web/main"><i class="fa-solid fa-calendar-days"></i></a>
             <a class="headerA" href="/web"><i class="fa-solid fa-house"></i></a> &nbsp;&nbsp;&nbsp;
             <button class="userButton"><i class="fa-solid fa-user" id="logoutClickableImage"></i></button>
