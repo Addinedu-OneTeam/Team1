@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.example.domain.User;
-import com.example.repository.AlarmRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,15 +19,12 @@ public class PlannerService {
 
 	@Autowired
 	private PlannerRepository plannerRepository;
-	@Autowired
-	private AlarmRepository alarmRepository;
 
 	@Transactional
 	public Plan insert(Plan plan) {
 		try {
 			// 일정 추가
-			Plan newPlan = plannerRepository.save(plan);
-			return plan;
+            return plannerRepository.save(plan);
 		} catch (Exception e) {
 			// 예외 로깅
 			// 필요한 경우 클라이언트에게 에러 응답 반환
@@ -42,8 +38,7 @@ public class PlannerService {
 		List<Plan> planList = plannerRepository.findAllByUser(user);
 
 		// Plan 객체를 Map으로 변환하는 로직을 추가하면 됩니다.
-        List<Map<String, Object>> eventList =
-        	planList.stream().map(plan -> {
+        return planList.stream().map(plan -> {
 
 	        	Map<String, Object> event = new HashMap<>();
 			    event.put("id",plan.getPlanId());
@@ -60,7 +55,6 @@ public class PlannerService {
 
     		    return event;
     		}).collect(Collectors.toList());
-        	return eventList;
 	}
 
 	@Transactional
@@ -69,9 +63,9 @@ public class PlannerService {
 		return plannerRepository.findById(id);
 	}
 
+	@SuppressWarnings("OptionalGetWithoutIsPresent")
 	@Transactional
 	public Plan update(Plan plan) { // 일정 수정
-		System.out.println("DB에 담을 새일정");
 	    Plan rePlan = plannerRepository.findById(plan.getPlanId()).get();
 	    rePlan.setTitle(plan.getTitle());
 	    rePlan.setAllDay(plan.isAllDay());
@@ -83,7 +77,6 @@ public class PlannerService {
 	    rePlan.setPlace(plan.getPlace());
 	    rePlan.setContent(plan.getContent());
 	    rePlan.setAlarm(plan.isAlarm());
-		System.out.println(rePlan);
 	    return plannerRepository.save(rePlan);
 	}
 
@@ -92,6 +85,7 @@ public class PlannerService {
     }
 
 
+	@SuppressWarnings("OptionalGetWithoutIsPresent")
 	public Map<String, Object> selectPlan(Long planId, User user) {
 		Plan plan = plannerRepository.findByplanIdAndUser(planId, user).get();
 		Map<String, Object> event = new HashMap<>();

@@ -170,7 +170,6 @@
         // 페이지가 로드될 때 endTime의 값을 '00:30'으로 설정
         $('#endTime').val('00:30');
 
-
     });
 </script>
 <script>
@@ -241,17 +240,37 @@
             eventDurationEditable: true,
 
             select: function (selectionInfo) {
+                console.log(selectionInfo)
                 // 드래그로 날짜와 시간 범위를 선택한 경우의 처리
                 const startSelectionDate = new Date(selectionInfo.startStr);
                 const endSelectionDate = new Date(selectionInfo.endStr);
 
-                // 시작 시간과 종료 시간을 'HH:mm' 형식으로 포맷팅하여 입력합니다.
-                const formattedStartTime = moment(startSelectionDate).format('HH:mm');
-                const formattedEndTime = moment(endSelectionDate).format('HH:mm');
+                // 날짜가 빠른 쪽을 시작일로, 더 늦는 쪽을 종료일로 설정합니다.
+                const startDate = startSelectionDate < endSelectionDate ? startSelectionDate : endSelectionDate;
+                const endDate = startSelectionDate < endSelectionDate ? endSelectionDate : startSelectionDate;
 
                 // 시작일과 종료일을 'YYYY-MM-DD' 형식으로 포맷팅하여 입력합니다.
-                const formattedStartDate = moment(startSelectionDate).format('YYYY-MM-DD');
-                const formattedEndDate = moment(endSelectionDate).subtract(1, 'days').format('YYYY-MM-DD');
+                const formattedStartDate = moment(startDate).format('YYYY-MM-DD');
+                let formattedEndDate;
+                let formattedStartTime;
+                let formattedEndTime;
+
+                if(selectionInfo.allDay == false) {
+                    formattedEndDate = moment(endDate).format('YYYY-MM-DD');
+                    formattedStartTime = moment(startSelectionDate).format('HH:mm');
+                    formattedEndTime = moment(endSelectionDate).format('HH:mm');
+                    $('#allDay').prop('checked', false);
+                    $('#startTime').parent().parent().removeClass('blurred');
+                    $('#endTime').parent().parent().removeClass('blurred');
+                } else {
+                    formattedEndDate = moment(endDate).subtract(1, 'days').format('YYYY-MM-DD');
+                    formattedStartTime = '00:00';
+                    formattedEndTime = '00:30';
+                    $('#allDay').prop('checked', true);
+                    $('#startTime').parent().parent().addClass('blurred');
+                    $('#endTime').parent().parent().addClass('blurred');
+                }
+
 
                 // 폼의 입력란에 날짜와 시간을 설정합니다.
                 document.getElementById('startDate').value = formattedStartDate;
@@ -507,7 +526,7 @@
                         place: $('#place').val(),
                         repeat: $('#repeat').val(),
                         content: $('#content').val(),
-// 체크박스의 checked 여부에 따라 1 또는 0으로 설정
+                        // 체크박스의 checked 여부에 따라 1 또는 0으로 설정
                         allDay: $('#allDay').is(':checked') ? 1 : 0,
                         alarm: $('#alarm').is(':checked') ? 1 : 0,
                     };
@@ -707,52 +726,6 @@
             success: function (response) {
                 response.forEach(function (event) {
                     const { start, end } = parseDateTime(event.startDate, event.startTime, event.endDate, event.endTime);
-
-                    let eventOptions = {
-                        id: event.id,
-                        title: event.title,
-                        start: start,
-                        end: moment(end).add(1, 'days').toDate(),
-                        allDay: event.allDay, // 변환된 allDay 값을 사용
-                    };
-                    if(event.allDay == false) {
-                        eventOptions.end = end;
-                    }
-
-                    // repeat값에 따라 daysOfWeek 값을 설정하지 않거나(반복 없음) 설정
-                    switch (event.repeat) {
-                        case '2': // 매일
-                            eventOptions.daysOfWeek = [0, 1, 2, 3, 4, 5, 6];
-                            break;
-                        case '3': // 매주
-                            // 이 예시에서는 매주 반복 로직 구현이 필요함
-                            eventOptions.daysOfWeek = [getDaysOfWeek(event.startDate, event.endDate)];
-                            break;
-                        case '4': // 평일
-                            eventOptions.daysOfWeek = [1, 2, 3, 4, 5];
-                            break;
-                        case '5': // 주말
-                            eventOptions.daysOfWeek = [0, 6];
-                            break;
-                        default:
-                            break;
-                        // "반복 없음"의 경우 daysOfWeek 속성을 추가하지 않음
-                    }
-                    mainCalendar.addEvent(eventOptions);
-                });
-            },
-            error: function () {
-                console.log("일정 목록 가져오기 실패");
-            }
-        });
-    }
-    function selectPlanList() {
-        $.ajax({
-            url: '/api/plan/selectList',
-            success: function (response) {
-                response.forEach(function (event) {
-
-                    var { start, end } = parseDateTime(event.startDate, event.startTime, event.endDate, event.endTime);
 
                     let eventOptions = {
                         id: event.id,

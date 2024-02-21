@@ -57,8 +57,4 @@ public class Plan {
     @JsonBackReference
     private User user;
 
-    // Plan 엔티티 예시
-    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Alarm> alarms;
-
 }
