@@ -38,7 +38,6 @@ public class Plan {
     private LocalDate startDate; // 시작일
 
     private LocalDate endDate; // 종료일
-    // String으로 하면 날짜 변경을 못한다
 
     private LocalTime startTime; // 시작 시간
 
@@ -53,5 +52,4 @@ public class Plan {
     @JoinColumn(name = "user_id", nullable = false)
     @JsonBackReference
     private User user;
-
 }
