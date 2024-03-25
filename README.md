@@ -50,46 +50,46 @@
     
     ```java
     com.example
-├── config
-│   ├── RestTemplateConfig.java
-│		├── SecurityConfig.java
-│   └── UserPasswordEncoder.java
-├── controller
-│   ├── HomeController.java
-│		├── UserController.java
-│		├── UserApiController.java
-│   └── PlannerApiController.java
-├── domain
-│   ├── Alarm.java
-│   ├── Plan.java
-│   ├── SnsInfo.java
-│   ├── User.java
-│   └── UserLog.java
-├── dto
-│   ├── EventDto.java
-│   └── LoginDto.java
-├── emailverify
-│   ├── EmailConfig.java
-│   ├── EmailService.java
-│   └── EmailVerificationController.java
-├── oauth2
-│   ├── exception
-│   ├── handler
-│   ├── service
-│   ├── user
-│   ├── util
-│   └── HttpCookieOauth2AuthorizationRequestRepository.java
-├── repository
-│   ├── PlannerRepository.java
-│   ├── SnsInfoRepository.java
-│   ├── UserLogRepository.java
-│   └── UserRepository.java
-├── service
-│   ├── PlannerService.java
-│   └── UserService.java
-├── util
-│   └── BooleanToNumberConverter.java
-└── PlannerApplication.java
+    ├── config
+    │   ├── RestTemplateConfig.java
+    │	├── SecurityConfig.java
+    │   └── UserPasswordEncoder.java
+    ├── controller
+    │   ├── HomeController.java
+    │	├── UserController.java
+    │	├── UserApiController.java
+    │   └── PlannerApiController.java
+    ├── domain
+    │   ├── Alarm.java
+    │   ├── Plan.java
+    │   ├── SnsInfo.java
+    │   ├── User.java
+    │   └── UserLog.java
+    ├── dto
+    │   ├── EventDto.java
+    │   └── LoginDto.java
+    ├── emailverify
+    │   ├── EmailConfig.java
+    │   ├── EmailService.java
+    │   └── EmailVerificationController.java
+    ├── oauth2
+    │   ├── exception
+    │   ├── handler
+    │   ├── service
+    │   ├── user
+    │   ├── util
+    │   └── HttpCookieOauth2AuthorizationRequestRepository.java
+    ├── repository
+    │   ├── PlannerRepository.java
+    │   ├── SnsInfoRepository.java
+    │   ├── UserLogRepository.java
+    │   └── UserRepository.java
+    ├── service
+    │   ├── PlannerService.java
+    │   └── UserService.java
+    ├── util
+    │   └── BooleanToNumberConverter.java
+    └── PlannerApplication.java
     ```
     
     ### 1. 로그인, 회원가입 페이지
