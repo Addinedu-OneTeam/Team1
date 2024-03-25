@@ -48,7 +48,6 @@
     - 실시간 데이터 반영
     - 다른 사용자에게 일정 공유 및 메일 전송 기능
 ## 프로젝트 구조
-    ```java
     com.example
     ├── config
     │   ├── RestTemplateConfig.java
@@ -90,7 +89,6 @@
     ├── util
     │   └── BooleanToNumberConverter.java
     └── PlannerApplication.java
-    ```
     
 ### 1. 로그인, 회원가입 페이지
 
