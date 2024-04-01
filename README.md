@@ -1,230 +1,149 @@
-# 문서정리
+# One - Planner
 
-**프로젝트 명**: One - Planner
+<hr/>
 
-**팀 구성원**:
+### Description
+One - Planner는 웹 기술을 활용하여 개인의 일정 관리를 위한 맞춤형 플래너를 제공하는 프로젝트입니다. 
+사용자는 효율적인 일정 관리를 통해 일상 생활의 질을 향상시킬 수 있습니다.
 
-- 1조: 강민, 애경, 용철
-- 2조: 범신, 재호
+<hr/>
+### Features
 
-**개요**:
-이 프로젝트는 사용자 개인의 요구에 맞춘 맞춤형 플래너를 웹 기술을 활용하여 구현하는 것을 목표로 합니다. 
-이를 통해 사용자는 자신의 일정을 효율적으로 관리할 수 있으며, 일상 생활의 질을 향상시킬 수 있습니다.
+- **사용자 인증 및 관리**: 로그인, 회원가입 기능과 이메일을 통한 사용자 인증을 제공합니다. 이를 통해 사용자는 안전하게 자신의 계정을 생성하고 관리할 수 있습니다.
+- **소셜 미디어 연동**: 네이버, 카카오, 구글 등 다양한 외부 SNS 계정과의 연동을 지원합니다. 사용자는 이를 통해 쉽고 빠르게 로그인할 수 있으며, SNS 정보를 활용한 서비스 경험을 제공받을 수 있습니다.
+- **일정 관리**: 사용자는 풀 캘린더 API를 통해 일정을 생성, 조회, 수정, 삭제할 수 있습니다. 실시간 일정 관리 및 Google Calendar와의 연동을 통해 복잡한 일정도 쉽게 관리할 수 있습니다.
+- **이메일 인증**: 안전한 사용자 인증 및 서비스 이용을 위해 이메일 인증 기능을 제공합니다. 사용자는 이메일을 통해 계정을 안전하게 활성화하고, 서비스 접근 권한을 얻을 수 있습니다.
+- **미니 플래너 및 사용자 인터페이스**: 사용자는 미니 플래너 기능을 통해 메인 캘린더의 요약된 정보를 빠르게 확인할 수 있으며, 직관적이고 사용자 친화적인 인터페이스를 통해 서비스를 이용할 수 있습니다.
+- **백엔드 서버 및 데이터베이스 연동**: 안정적인 서비스 운영을 위해 백엔드 서버와 데이터베이스 간의 연동을 통해 데이터의 일관성과 신뢰성을 보장합니다. 사용자의 요청은 AJAX를 통해 비동기적으로 처리되며, 이는 사용자 경험을 향상시킵니다.
 
-**목적**:
-다양한 플래너 기능을 직접 구현하여 사용자에게 개인화된 경험을 제공합니다. 
-이 프로젝트는 웹 개발 기술을 실제 상황에 적용하며, 협업을 통한 실무 경험을 쌓는 데에도 중점을 둡니다.
+<hr/>
 
-**기술 스택 및 역할**:
+### System Requirements
+- **Programming Language**: Java 17
+- **Build Tool**: Gradle
+  - `org.springframework.boot` version `3.2.2`
+  - `io.spring.dependency-management` version `1.1.4`
+- **Web Framework**: Spring Boot `3.2.2`
+- **Database**: Oracle Database 19c 이상 with JDBC
+- **Front-end**:
+  - HTML5, CSS3, JavaScript
+  - jQuery `3.7.1`, jQuery UI `1.13.1`
+  - Bootstrap `5.3.2`, Popper.js `2.11.7`
+  - FullCalendar `6.1.10`, flatpickr `4.6.13`, moment `2.30.1`, sweetalert2 `11.10.4`
 
-- **Spring Boot, Java**: 백엔드 서버 구축 및 비즈니스 로직 처리
-- **JPA**: 객체 관계 매핑을 통한 데이터베이스 관리 및 접근 최적화
-- **IntelliJ IDEA**: 통합 개발 환경(IDE)으로 코드 작성 및 디버깅
-- **Thymeleaf**: 서버 사이드 Java 템플릿 엔진으로 사용자 인터페이스 구축
-- **Oracle, JDBC**: 데이터베이스 관리 및 Java 애플리케이션과 데이터베이스의 연결 관리
-- **HTML, CSS, JavaScript, jQuery, AJAX**: 프론트엔드 페이지 설계 및 동적 기능 구현
+- **Security**:
+  - Spring Security, including OAuth2 Client support
 
-**주차별 목표**:
-
-1. **1주차 (1/15 ~ 1/19)**: 데이터베이스 설계, 인터페이스 설계, 기능에 대한 논의, 문서화 작업
-2. **2주차 (1/22 ~ 1/26)**: 데이터베이스 구축 및 연동, 서버와의 연결 설정, 웹 페이지 제작 시작
-3. **3주차 (1/29 ~ 2/2)**: 데이터베이스 값 검증, 목표 기능 구현 및 테스트, 페이지 레이아웃 조정 및 수정
-4. **4주차 (2/5 ~ 2/9)**: 목표 기능 검증 및 튜닝, 추가 기능 개발, 사용자 인터페이스 다듬기
-5. **마무리 (2/12 ~ 2/16)**: 버그 수정, 최종 문서 작업 및 프로젝트 마무리
-
-**기능**:
-
-- **목표 기능(필수)**:
-    - 로그인, 회원가입, 마이페이지 구현
-    - CR (생성과 조회): 로그인 및 회원가입 기능에 이메일 인증 포함
-    - UD (업데이트와 삭제): 마이페이지 관리 및 캘린더 페이지 내 일정 관리
-    - 달력, 날짜, 시간, 장소 관리를 위한 https://fullcalendar.io/demos 캘린더 API 활용
-    - 일정 CRUD (추가, 조회, 수정, 삭제)
-    - 알림 기능: 일정 목록에 대한 알림 표시
-- **추가 기능(선택)**:
-    - SNS 연동: 네이버, 카카오, 구글
-    (참고: https://developers.naver.com/docs/login/devguide/devguide.md)
-    - 실시간 날씨 정보 표시
-    - 실시간 데이터 반영
-    - 다른 사용자에게 일정 공유 및 메일 전송 기능
-## 프로젝트 구조
-    com.example
-    ├── config
-    │   ├── RestTemplateConfig.java
-    │	├── SecurityConfig.java
-    │   └── UserPasswordEncoder.java
-    ├── controller
-    │   ├── HomeController.java
-    │	├── UserController.java
-    │	├── UserApiController.java
-    │   └── PlannerApiController.java
-    ├── domain
-    │   ├── Alarm.java
-    │   ├── Plan.java
-    │   ├── SnsInfo.java
-    │   ├── User.java
-    │   └── UserLog.java
-    ├── dto
-    │   ├── EventDto.java
-    │   └── LoginDto.java
-    ├── emailverify
-    │   ├── EmailConfig.java
-    │   ├── EmailService.java
-    │   └── EmailVerificationController.java
-    ├── oauth2
-    │   ├── exception
-    │   ├── handler
-    │   ├── service
-    │   ├── user
-    │   ├── util
-    │   └── HttpCookieOauth2AuthorizationRequestRepository.java
-    ├── repository
-    │   ├── PlannerRepository.java
-    │   ├── SnsInfoRepository.java
-    │   ├── UserLogRepository.java
-    │   └── UserRepository.java
-    ├── service
-    │   ├── PlannerService.java
-    │   └── UserService.java
-    ├── util
-    │   └── BooleanToNumberConverter.java
-    └── PlannerApplication.java
-    
-### 1. 로그인, 회원가입 페이지
-
-### 1-1 도메인창
-
-- **내용**: 서비스 소개, 플래너 사용법, 주요 기능 소개 등.
-- **디자인 요소**: 플래너 관련 이미지 및 아이콘, 서비스 로고.
-- **구성 요소**: Header (네비게이션 포함), Footer (저작권 정보, 연락처 정보).
-
-### 1-2 로그인창
-
-- **기능**: 사용자 이메일 및 비밀번호 입력을 통한 로그인 처리.
-- **유효성 검사**: 입력된 사용자 정보의 유효성 검사.
-- **세션 처리**: 로그인 상태 유지를 위한 세션 처리.
-- **SNS 연동**: 네이버, 구글, 카카오 등 SNS 계정을 통한 로그인 지원.
-
-### 1-3 회원가입창
-
-- **회원가입 처리**: 사용자 정보 입력 및 처리.
-- **유효성 검사**: 입력된 회원 정보의 유효성 검사 (예: 이메일 형식, 비밀번호 강도).
-- **이메일 중복검사**: 기존 회원 데이터와의 중복 검사.
-- **이메일 인증**: 회원가입 절차의 일환으로 이메일 인증 처리.
-
-### 1-4 비밀번호 찾기창
-
-- **이메일 인증**: 사용자 식별을 위한 이메일 인증 절차.
-- **비밀번호 변경**: 인증 후 비밀번호 변경 기능.
-
-### 2. 플래너 페이지
-
-### 2-1 메인 플래너
-
-- **이벤트 CRUD**: 생성, 조회, 수정, 삭제 기능.
-- **이벤트 상호작용**: 클릭, 드래그, 리사이즈를 통한 이벤트 관리.
-- **이벤트 고급 기능**: 월간, 주간, 일간, 리스트 일정, 반복 일정, 알람 설정.
-- **Google Calendar 연동**: Google Calendar와의 일정 동기화.
-
-### 2-2 일정 입력 폼
-
-- **데이터 연동**: 입력된 이벤트 데이터를 Oracle DB와 연동.
-- **유효성 검사**: 입력된 이벤트 데이터의 유효성 검사.
-- **서버 CRUD 연동**: 백엔드 서버와의 CRUD 연동 처리.
-
-### 2-3 미니 플래너
-
-- **동기화**: 메인 캘린더와 동기화되어 표시되는 미니 캘린더.
-- **기능**: 메인 플래너의 요약 보기 및 빠른 날짜 이동 기능.
+- **Additional Libraries**:
+  - Lombok, log4jdbc-log4j2 for JDBC logging
+  - Spring Boot DevTools for development-time utilities
+  - Jackson Dataformat JSR310, Jackson Databind for JSON processing
+  - Spring Boot Starter Mail for email functionality
 
 
-## 담당기능
+<hr/>
 
-**김강민 : 엔티티, SNS 연동(Foreign Key, DB 세팅, Oauth, Security)**
+### Getting Started
 
-**노용철 : 유효성 검사, 로그인, 회원가입 처리(login, signup, passwordUpdate)**
+프로젝트를 시작하기 위한 기본 단계는 다음과 같습니다. 프로젝트의 세부 설치 및 실행 방법은 [프로젝트 Wiki](https://example.com/one-planner/wiki)를 참조하세요.
 
-**민애경 : 이메일 인증, 페이지 설계 (index, header, footer, domain)**
+1. **프로젝트 클론하기**
 
-**이범신 : 미니플래너, 구글플래너, 입력폼(API), 유효성처리(날짜 및 시간)**
+   Git을 사용하여 프로젝트를 로컬 시스템에 복제합니다.
+   ```bash
+   git clone https://example.com/one-planner.git
+   ```
 
-**최재호 : 메인플래너, 서버, DB연동(AJAX, event 함수, 필요 & 사용 속성)**
+2. **프로젝트 디렉토리로 이동**
+   
+   클론된 프로젝트의 디렉토리로 이동합니다.
+   ```bash
+   cd one-planner
+   ```
 
+3. **환경 설정 파일 구성**
 
-## **기능구현**
+   `application.properties` 또는 `application.yml` 파일을 열고 필요한 환경 설정(예: 데이터베이스 연결 정보, 외부 API 키 등)을 구성합니다. 이 단계에서는 실제 운영 환경에 맞는 값을 입력해야 합니다.
+   *주의: 민감한 정보는 환경 변수를 통해 관리하는 것이 안전합니다.*
 
-### **프로젝트 구성 요소 및 팀원 역할 분담**
+4. **Spring Boot 애플리케이션 실행 (Linux/Mac)**
 
-### **김강민**
+   Linux 또는 Mac 환경에서 다음 명령어를 사용하여 Spring Boot 애플리케이션을 실행합니다.
+   ```bash
+   ./gradlew bootRun
+   ```
+   이 명령어는 Gradle Wrapper를 사용하여 Spring Boot 애플리케이션을 실행합니다. 프로젝트가 성공적으로 시작되면, 웹 브라우저를 통해 애플리케이션에 접근할 수 있습니다.
 
-- **담당 기능**: 엔티티 설계, SNS 연동
-- **세부 업무**:
-    - 데이터베이스 스키마 설계 및 설정
-    - 외래 키와 데이터베이스 설정
-    - OAuth를 이용한 SNS 로그인 기능 구현 (네이버, 구글, 카카오)
-    - Spring Security를 활용한 인증 및 보안 설정
-- **담당 클래스**:
-    - domain: User, SnsInfo
-    - config: SecurityConfig
-    - oauth2: 관련 모든 패키지 및 클래스
-- **설명**: 시스템의 보안 구성과 사용자 인증을 담당합니다.
-- User와 SnsInfo 엔티티를 설계하여 사용자 데이터와 SNS 로그인 정보를 관리합니다. SecurityConfig 클래스를 통해 시스템의 보안 설정을 구성하며,
-- oauth2 패키지 내의 클래스들을 사용하여 OAuth2를 통한 SNS 로그인 기능을 구현합니다.
+5. **Spring Boot 애플리케이션 실행 (Windows)**
 
-### **노용철**
+   Windows 환경에서는 CMD 또는 PowerShell을 사용하여 다음과 같이 애플리케이션을 실행할 수 있습니다.
 
-- **담당 기능**: 유효성 검사, 로그인 및 회원가입 처리
-- **세부 업무**:
-    - 클라이언트 및 서버 측에서의 유효성 검사 로직 구현
-    - 로그인 및 회원가입 기능 구현
-    - 비밀번호 갱신 로직 개발
-- **담당 클래스**:
-    - controller: UserController, UserApiController
-    - service: UserService
-    - dto: LoginDto
-- **설명**: 사용자 관리 기능을 담당합니다. UserController와 UserApiController를 통해 로그인, 회원가입 요청을 처리합니다.
-- UserService에서는 로그인 및 회원가입 로직을 구현하며, LoginDto를 사용하여 로그인 데이터의 전달을 관리합니다.
+   - **CMD에서 실행하기**
+     ```cmd
+     gradlew bootRun
+     ```
+   
+   - **PowerShell에서 실행하기**
+     ```powershell
+     .\gradlew bootRun
+     ```
 
-### **민애경**
+<hr/>
 
-- **담당 기능**: 이메일 인증 유효성 구현, 페이지 디자인
-- **세부 업무**:
-    - 이메일을 이용한 사용자 인증 시스템 구현
-    - 웹사이트의 메인 페이지, 헤더, 푸터, 도메인 소개 페이지 디자인
-- **담당 클래스**:
-    - emailverify: EmailConfig, EmailService, EmailVerificationController
-    - controller: HomeController
-- **설명**: 이메일 인증 유효성 구현 및 프로젝트의 프론트엔드 디자인을 담당합니다. EmailVerificationController를 통해 이메일 인증 관련 요청을 처리하고,
-- EmailService에서 이메일 인증 로직을 구현합니다. HomeController를 통해 메인 페이지와 도메인 소개 페이지의 라우팅을 관리합니다.
-- SMTP, Application, build Gradle 설정, Controller, Service, Config
-- 이메일 인증 => 이메일주소 수집 -> 인증번호 생성 -> 저장 -> 전송 -> 인증코드 입력 -> 검증 -> 유효하면 삭제
-- 인덱스,헤더,푸터
-- 
+### Source Architecture
+프로젝트의 주요 소스 구조는 다음과 같습니다. 세부 구성 및 설명은 프로젝트 문서 내에서 확인할 수 있습니다.
+```
+com.example
+├── config
+│   ├── RestTemplateConfig.java
+│	├── SecurityConfig.java
+│   └── UserPasswordEncoder.java
+├── controller
+│   ├── HomeController.java
+│	├── UserController.java
+│	├── UserApiController.java
+│   └── PlannerApiController.java
+├── domain
+│   ├── Alarm.java
+│   ├── Plan.java
+│   ├── SnsInfo.java
+│   ├── User.java
+│   └── UserLog.java
+├── dto
+│   ├── EventDto.java
+│   └── LoginDto.java
+├── emailverify
+│   ├── EmailConfig.java
+│   ├── EmailService.java
+│   └── EmailVerificationController.java
+├── oauth2
+│   ├── exception
+│   ├── handler
+│   ├── service
+│   ├── user
+│   ├── util
+│   └── HttpCookieOauth2AuthorizationRequestRepository.java
+├── repository
+│   ├── PlannerRepository.java
+│   ├── SnsInfoRepository.java
+│   ├── UserLogRepository.java
+│   └── UserRepository.java
+├── service
+│   ├── PlannerService.java
+│   └── UserService.java
+├── util
+│   └── BooleanToNumberConverter.java
+└── PlannerApplication.java
+```
 
-### **이범신**
+<hr/>
 
-- **담당 기능**: 미니 플래너, Google Calendar 연동, 입력 폼 및 유효성 검사
-- **세부 업무**:
-    - 미니 플래너 개발 및 메인 캘린더와의 동기화 구현
-    - Google Calendar API를 활용한 일정 동기화 기능 구현
-    - 이벤트 입력 폼 개발 및 날짜 및 시간에 대한 유효성 검사 로직 구현
-- **담당 클래스**:
-    - controller: PlannerApiController
-    - service: PlannerService
-    - dto: EventDto
-- **설명**: 플래너 기능의 핵심을 담당합니다. PlannerApiController를 통해 플래너 관련 요청을 처리하고, PlannerService에서는 이벤트 CRUD 로직을 구현합니다.
-- EventDto는 이벤트 데이터 전달을 위해 사용됩니다. 또한, Google Calendar API와의 연동을 구현하여 외부 캘린더와의 일정 동기화를 지원합니다.
+### Wiki link (or Homepage link)
 
-### **최재호**
+- 프로젝트 Wiki: [One - Planner Wiki](https://example.com/one-planner/wiki)
+- 홈페이지 링크: [One - Planner Home](https://example.com/one-planner)
 
-- **담당 기능**: 메인 플래너, 서버 및 DB 연동
-- **세부 업무**:
-    - 메인 플래너의 이벤트 CRUD 기능 개발
-    - AJAX를 이용한 비동기 서버 통신 구현
-    - 백엔드 서버와 Oracle DB 간의 데이터 연동 로직 개발
-- **담당 클래스**:
-    - repository: PlannerRepository, UserRepository
-    - util: BooleanToNumberConverter
+<hr/>
 
-**설명**: 백엔드 서버와 데이터베이스 연동을 담당합니다. PlannerRepository와 UserRepository를 통해 데이터베이스와의 CRUD 작업을 수행합니다.
-BooleanToNumberConverter는 데이터베이스 저장 시 Boolean 값을 숫자로 변환하는 데 사용되는 유틸리티 클래스입니다.
+### License
+이 프로젝트는 MIT 라이선스를 따릅니다. 라이선스에 대한 자세한 정보는 [LICENSE](LICENSE) 파일을 참조하세요.
