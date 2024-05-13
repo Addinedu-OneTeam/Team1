@@ -138,13 +138,3 @@ com.example
 ```
 
 <hr/>
-
-### Wiki link (or Homepage link)
-
-- 프로젝트 Wiki: [One - Planner Wiki](https://example.com/one-planner/wiki)
-- 홈페이지 링크: [One - Planner Home](https://example.com/one-planner)
-
-<hr/>
-
-### License
-이 프로젝트는 MIT 라이선스를 따릅니다. 라이선스에 대한 자세한 정보는 [LICENSE](LICENSE) 파일을 참조하세요.
